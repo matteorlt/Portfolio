@@ -329,14 +329,14 @@ const Home = () => {
         url="https://matteo-rlt.fr"
       />
       <StructuredData />
-      <HomeContainer>
-        <BackgroundCanvas>
-          <Canvas camera={{ position: [0, 0, 5] }}>
-            <Suspense fallback={null}>
-              <Scene />
-            </Suspense>
-          </Canvas>
-        </BackgroundCanvas>
+    <HomeContainer>
+      <BackgroundCanvas>
+        <Canvas camera={{ position: [0, 0, 5] }}>
+          <Suspense fallback={null}>
+            <Scene />
+          </Suspense>
+        </Canvas>
+      </BackgroundCanvas>
 
       <Content>
         <TextContent>
