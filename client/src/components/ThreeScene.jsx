@@ -89,7 +89,7 @@ const Scene = () => {
 const ThreeScene = () => {
   return (
     <Canvas
-      camera={{ position: [0, 0, 5], fov: 75 }}
+      camera={{ position: [2, 3, 4], fov: 75 }}
       style={{ background: 'transparent' }}
     >
       <Suspense fallback={null}>
