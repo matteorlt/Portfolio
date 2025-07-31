@@ -20,20 +20,11 @@ const PlanetRings = () => {
   return (
     <group>
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.1, 2.9, 64]} />
+        <ringGeometry args={[1.8, 2.5, 64]} />
         <meshBasicMaterial
           color="#4a90e2"
           transparent
-          opacity={0.3}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2.5, 2.7, 64]} />
-        <meshBasicMaterial
-          color="#357abd"
-          transparent
-          opacity={0.2}
+          opacity={0.5}
           side={THREE.DoubleSide}
         />
       </mesh>
@@ -64,17 +55,17 @@ const Satellites = () => {
 const FloatingParticles = () => {
   return (
     <group>
-      {[...Array(50)].map((_, i) => (
+      {[...Array(20)].map((_, i) => (
         <mesh
           key={i}
           position={[
-            (Math.random() - 0.5) * 20,
-            (Math.random() - 0.5) * 20,
-            (Math.random() - 0.5) * 20
+            (Math.random() - 0.5) * 15,
+            (Math.random() - 0.5) * 15,
+            (Math.random() - 0.5) * 15
           ]}
         >
-          <sphereGeometry args={[0.02, 8, 8]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.6} />
+          <sphereGeometry args={[0.02, 6, 6]} />
+          <meshBasicMaterial color="#ffffff" transparent opacity={0.4} />
         </mesh>
       ))}
     </group>
@@ -90,7 +81,7 @@ const Scene = () => {
       <PlanetRings />
       <Satellites />
       <FloatingParticles />
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade />
+      <Stars radius={80} depth={30} count={2000} factor={3} saturation={0} fade />
     </>
   );
 };

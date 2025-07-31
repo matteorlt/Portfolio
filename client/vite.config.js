@@ -5,6 +5,9 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   publicDir: 'public',
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'styled-components'],
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
