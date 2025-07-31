@@ -1,4 +1,4 @@
 {
-  "buildCommand": "cd client && npm install && npm run build",
+  "buildCommand": "chmod +x build.sh && ./build.sh",
   "outputDirectory": "client/build"
 } 
