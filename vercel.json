@@ -9,42 +9,42 @@
       }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/static/(.*)",
-      "dest": "/static/$1"
+      "source": "/static/(.*)",
+      "destination": "/static/$1"
     },
     {
-      "src": "/favicon.ico",
-      "dest": "/favicon.ico"
+      "source": "/favicon.ico",
+      "destination": "/favicon.ico"
     },
     {
-      "src": "/manifest.json",
-      "dest": "/manifest.json"
+      "source": "/manifest.json",
+      "destination": "/manifest.json"
     },
     {
-      "src": "/sitemap.xml",
-      "dest": "/sitemap.xml"
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
     },
     {
-      "src": "/robots.txt",
-      "dest": "/robots.txt"
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
     },
     {
-      "src": "/ico/(.*)",
-      "dest": "/ico/$1"
+      "source": "/ico/(.*)",
+      "destination": "/ico/$1"
     },
     {
-      "src": "/logos/(.*)",
-      "dest": "/logos/$1"
+      "source": "/logos/(.*)",
+      "destination": "/logos/$1"
     },
     {
-      "src": "/cv/(.*)",
-      "dest": "/cv/$1"
+      "source": "/cv/(.*)",
+      "destination": "/cv/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
