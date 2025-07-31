@@ -6,8 +6,8 @@ import { OrbitControls, Stars, useTexture } from '@react-three/drei';
 import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import THREE from '../utils/threeConfig';
 import { useNavigate } from 'react-router-dom';
-import SEO from '../components/SEO';
-import StructuredData from '../components/StructuredData';
+import SEO from '../components/SEO.jsx';
+import StructuredData from '../components/StructuredData.jsx';
 
 const HomeContainer = styled.div`
   min-height: 100vh;

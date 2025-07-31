@@ -1,17 +1,17 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
-import Navbar from './components/Navbar';
-import Loading from './components/Loading';
-import GlobalStyle from './styles/GlobalStyle';
-import ThemeIcons from './components/ThemeIcons';
+import Navbar from './components/Navbar.jsx';
+import Loading from './components/Loading.jsx';
+import GlobalStyle from './styles/GlobalStyle.jsx';
+import ThemeIcons from './components/ThemeIcons.jsx';
 
 // Lazy loading pour améliorer les performances
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
-const Projects = lazy(() => import('./pages/Projects'));
-const Skills = lazy(() => import('./pages/Skills'));
-const Contact = lazy(() => import('./pages/Contact'));
+const Home = lazy(() => import('./pages/Home.jsx'));
+const About = lazy(() => import('./pages/About.jsx'));
+const Projects = lazy(() => import('./pages/Projects.jsx'));
+const Skills = lazy(() => import('./pages/Skills.jsx'));
+const Contact = lazy(() => import('./pages/Contact.jsx'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
