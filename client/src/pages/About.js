@@ -196,13 +196,13 @@ const About = () => {
         >
           <StatsGrid>
             <StatCard
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05 }}quick 
               transition={{ duration: 0.3 }}
             >
               <StatIcon>
                 <FiCode />
               </StatIcon>
-              <StatNumber>6</StatNumber>
+              <StatNumber>7</StatNumber>
               <StatLabel>Projets réalisés</StatLabel>
             </StatCard>
             

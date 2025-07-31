@@ -7,7 +7,7 @@ const StructuredData = () => {
     "name": "Mattéo Rannou Le Texier",
     "jobTitle": "Développeur Web & Web Mobile",
     "description": "Développeur Web & Web Mobile spécialisé en React, Java, PHP et JavaScript",
-    "url": "https://votre-domaine.com",
+    "url": "https://matteo-rlt.fr",
     "sameAs": [
       "https://github.com/matteorlt",
       "https://linkedin.com/in/matteo-rlt"

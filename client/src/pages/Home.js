@@ -326,7 +326,7 @@ const Home = () => {
         title="Mattéo Rannou Le Texier - Développeur Web & Web Mobile | Portfolio"
         description="Portfolio de Mattéo Rannou Le Texier - Développeur Web & Web Mobile spécialisé en React, Java, PHP et JavaScript. Découvrez mes projets et compétences en développement."
         keywords="développeur web, React, JavaScript, Java, PHP, portfolio, Mattéo Rannou Le Texier, développement web, développement mobile"
-        url="https://votre-domaine.com"
+        url="https://matteo-rlt.fr"
       />
       <StructuredData />
       <HomeContainer>
