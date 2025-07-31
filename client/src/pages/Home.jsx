@@ -1,13 +1,13 @@
-import React, { Suspense, useRef, useState, useCallback } from 'react';
+import React, { Suspense, useRef, useState, useCallback, lazy } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars, useTexture } from '@react-three/drei';
 import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
-import THREE from '../utils/threeConfig';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
+
+// Lazy loading pour Three.js
+const ThreeScene = lazy(() => import('../components/ThreeScene.jsx'));
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -173,150 +173,7 @@ const CanvasContainer = styled.div`
   }
 `;
 
-// Composant Three.js pour l'animation
-const Planet = () => {
-  return (
-    <group>
-      {/* Planète principale */}
-      <mesh>
-        <sphereGeometry args={[1.5, 64, 64]} />
-        <meshStandardMaterial
-          color="#4a90e2"
-          transparent
-          opacity={0.9}
-          roughness={0.3}
-          metalness={0.1}
-        />
-      </mesh>
-      
-      {/* Continents */}
-      <mesh>
-        <sphereGeometry args={[1.52, 64, 64]} />
-        <meshStandardMaterial
-          color="#357abd"
-          transparent
-          opacity={0.7}
-          roughness={0.8}
-          metalness={0.1}
-        />
-      </mesh>
-      
-      {/* Atmosphère */}
-      <mesh>
-        <sphereGeometry args={[1.8, 64, 64]} />
-        <meshBasicMaterial
-          color="#4a90e2"
-          transparent
-          opacity={0.1}
-        />
-      </mesh>
-    </group>
-  );
-};
 
-const PlanetRings = () => {
-  return (
-    <group rotation={[Math.PI / 2, 0, 0]} position={[0, 0.1, 0]}>
-      {/* Anneau extérieur - plus large et plus espacé */}
-      <mesh>
-        <ringGeometry args={[2.1, 2.9, 64]} />
-        <meshBasicMaterial
-          color="#4a90e2"
-          transparent
-          opacity={0.15}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-    </group>
-  );
-};
-
-
-
-const Satellites = () => {
-  const satellites = [
-    { position: [3, 1, 0], size: 0.1 },
-    { position: [-2.5, -0.8, 1.5], size: 0.08 },
-    { position: [1.8, -1.2, -2], size: 0.12 }
-  ];
-
-  return (
-    <>
-      {satellites.map((sat, index) => (
-        <mesh key={index} position={sat.position}>
-          <sphereGeometry args={[sat.size, 16, 16]} />
-          <meshBasicMaterial
-            color="#ffffff"
-            transparent
-            opacity={0.8}
-          />
-        </mesh>
-      ))}
-    </>
-  );
-};
-
-const FloatingParticles = () => {
-  const particles = Array.from({ length: 50 }, (_, i) => ({
-    id: i,
-    position: [
-      (Math.random() - 0.5) * 10,
-      (Math.random() - 0.5) * 10,
-      (Math.random() - 0.5) * 10
-    ]
-  }));
-
-  return (
-    <>
-      {particles.map((particle) => (
-        <mesh key={particle.id} position={particle.position}>
-          <sphereGeometry args={[0.02, 8, 8]} />
-          <meshBasicMaterial color="#4a90e2" transparent opacity={0.6} />
-        </mesh>
-      ))}
-    </>
-  );
-};
-
-
-
-const Scene = () => {
-  const controlsRef = useRef();
-  const [autoRotate, setAutoRotate] = useState(true);
-
-  // Gestion du drag
-  const handlePointerDown = useCallback(() => {
-    setAutoRotate(false);
-  }, []);
-  const handlePointerUp = useCallback(() => {
-    setAutoRotate(true);
-  }, []);
-
-  return (
-    <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[10, 10, 10]} intensity={1.5} />
-      <pointLight position={[-10, -10, -10]} intensity={0.8} color="#4a90e2" />
-      <Planet />
-      <PlanetRings />
-      <Satellites />
-      <FloatingParticles />
-      <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-      <OrbitControls
-        ref={controlsRef}
-        enableZoom={false}
-        enablePan={false}
-        enableRotate={true}
-        autoRotate={autoRotate}
-        autoRotateSpeed={0.3}
-        onStart={handlePointerDown}
-        onEnd={handlePointerUp}
-        dampingFactor={0.05}
-        rotateSpeed={0.5}
-      />
-    </>
-  );
-};
 
 const Home = () => {
   const navigate = useNavigate();
@@ -331,11 +188,9 @@ const Home = () => {
       <StructuredData />
     <HomeContainer>
       <BackgroundCanvas>
-        <Canvas camera={{ position: [0, 0, 5] }}>
-          <Suspense fallback={null}>
-            <Scene />
-          </Suspense>
-        </Canvas>
+        <Suspense fallback={<div style={{ background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)', width: '100%', height: '100%' }} />}>
+          <ThreeScene />
+        </Suspense>
       </BackgroundCanvas>
 
       <Content>

@@ -13,11 +13,20 @@ export default defineConfig({
   build: {
     outDir: 'build',
     sourcemap: false,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
           three: ['three', '@react-three/fiber', '@react-three/drei'],
+          animations: ['framer-motion'],
+          icons: ['react-icons'],
         },
       },
     },
