@@ -202,7 +202,7 @@ const About = () => {
               <StatIcon>
                 <FiCode />
               </StatIcon>
-              <StatNumber>9</StatNumber>
+              <StatNumber>6</StatNumber>
               <StatLabel>Projets réalisés</StatLabel>
             </StatCard>
             

@@ -172,6 +172,30 @@ const ExperienceDescription = styled.p`
   line-height: 1.5;
 `;
 
+const FooterNote = styled(motion.div)`
+  margin-top: 4rem;
+  padding: 2rem;
+  background: rgba(74, 144, 226, 0.05);
+  border: 1px solid rgba(74, 144, 226, 0.1);
+  border-radius: 12px;
+  text-align: center;
+`;
+
+const FooterNoteTitle = styled.h4`
+  color: #4a90e2;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+`;
+
+const FooterNoteText = styled.p`
+  color: #cccccc;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+`;
+
 const Skills = () => {
   const skillCategories = [
     {
@@ -247,7 +271,7 @@ const Skills = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        Expertise technique et domaines de spécialisation
+        Expertise technique et domaines de spécialisation* 
       </Subtitle>
 
       <SkillsGrid>
@@ -313,6 +337,18 @@ const Skills = () => {
           ))}
         </ExperienceGrid>
       </ExperienceSection>
+
+      <FooterNote
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
+      >
+        <FooterNoteTitle>Note importante</FooterNoteTitle>
+        <FooterNoteText>
+          * Les pourcentages représentent ma propre estimation de mon niveau de maîtrise dans chaque technologie.
+          Ils ne reflètent pas une évaluation objective, mais servent à indiquer les outils avec lesquels je suis le plus à l'aise.
+        </FooterNoteText>
+      </FooterNote>
     </SkillsContainer>
   );
 };

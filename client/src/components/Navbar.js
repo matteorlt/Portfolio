@@ -26,6 +26,9 @@ const NavContent = styled.div`
 `;
 
 const Logo = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 1.5rem;
   font-weight: 700;
   color: #4a90e2;
@@ -35,6 +38,22 @@ const Logo = styled(Link)`
   &:hover {
     color: #357abd;
     transform: scale(1.05);
+  }
+`;
+
+const LogoImage = styled.img`
+  height: 50px;
+  width: auto;
+  transition: all 0.3s ease;
+  
+  ${Logo}:hover & {
+    transform: scale(1.05);
+  }
+`;
+
+const LogoText = styled.span`
+  @media (max-width: 480px) {
+    display: none;
   }
 `;
 
@@ -166,7 +185,13 @@ const Navbar = () => {
       }}
     >
       <NavContent>
-        <Logo to="/">Portfolio</Logo>
+        <Logo to="/">
+          <LogoImage 
+            src="/logos/logo_dark.png" 
+            alt="Logo Mattéo Rannou Le Texier"
+          />
+          <LogoText>Portfolio</LogoText>
+        </Logo>
         
         <NavLinks>
           {navItems.map((item) => (

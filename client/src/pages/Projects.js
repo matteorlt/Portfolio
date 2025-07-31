@@ -189,7 +189,8 @@ const Projects = () => {
     { id: 'all', label: 'Tous' },
     { id: 'typescript', label: 'TypeScript' },
     { id: 'java', label: 'Java' },
-    { id: 'javascript', label: 'JavaScript' }
+    { id: 'javascript', label: 'JavaScript' },
+    { id: 'wordpress', label: 'WordPress' }
   ];
 
   const projects = [
@@ -251,6 +252,16 @@ const Projects = () => {
       tech: ['JavaScript', 'HTML', 'CSS'],
       category: ['javascript'],
       demo: '#',
+      code: 'https://github.com/matteorlt'
+    },
+    {
+      id: 7,
+      title: 'Gym Phys',
+      description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
+      image: '🛠️',
+      tech: ['Wordpress', 'PHP'],
+      category: ['wordpress'],
+      demo: 'https://www.gym-phys-ploermel.fr/',
       code: 'https://github.com/matteorlt'
     }
   ];

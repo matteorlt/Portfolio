@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from './components/Navbar';
 import Loading from './components/Loading';
-import Home from './pages/Home';
-import About from './pages/About';
-import Projects from './pages/Projects';
-import Skills from './pages/Skills';
-import Contact from './pages/Contact';
 import GlobalStyle from './styles/GlobalStyle';
+import ThemeIcons from './components/ThemeIcons';
+
+// Lazy loading pour améliorer les performances
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Projects = lazy(() => import('./pages/Projects'));
+const Skills = lazy(() => import('./pages/Skills'));
+const Contact = lazy(() => import('./pages/Contact'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -44,15 +47,18 @@ function App() {
   return (
     <Router>
       <GlobalStyle />
+      <ThemeIcons theme="auto" />
       <AppContainer>
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
+        <Suspense fallback={<Loading progress={100} />}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+        </Suspense>
       </AppContainer>
     </Router>
   );

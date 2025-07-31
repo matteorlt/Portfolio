@@ -63,7 +63,7 @@ portfolio/
 
 1. **Cloner le repository**
 ```bash
-git clone <url-du-repo>
+git clone https://github.com/matteorlt/Portfolio
 cd portfolio
 ```
 
@@ -211,4 +211,4 @@ Pour toute question ou suggestion, n'hésitez pas à me contacter via le formula
 
 ---
 
-**Développé avec ❤️ en utilisant React, Node.js et Three.js** 
+**Développé par Mattéo Rannou-Le Texier en utilisant React, Node.js et Three.js** 

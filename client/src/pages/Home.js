@@ -6,6 +6,8 @@ import { OrbitControls, Stars, useTexture } from '@react-three/drei';
 import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import THREE from '../utils/threeConfig';
 import { useNavigate } from 'react-router-dom';
+import SEO from '../components/SEO';
+import StructuredData from '../components/StructuredData';
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -215,24 +217,14 @@ const Planet = () => {
 const PlanetRings = () => {
   return (
     <group rotation={[Math.PI / 2, 0, 0]} position={[0, 0.1, 0]}>
+      {/* Anneau extérieur - plus large et plus espacé */}
       <mesh>
-        <ringGeometry args={[2.2, 2.8, 64]} />
-        <meshStandardMaterial
+        <ringGeometry args={[2.1, 2.9, 64]} />
+        <meshBasicMaterial
           color="#4a90e2"
           transparent
-          opacity={0.2}
+          opacity={0.15}
           side={THREE.DoubleSide}
-          roughness={0.5}
-        />
-      </mesh>
-      <mesh>
-        <ringGeometry args={[2.4, 2.6, 64]} />
-        <meshStandardMaterial
-          color="#357abd"
-          transparent
-          opacity={0.3}
-          side={THREE.DoubleSide}
-          roughness={0.5}
         />
       </mesh>
     </group>
@@ -286,20 +278,7 @@ const FloatingParticles = () => {
   );
 };
 
-const RotatingRings = () => {
-  return (
-    <group>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[2, 2.5, 32]} />
-        <meshBasicMaterial color="#4a90e2" transparent opacity={0.3} side={2} />
-      </mesh>
-      <mesh rotation={[0, Math.PI / 2, 0]}>
-        <ringGeometry args={[1.5, 2, 32]} />
-        <meshBasicMaterial color="#357abd" transparent opacity={0.4} side={2} />
-      </mesh>
-    </group>
-  );
-};
+
 
 const Scene = () => {
   const controlsRef = useRef();
@@ -342,14 +321,22 @@ const Scene = () => {
 const Home = () => {
   const navigate = useNavigate();
   return (
-    <HomeContainer>
-      <BackgroundCanvas>
-        <Canvas camera={{ position: [0, 0, 5] }}>
-          <Suspense fallback={null}>
-            <Scene />
-          </Suspense>
-        </Canvas>
-      </BackgroundCanvas>
+    <>
+      <SEO 
+        title="Mattéo Rannou Le Texier - Développeur Web & Web Mobile | Portfolio"
+        description="Portfolio de Mattéo Rannou Le Texier - Développeur Web & Web Mobile spécialisé en React, Java, PHP et JavaScript. Découvrez mes projets et compétences en développement."
+        keywords="développeur web, React, JavaScript, Java, PHP, portfolio, Mattéo Rannou Le Texier, développement web, développement mobile"
+        url="https://votre-domaine.com"
+      />
+      <StructuredData />
+      <HomeContainer>
+        <BackgroundCanvas>
+          <Canvas camera={{ position: [0, 0, 5] }}>
+            <Suspense fallback={null}>
+              <Scene />
+            </Suspense>
+          </Canvas>
+        </BackgroundCanvas>
 
       <Content>
         <TextContent>
@@ -419,6 +406,7 @@ const Home = () => {
         </TextContent>
       </Content>
     </HomeContainer>
+    </>
   );
 };
 
