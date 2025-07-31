@@ -15,20 +15,20 @@
     "react-helmet": "^6.1.0",
     "react-icons": "^4.12.0",
     "react-router-dom": "^6.18.0",
-    "react-scripts": "5.0.1",
     "styled-components": "^6.1.0",
     "three": "^0.159.0"
   },
   "devDependencies": {
     "@craco/craco": "^7.1.0",
-    "path-browserify": "^1.0.1"
+    "path-browserify": "^1.0.1",
+    "@vitejs/plugin-react": "^4.1.0",
+    "vite": "^4.5.0"
   },
   "scripts": {
-    "start": "npx craco start",
-    "build": "npx craco build --max_old_space_size=4096",
-    "build:prod": "GENERATE_SOURCEMAP=false npx craco build",
-    "test": "npx craco test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build",
+    "build:prod": "vite build --mode production",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
