@@ -1,6 +1,6 @@
 [build]
   base = "client"
-  command = "npm run build"
+  command = "npm run build:prod"
   publish = "build"
 
 [build.environment]

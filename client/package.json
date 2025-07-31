@@ -5,18 +5,18 @@
   "dependencies": {
     "@react-three/drei": "^9.88.13",
     "@react-three/fiber": "^8.15.11",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.5.0",
+    "@testing-library/jest-dom": "^6.1.4",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.5.1",
+    "axios": "^1.6.0",
     "framer-motion": "^10.16.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "react-icons": "^4.11.0",
-    "react-router-dom": "^6.8.1",
+    "react-icons": "^4.12.0",
+    "react-router-dom": "^6.18.0",
     "react-scripts": "5.0.1",
-    "styled-components": "^6.0.7",
+    "styled-components": "^6.1.0",
     "three": "^0.159.0"
   },
   "devDependencies": {
@@ -25,7 +25,8 @@
   },
   "scripts": {
     "start": "npx craco start",
-    "build": "npx craco build",
+    "build": "npx craco build --max_old_space_size=4096",
+    "build:prod": "GENERATE_SOURCEMAP=false npx craco build",
     "test": "npx craco test",
     "eject": "react-scripts eject"
   },
