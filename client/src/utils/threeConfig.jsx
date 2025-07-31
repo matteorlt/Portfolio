@@ -2,8 +2,9 @@
 import * as THREE from 'three';
 
 // Patch pour BatchedMesh si nécessaire
-if (!THREE.BatchedMesh) {
-  THREE.BatchedMesh = THREE.InstancedMesh;
+const THREEWithPatch = { ...THREE };
+if (!THREEWithPatch.BatchedMesh) {
+  THREEWithPatch.BatchedMesh = THREEWithPatch.InstancedMesh;
 }
 
-export default THREE; 
+export default THREEWithPatch; 
