@@ -16,6 +16,20 @@ const Planet = () => {
   );
 };
 
+const PlanetAura = () => {
+  return (
+    <mesh>
+      <sphereGeometry args={[1.3, 32, 32]} />
+      <meshBasicMaterial
+        color="#4a90e2"
+        transparent
+        opacity={0.3}
+        side={THREE.BackSide}
+      />
+    </mesh>
+  );
+};
+
 const PlanetRings = () => {
   return (
     <group>
@@ -78,6 +92,7 @@ const Scene = () => {
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={1} />
       <Planet />
+      <PlanetAura />
       <PlanetRings />
       <Satellites />
       <FloatingParticles />
