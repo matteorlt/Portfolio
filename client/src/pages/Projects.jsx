@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiGithub, FiEye } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 
 const ProjectsContainer = styled.div`
   min-height: 100vh;
@@ -182,6 +183,28 @@ const ProjectLink = styled(motion.a)`
   }
 `;
 
+const ProjectLinkRouter = styled(Link)`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+
+  &.demo {
+    background: #4a90e2;
+    color: white;
+
+    &:hover {
+      background: #357abd;
+      transform: translateY(-2px);
+    }
+  }
+`;
+
 const Projects = () => {
   const [activeFilter, setActiveFilter] = useState('all');
 
@@ -201,7 +224,7 @@ const Projects = () => {
       image: '📋',
       tech: ['TypeScript', 'React', 'Docker'],
       category: ['typescript'],
-      demo: '#',
+      demo: '/demo/task-manager',
       code: 'https://github.com/matteorlt/Task-Manager'
     },
     {
@@ -211,7 +234,7 @@ const Projects = () => {
       image: '🏷️',
       tech: ['Java', 'JSP', 'Servlet'],
       category: ['java'],
-      demo: '#',
+      demo: '/demo/eni-enchere',
       code: 'https://github.com/matteorlt/ENI-Enchere'
     },
     {
@@ -221,7 +244,7 @@ const Projects = () => {
       image: '🔐',
       tech: ['JavaScript', 'Node.js', 'Express'],
       category: ['javascript'],
-      demo: '#',
+      demo: '/demo/auth',
       code: 'https://github.com/matteorlt/Auth'
     },
     {
@@ -231,7 +254,7 @@ const Projects = () => {
       image: '🎫',
       tech: ['JavaScript', 'React', 'Node.js'],
       category: ['javascript'],
-      demo: '#',
+      demo: '/demo/ticket-support-app',
       code: 'https://github.com/matteorlt/ticket-support-app'
     },
     {
@@ -241,7 +264,7 @@ const Projects = () => {
       image: '⚛️',
       tech: ['React', 'JavaScript', 'CSS'],
       category: ['javascript'],
-      demo: '#',
+      demo: '/demo/site-react-openclassroom',
       code: 'https://github.com/matteorlt'
     },
     {
@@ -251,7 +274,7 @@ const Projects = () => {
       image: '🧠',
       tech: ['JavaScript', 'HTML', 'CSS'],
       category: ['javascript'],
-      demo: '#',
+      demo: '/demo/jeu-memory',
       code: 'https://github.com/matteorlt'
     },
     {
@@ -261,7 +284,7 @@ const Projects = () => {
       image: '🛠️',
       tech: ['Wordpress', 'PHP'],
       category: ['wordpress'],
-      demo: 'https://www.gym-phys-ploermel.fr/',
+      demo: '/demo/gym-phys',
       code: 'https://github.com/matteorlt'
     }
   ];
@@ -330,10 +353,10 @@ const Projects = () => {
               </ProjectTech>
               
               <ProjectLinks>
-                <ProjectLink href={project.demo} className="demo" target="_blank" rel="noopener noreferrer">
+                <ProjectLinkRouter to={project.demo} className="demo">
                   <FiEye />
                   Demo
-                </ProjectLink>
+                </ProjectLinkRouter>
                 <ProjectLink href={project.code} className="code" target="_blank" rel="noopener noreferrer">
                   <FiGithub />
                   Code
