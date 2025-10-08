@@ -341,7 +341,7 @@ const Quote = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/quote', {
+      const response = await fetch('/.netlify/functions/quote', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
