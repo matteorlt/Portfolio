@@ -343,6 +343,14 @@ const Quote = () => {
     setIsSubmitting(true);
 
     try {
+      // Vérifier si EmailJS est configuré
+      if (EMAILJS_CONFIG.serviceId === 'service_xxxxxxx' || 
+          EMAILJS_CONFIG.templateId === 'template_xxxxxxx' || 
+          EMAILJS_CONFIG.publicKey === 'your_public_key_here') {
+        alert('EmailJS n\'est pas encore configuré. Veuillez configurer les identifiants EmailJS dans le fichier de configuration.');
+        return;
+      }
+
       const packageDetails = packages.find(p => p.id === selectedPackage);
       
       // Préparer les données pour EmailJS
