@@ -322,6 +322,12 @@ const Quote = () => {
     email: '',
     phone: '',
     company: '',
+    website: '',
+    budget: '',
+    timeline: '',
+    projectType: '',
+    targetAudience: '',
+    competitors: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -359,6 +365,12 @@ const Quote = () => {
         from_email: formData.email,
         phone: formData.phone || 'Non renseigné',
         company: formData.company || 'Non renseignée',
+        website: formData.website || 'Non renseigné',
+        budget: formData.budget || 'Non renseigné',
+        timeline: formData.timeline || 'Non renseigné',
+        project_type: formData.projectType || 'Non renseigné',
+        target_audience: formData.targetAudience || 'Non renseigné',
+        competitors: formData.competitors || 'Non renseigné',
         message: formData.message || 'Aucun message',
         package_title: packageDetails?.title || 'Non spécifiée',
         package_price: packageDetails?.price || 'N/A',
@@ -393,6 +405,12 @@ const Quote = () => {
           email: '',
           phone: '',
           company: '',
+          website: '',
+          budget: '',
+          timeline: '',
+          projectType: '',
+          targetAudience: '',
+          competitors: '',
           message: ''
         });
         setSelectedPackage(null);
@@ -595,12 +613,92 @@ const Quote = () => {
                 </FormGroup>
 
                 <FormGroup>
+                  <Label>
+                    🌐 Site web existant (optionnel)
+                  </Label>
+                  <Input
+                    type="url"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleInputChange}
+                    placeholder="https://votre-site.com"
+                  />
+                </FormGroup>
+
+                <FormGrid>
+                  <FormGroup>
+                    <Label>
+                      💰 Budget approximatif (optionnel)
+                    </Label>
+                    <Input
+                      type="text"
+                      name="budget"
+                      value={formData.budget}
+                      onChange={handleInputChange}
+                      placeholder="Ex: 500-1000€"
+                    />
+                  </FormGroup>
+                  
+                  <FormGroup>
+                    <Label>
+                      ⏰ Délai souhaité (optionnel)
+                    </Label>
+                    <Input
+                      type="text"
+                      name="timeline"
+                      value={formData.timeline}
+                      onChange={handleInputChange}
+                      placeholder="Ex: 1 mois"
+                    />
+                  </FormGroup>
+                </FormGrid>
+
+                <FormGroup>
+                  <Label>
+                    🎯 Type de projet (optionnel)
+                  </Label>
+                  <Input
+                    type="text"
+                    name="projectType"
+                    value={formData.projectType}
+                    onChange={handleInputChange}
+                    placeholder="Ex: Site vitrine, E-commerce, Application web..."
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                  <Label>
+                    👥 Public cible (optionnel)
+                  </Label>
+                  <Input
+                    type="text"
+                    name="targetAudience"
+                    value={formData.targetAudience}
+                    onChange={handleInputChange}
+                    placeholder="Ex: Particuliers, Professionnels, Étudiants..."
+                  />
+                </FormGroup>
+
+                <FormGroup>
+                  <Label>
+                    🏆 Sites concurrents (optionnel)
+                  </Label>
+                  <Input
+                    type="text"
+                    name="competitors"
+                    value={formData.competitors}
+                    onChange={handleInputChange}
+                    placeholder="Ex: site1.com, site2.com..."
+                  />
+                </FormGroup>
+
+                <FormGroup>
                   <Label>Message (optionnel)</Label>
                   <TextArea
                     name="message"
                     value={formData.message}
                     onChange={handleInputChange}
-                    placeholder="Décrivez vos besoins spécifiques..."
+                    placeholder="Décrivez vos besoins spécifiques, vos objectifs, vos préférences..."
                   />
                 </FormGroup>
 
