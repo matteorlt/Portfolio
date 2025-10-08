@@ -404,19 +404,24 @@ const Quote = () => {
       console.error('Erreur détaillée:', error);
       console.error('Message d\'erreur:', error.message);
       console.error('Code d\'erreur:', error.code);
+      console.error('Status:', error.status);
       
       let errorMessage = 'Erreur lors de l\'envoi du devis. ';
       
-      if (error.message.includes('Invalid template')) {
+      if (error.message && error.message.includes('Invalid template')) {
         errorMessage += 'Template EmailJS invalide. Vérifiez votre Template ID.';
-      } else if (error.message.includes('Invalid service')) {
+      } else if (error.message && error.message.includes('Invalid service')) {
         errorMessage += 'Service EmailJS invalide. Vérifiez votre Service ID.';
-      } else if (error.message.includes('Invalid public key')) {
+      } else if (error.message && error.message.includes('Invalid public key')) {
         errorMessage += 'Clé publique EmailJS invalide. Vérifiez votre Public Key.';
       } else if (error.status === 422) {
-        errorMessage += 'Données invalides. Vérifiez que toutes les variables du template sont correctement définies.';
+        errorMessage += 'Données invalides (422). Vérifiez que toutes les variables du template sont correctement définies dans EmailJS.';
+      } else if (error.status === 400) {
+        errorMessage += 'Requête invalide (400). Vérifiez vos identifiants EmailJS.';
+      } else if (error.status === 401) {
+        errorMessage += 'Non autorisé (401). Vérifiez votre clé publique EmailJS.';
       } else {
-        errorMessage += 'Veuillez réessayer.';
+        errorMessage += `Erreur ${error.status || 'inconnue'}. Vérifiez la console pour plus de détails.`;
       }
       
       alert(errorMessage);
