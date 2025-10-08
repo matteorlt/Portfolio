@@ -270,7 +270,7 @@ const projectsData = {
     title: 'Task-Manager',
     description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
     tech: ['TypeScript', 'React', 'Docker'],
-    videoUrl: null, // URL de la vidéo à ajouter
+    videoUrl: '/videos/Task Manager.mp4',
     codeUrl: 'https://github.com/matteorlt/Task-Manager'
   },
   'eni-enchere': {
@@ -368,25 +368,10 @@ const ProjectDemo = () => {
         transition={{ duration: 0.8, delay: 0.4 }}
       >
         {project.videoUrl ? (
-          <>
-            <Video controls>
-              <source src={project.videoUrl} type="video/mp4" />
-              Votre navigateur ne supporte pas la lecture vidéo.
-            </Video>
-            <VideoControls>
-              <ControlButton>
-                <FiPlay size={20} />
-              </ControlButton>
-              <ProgressBar progress={0} />
-              <TimeDisplay>0:00 / 0:00</TimeDisplay>
-              <ControlButton>
-                <FiVolume2 size={20} />
-              </ControlButton>
-              <ControlButton>
-                <FiMaximize size={20} />
-              </ControlButton>
-            </VideoControls>
-          </>
+          <Video controls muted>
+            <source src={project.videoUrl} type="video/mp4" />
+            Votre navigateur ne supporte pas la lecture vidéo.
+          </Video>
         ) : (
           <VideoPlaceholder>
             <PlayIcon>
