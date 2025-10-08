@@ -265,7 +265,7 @@ const packages = [
     id: 'starter',
     title: 'Starter',
     price: '300',
-    period: 'Site vitrine simple',
+    period: '2-3 semaines',
     features: [
       'Site WordPress (facile à utiliser)',
       'Jusqu\'à 4 pages',
@@ -281,7 +281,7 @@ const packages = [
     id: 'professional',
     title: 'Professional',
     price: '600',
-    period: 'Site professionnel',
+    period: '3-4 semaines',
     features: [
       'Design personnalisé selon vos goûts',
       'Jusqu\'à 10 pages',
@@ -298,7 +298,7 @@ const packages = [
     id: 'premium',
     title: 'Premium',
     price: '1 100',
-    period: 'Boutique en ligne ou application web',
+    period: '4-6 semaines',
     features: [
       'Design haut de gamme personnalisé',
       'Nombre de pages illimité',
