@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../config/emailjs';
 
 const QuoteContainer = styled.div`
   min-height: 100vh;
@@ -341,67 +343,48 @@ const Quote = () => {
     setIsSubmitting(true);
 
     try {
-      // Préparer les données du formulaire
       const packageDetails = packages.find(p => p.id === selectedPackage);
-      const emailData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
+      
+      // Préparer les données pour EmailJS
+      const templateParams = {
+        from_name: `${formData.firstName} ${formData.lastName}`,
+        from_email: formData.email,
         phone: formData.phone || 'Non renseigné',
         company: formData.company || 'Non renseignée',
         message: formData.message || 'Aucun message',
-        packageTitle: packageDetails?.title || 'Non spécifiée',
-        packagePrice: packageDetails?.price || 'N/A',
-        packagePeriod: packageDetails?.period || 'Non spécifiée',
-        packageFeatures: packageDetails?.features?.join(', ') || 'Aucune fonctionnalité',
+        package_title: packageDetails?.title || 'Non spécifiée',
+        package_price: packageDetails?.price || 'N/A',
+        package_period: packageDetails?.period || 'Non spécifiée',
+        package_features: packageDetails?.features?.join(', ') || 'Aucune fonctionnalité',
         timestamp: new Date().toLocaleString('fr-FR')
       };
 
-      // Créer le lien mailto avec toutes les informations
-      const subject = encodeURIComponent(`Demande de devis - ${emailData.packageTitle}`);
-      const body = encodeURIComponent(`
-Nouvelle demande de devis
+      // Envoyer l'email via EmailJS
+      const response = await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        templateParams,
+        EMAILJS_CONFIG.publicKey
+      );
 
-FORMULE SÉLECTIONNÉE:
-${emailData.packageTitle} (€${emailData.packagePrice})
-Période: ${emailData.packagePeriod}
-
-INFORMATIONS CLIENT:
-- Nom: ${emailData.firstName} ${emailData.lastName}
-- Email: ${emailData.email}
-- Téléphone: ${emailData.phone}
-- Entreprise: ${emailData.company}
-
-MESSAGE:
-${emailData.message}
-
-FONCTIONNALITÉS DE LA FORMULE:
-${emailData.packageFeatures}
-
----
-Demande envoyée le ${emailData.timestamp}
-      `);
-
-      const mailtoLink = `mailto:matteo.rannou.letexier@gmail.com?subject=${subject}&body=${body}`;
-      
-      // Ouvrir le client email par défaut
-      window.open(mailtoLink, '_blank');
-      
-      // Marquer comme soumis
-      setIsSubmitted(true);
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        company: '',
-        message: ''
-      });
-      setSelectedPackage(null);
+      if (response.status === 200) {
+        setIsSubmitted(true);
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phone: '',
+          company: '',
+          message: ''
+        });
+        setSelectedPackage(null);
+      } else {
+        throw new Error('Erreur lors de l\'envoi');
+      }
 
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur lors de l\'ouverture du client email. Veuillez réessayer.');
+      alert('Erreur lors de l\'envoi du devis. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -598,8 +581,7 @@ Demande envoyée le ${emailData.timestamp}
                 Demande envoyée !
               </h2>
               <p style={{ color: '#cccccc', marginBottom: '2rem' }}>
-                Merci pour votre demande ! Votre client email s'est ouvert avec toutes les informations pré-remplies. 
-                Il vous suffit d'envoyer l'email pour finaliser votre demande de devis.
+                Merci pour votre demande ! Je vous recontacterai dans les plus brefs délais.
               </p>
               <SubmitButton
                 onClick={closeForm}
