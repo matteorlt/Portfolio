@@ -9,10 +9,20 @@ const PORT = process.env.PORT || 5000;
 
 // Configuration du transporteur email
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // ou votre service email préféré
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER || 'votre-email@gmail.com',
     pass: process.env.EMAIL_PASS || 'votre-mot-de-passe-app'
+  }
+});
+
+// Test de la configuration email au démarrage
+transporter.verify((error, success) => {
+  if (error) {
+    console.log('❌ Erreur configuration email:', error.message);
+    console.log('💡 Vérifiez vos identifiants dans le fichier .env');
+  } else {
+    console.log('✅ Configuration email validée');
   }
 });
 
@@ -101,8 +111,23 @@ app.post('/api/quote', async (req, res) => {
 
     res.json({ success: true, message: 'Devis envoyé avec succès' });
   } catch (error) {
-    console.error('Erreur lors de l\'envoi du devis:', error);
-    res.status(500).json({ success: false, message: 'Erreur lors de l\'envoi du devis' });
+    console.error('❌ Erreur détaillée lors de l\'envoi du devis:', error);
+    
+    // Messages d'erreur plus spécifiques
+    let errorMessage = 'Erreur lors de l\'envoi du devis';
+    if (error.code === 'EAUTH') {
+      errorMessage = 'Erreur d\'authentification email. Vérifiez vos identifiants.';
+    } else if (error.code === 'ECONNECTION') {
+      errorMessage = 'Erreur de connexion au serveur email.';
+    } else if (error.message.includes('Invalid login')) {
+      errorMessage = 'Identifiants email incorrects.';
+    }
+    
+    res.status(500).json({ 
+      success: false, 
+      message: errorMessage,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
