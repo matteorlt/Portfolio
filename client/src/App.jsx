@@ -2,6 +2,7 @@ import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
 import Loading from './components/Loading.jsx';
 import GlobalStyle from './styles/GlobalStyle.jsx';
 import ThemeIcons from './components/ThemeIcons.jsx';
@@ -14,6 +15,8 @@ const Skills = lazy(() => import('./pages/Skills.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const ProjectDemo = lazy(() => import('./pages/ProjectDemo.jsx'));
 const Quote = lazy(() => import('./pages/Quote.jsx'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
+const LegalNotices = lazy(() => import('./pages/LegalNotices.jsx'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -61,8 +64,11 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/demo/:projectId" element={<ProjectDemo />} />
           <Route path="/quote" element={<Quote />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/legal-notices" element={<LegalNotices />} />
         </Routes>
         </Suspense>
+        <Footer />
       </AppContainer>
     </Router>
   );
