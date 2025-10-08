@@ -367,6 +367,14 @@ const Quote = () => {
         timestamp: new Date().toLocaleString('fr-FR')
       };
 
+      // Debug: Afficher les données envoyées
+      console.log('Données EmailJS:', {
+        serviceId: EMAILJS_CONFIG.serviceId,
+        templateId: EMAILJS_CONFIG.templateId,
+        publicKey: EMAILJS_CONFIG.publicKey,
+        templateParams: templateParams
+      });
+
       // Envoyer l'email via EmailJS
       const response = await emailjs.send(
         EMAILJS_CONFIG.serviceId,
@@ -374,6 +382,8 @@ const Quote = () => {
         templateParams,
         EMAILJS_CONFIG.publicKey
       );
+
+      console.log('Réponse EmailJS:', response);
 
       if (response.status === 200) {
         setIsSubmitted(true);
@@ -391,8 +401,25 @@ const Quote = () => {
       }
 
     } catch (error) {
-      console.error('Erreur:', error);
-      alert('Erreur lors de l\'envoi du devis. Veuillez réessayer.');
+      console.error('Erreur détaillée:', error);
+      console.error('Message d\'erreur:', error.message);
+      console.error('Code d\'erreur:', error.code);
+      
+      let errorMessage = 'Erreur lors de l\'envoi du devis. ';
+      
+      if (error.message.includes('Invalid template')) {
+        errorMessage += 'Template EmailJS invalide. Vérifiez votre Template ID.';
+      } else if (error.message.includes('Invalid service')) {
+        errorMessage += 'Service EmailJS invalide. Vérifiez votre Service ID.';
+      } else if (error.message.includes('Invalid public key')) {
+        errorMessage += 'Clé publique EmailJS invalide. Vérifiez votre Public Key.';
+      } else if (error.status === 422) {
+        errorMessage += 'Données invalides. Vérifiez que toutes les variables du template sont correctement définies.';
+      } else {
+        errorMessage += 'Veuillez réessayer.';
+      }
+      
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
