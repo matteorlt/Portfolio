@@ -13,6 +13,7 @@ const Projects = lazy(() => import('./pages/Projects.jsx'));
 const Skills = lazy(() => import('./pages/Skills.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const ProjectDemo = lazy(() => import('./pages/ProjectDemo.jsx'));
+const Quote = lazy(() => import('./pages/Quote.jsx'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -59,6 +60,7 @@ function App() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/demo/:projectId" element={<ProjectDemo />} />
+          <Route path="/quote" element={<Quote />} />
         </Routes>
         </Suspense>
       </AppContainer>

@@ -273,6 +273,14 @@ const projectsData = {
     videoUrl: '/videos/Task Manager.mp4',
     codeUrl: 'https://github.com/matteorlt/Task-Manager'
   },
+  'gym-phys': {
+    title: 'Gym Phys',
+    description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
+    tech: ['Wordpress', 'PHP'],
+    videoUrl: null,
+    codeUrl: 'https://github.com/matteorlt',
+    demoUrl: 'https://www.gym-phys-ploermel.fr/'
+  },
   'eni-enchere': {
     title: 'ENI-Enchère',
     description: 'Projet ENI - Système d\'enchères développé en Java. Application complète avec gestion des utilisateurs et des enchères.',
@@ -307,14 +315,6 @@ const projectsData = {
     tech: ['JavaScript', 'HTML', 'CSS'],
     videoUrl: null,
     codeUrl: 'https://github.com/matteorlt'
-  },
-  'gym-phys': {
-    title: 'Gym Phys',
-    description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
-    tech: ['Wordpress', 'PHP'],
-    videoUrl: null,
-    codeUrl: 'https://github.com/matteorlt',
-    demoUrl: 'https://www.gym-phys-ploermel.fr/'
   }
 };
 
