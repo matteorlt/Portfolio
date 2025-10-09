@@ -271,7 +271,6 @@ const packages = [
       'Jusqu\'à 4 pages',
       'Formulaire de contact',
       'Référencement Google de base',
-      'Hébergement inclus (1 an)',
       'Formation pour utiliser votre site',
       'Site adapté mobile et ordinateur'
     ],
@@ -281,16 +280,17 @@ const packages = [
     id: 'professional',
     title: 'Professional',
     price: '600',
-    period: '3-4 semaines',
+    period: '4-5 semaines',
     features: [
       'Design personnalisé selon vos goûts',
       'Jusqu\'à 10 pages',
       'Interface d\'administration simple',
       'Référencement Google avancé',
-      'Liens vers vos réseaux sociaux',
+      'Ajout d\'une fonctionnalité avancée',
       'Hébergement inclus (1 an)',
+      'Nom de domaine inclus (1 an)',
       'Support prioritaire',
-      'Formation pour utiliser votre site'
+      'Les avantages du pack "Starter"'
     ],
     popular: true
   },
@@ -298,7 +298,7 @@ const packages = [
     id: 'premium',
     title: 'Premium',
     price: '1 100',
-    period: '4-6 semaines',
+    period: '6-8 semaines',
     features: [
       'Design haut de gamme personnalisé',
       'Nombre de pages illimité',
@@ -306,9 +306,11 @@ const packages = [
       'Paiements sécurisés en ligne',
       'Gestion des stocks automatique',
       'Statistiques détaillées de visiteurs',
-      'Hébergement premium (1 an)',
-      'Support 24h/24 et 7j/7',
-      'Maintenance et mises à jour incluses'
+      'Fonctionnalités avancées',
+      'Hébergement inclus (1 an)',
+      'Support premium',
+      'Maintenance et mises à jour incluses',
+      'Les avantages du pack "Professional"'
     ],
     popular: false
   }

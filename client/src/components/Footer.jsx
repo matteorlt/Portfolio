@@ -118,7 +118,7 @@ const Footer = () => {
           viewport={{ once: true }}
         >
           <FooterTitle>Contact</FooterTitle>
-          <FooterText>📧 contact@matteo-rlt.fr</FooterText>
+          <FooterText>📧 rannouletexiermatteo@gmail.com</FooterText>
           <FooterText>🌐 matteo-rlt.fr</FooterText>
           <FooterText>📍 Rennes, France</FooterText>
         </FooterSection>

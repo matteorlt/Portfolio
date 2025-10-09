@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiMail, FiMapPin, FiSend, FiGithub, FiLinkedin, FiCode } from 'react-icons/fi';
+import emailjs from '@emailjs/browser';
+import { EMAILJS_CONFIG } from '../config/emailjs';
 
 const ContactContainer = styled.div`
   min-height: 100vh;
@@ -239,7 +241,18 @@ const Contact = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+
+  // Effet pour masquer la notification automatiquement
+  useEffect(() => {
+    if (showNotification) {
+      const timer = setTimeout(() => {
+        setShowNotification(false);
+      }, 5000); // Disparaît après 5 secondes
+
+      return () => clearTimeout(timer);
+    }
+  }, [showNotification]);
 
   const handleChange = (e) => {
     setFormData({
@@ -251,17 +264,83 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulation d'envoi
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setShowSuccess(true);
-      setFormData({ name: '', email: '', subject: '', message: '' });
+
+    try {
+      // Vérifier si EmailJS est configuré
+      if (EMAILJS_CONFIG.serviceId === 'service_xxxxxxx' || 
+          EMAILJS_CONFIG.contactTemplateId === 'template_VOTRE_TEMPLATE_CONTACT_ID' || 
+          EMAILJS_CONFIG.publicKey === 'your_public_key_here') {
+        alert('EmailJS n\'est pas encore configuré. Veuillez configurer les identifiants EmailJS dans le fichier de configuration.');
+        return;
+      }
+
+      // Préparer les données pour EmailJS
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        timestamp: new Date().toLocaleString('fr-FR')
+      };
+
+      // Debug: Afficher les données envoyées
+      console.log('Données EmailJS Contact:', {
+        serviceId: EMAILJS_CONFIG.serviceId,
+        templateId: EMAILJS_CONFIG.contactTemplateId,
+        publicKey: EMAILJS_CONFIG.publicKey,
+        templateParams: templateParams
+      });
+
+      // Envoyer l'email via EmailJS
+      const response = await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.contactTemplateId, // Utilise le template pour le contact
+        templateParams,
+        EMAILJS_CONFIG.publicKey
+      );
+
+      console.log('Réponse EmailJS Contact:', response);
+      console.log('Status:', response.status);
+      console.log('Text:', response.text);
+
+      if (response.status === 200) {
+        // Afficher la notification de succès
+        setShowNotification(true);
+        
+        // Réinitialiser le formulaire
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      } else {
+        throw new Error('Erreur lors de l\'envoi');
+      }
+
+    } catch (error) {
+      console.error('Erreur détaillée Contact:', error);
+      console.error('Message d\'erreur:', error.message);
+      console.error('Code d\'erreur:', error.code);
+      console.error('Status:', error.status);
       
-      setTimeout(() => {
-        setShowSuccess(false);
-      }, 3000);
-    }, 2000);
+      let errorMessage = 'Erreur lors de l\'envoi du message. ';
+      
+      if (error.message && error.message.includes('Invalid template')) {
+        errorMessage += 'Template EmailJS invalide. Vérifiez votre Template ID.';
+      } else if (error.message && error.message.includes('Invalid service')) {
+        errorMessage += 'Service EmailJS invalide. Vérifiez votre Service ID.';
+      } else if (error.message && error.message.includes('Invalid public key')) {
+        errorMessage += 'Clé publique EmailJS invalide. Vérifiez votre Public Key.';
+      } else if (error.status === 422) {
+        errorMessage += 'Données invalides (422). Vérifiez que toutes les variables du template sont correctement définies dans EmailJS.';
+      } else if (error.status === 400) {
+        errorMessage += 'Requête invalide (400). Vérifiez vos identifiants EmailJS.';
+      } else if (error.status === 401) {
+        errorMessage += 'Non autorisé (401). Vérifiez votre clé publique EmailJS.';
+      } else {
+        errorMessage += `Erreur ${error.status || 'inconnue'}. Vérifiez la console pour plus de détails.`;
+      }
+      
+      alert(errorMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -289,6 +368,57 @@ const Contact = () => {
 
   return (
     <ContactContainer>
+      {/* Notification de succès */}
+      {showNotification && (
+        <motion.div
+          initial={{ opacity: 0, x: 300, scale: 0.8 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: 300, scale: 0.8 }}
+          transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+            color: 'white',
+            padding: '1rem 1.5rem',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(40, 167, 69, 0.3)',
+            zIndex: 1000,
+            maxWidth: '400px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem'
+          }}
+        >
+          <div style={{ fontSize: '1.5rem', flexShrink: 0 }}>✅</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: '0.25rem' }}>
+              Message envoyé !
+            </div>
+            <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+              Merci ! Je vous répondrai dans les plus brefs délais.
+            </div>
+          </div>
+          <button
+            onClick={() => setShowNotification(false)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '1.2rem',
+              cursor: 'pointer',
+              padding: 0,
+              opacity: 0.7
+            }}
+            onMouseEnter={(e) => e.target.style.opacity = 1}
+            onMouseLeave={(e) => e.target.style.opacity = 0.7}
+          >
+            ×
+          </button>
+        </motion.div>
+      )}
+
       <Title
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -422,16 +552,6 @@ const Contact = () => {
             <FiSend />
             {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
           </SubmitButton>
-
-          {showSuccess && (
-            <SuccessMessage
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-            >
-              Message envoyé avec succès ! Je vous répondrai dans les plus brefs délais.
-            </SuccessMessage>
-          )}
         </ContactForm>
       </ContactGrid>
     </ContactContainer>
