@@ -1,9 +1,0 @@
-{
-  "name": "netlify-functions",
-  "version": "1.0.0",
-  "description": "Netlify Functions for Portfolio",
-  "main": "quote.js",
-  "dependencies": {
-    "nodemailer": "^6.9.7"
-  }
-}

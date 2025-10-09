@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
@@ -332,6 +332,18 @@ const Quote = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showNotification, setShowNotification] = useState(false);
+
+  // Effet pour masquer la notification automatiquement
+  useEffect(() => {
+    if (showNotification) {
+      const timer = setTimeout(() => {
+        setShowNotification(false);
+      }, 5000); // Disparaît après 5 secondes
+
+      return () => clearTimeout(timer);
+    }
+  }, [showNotification]);
 
   const handlePackageSelect = (packageId) => {
     setSelectedPackage(packageId);
@@ -398,7 +410,10 @@ const Quote = () => {
       console.log('Réponse EmailJS:', response);
 
       if (response.status === 200) {
-        setIsSubmitted(true);
+        // Afficher la notification de succès
+        setShowNotification(true);
+        
+        // Réinitialiser le formulaire
         setFormData({
           firstName: '',
           lastName: '',
@@ -455,6 +470,57 @@ const Quote = () => {
 
   return (
     <QuoteContainer>
+      {/* Notification de succès */}
+      {showNotification && (
+        <motion.div
+          initial={{ opacity: 0, x: 300, scale: 0.8 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: 300, scale: 0.8 }}
+          transition={{ duration: 0.5, type: "spring", stiffness: 200 }}
+          style={{
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+            color: 'white',
+            padding: '1rem 1.5rem',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(40, 167, 69, 0.3)',
+            zIndex: 1000,
+            maxWidth: '400px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem'
+          }}
+        >
+          <div style={{ fontSize: '1.5rem', flexShrink: 0 }}>✅</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: '0.25rem' }}>
+              Demande envoyée !
+            </div>
+            <div style={{ fontSize: '0.9rem', opacity: 0.9 }}>
+              Merci ! Je vous recontacterai dans les plus brefs délais.
+            </div>
+          </div>
+          <button
+            onClick={() => setShowNotification(false)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '1.2rem',
+              cursor: 'pointer',
+              padding: 0,
+              opacity: 0.7
+            }}
+            onMouseEnter={(e) => e.target.style.opacity = 1}
+            onMouseLeave={(e) => e.target.style.opacity = 0.7}
+          >
+            ×
+          </button>
+        </motion.div>
+      )}
+
       <Title
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -681,7 +747,7 @@ const Quote = () => {
 
                 <FormGroup>
                   <Label>
-                    🏆 Sites concurrents (optionnel)
+                    🏆 Sites d'exemple (optionnel)
                   </Label>
                   <Input
                     type="text"
