@@ -1,125 +1,65 @@
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Stars } from '@react-three/drei';
+import { OrbitControls, Stars, Environment, Float, Sparkles, ContactShadows, useGLTF } from '@react-three/drei';
 import THREE from '../utils/threeConfig';
 
-const Planet = () => {
+// Chargeur de modèle générique (compatible avec des modèles issus de pmndrs market)
+const MarketModel = ({ url = '/models/hero.glb', scale = 1, position = [0, 0, 0] }) => {
+  const gltf = useGLTF(url, true);
   return (
-    <mesh>
-      <sphereGeometry args={[1, 32, 32]} />
-      <meshStandardMaterial
-        color="#4a90e2"
-        metalness={0.1}
-        roughness={0.2}
-      />
-    </mesh>
-  );
-};
-
-const PlanetAura = () => {
-  return (
-    <mesh>
-      <sphereGeometry args={[1.3, 32, 32]} />
-      <meshBasicMaterial
-        color="#4a90e2"
-        transparent
-        opacity={0.3}
-        side={THREE.BackSide}
-      />
-    </mesh>
-  );
-};
-
-const PlanetRings = () => {
-  return (
-    <group>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[1.8, 2.5, 64]} />
-        <meshBasicMaterial
-          color="#4a90e2"
-          transparent
-          opacity={0.5}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
+    <group dispose={null} scale={scale} position={position}>
+      <primitive object={gltf.scene} />
     </group>
   );
 };
 
-const Satellites = () => {
+// Décor interactif de repli si aucun modèle n'est fourni
+const DecorativeFallback = () => {
   return (
     <group>
-      {[...Array(3)].map((_, i) => (
-        <mesh
-          key={i}
-          position={[
-            Math.cos(i * (Math.PI * 2) / 3) * 3,
-            Math.sin(i * (Math.PI * 2) / 3) * 3,
-            0
-          ]}
-        >
-          <sphereGeometry args={[0.1, 16, 16]} />
-          <meshBasicMaterial color="#ffffff" />
-        </mesh>
-      ))}
+
+      <Sparkles count={80} scale={[8, 3, 6]} size={2} speed={0.6} />
+      <Stars radius={80} depth={30} count={2000} factor={3} saturation={0} fade />
+      <ContactShadows position={[0, -1.1, 0]} opacity={0.35} scale={10} blur={2.5} far={3} />
     </group>
   );
 };
 
-const FloatingParticles = () => {
-  return (
-    <group>
-      {[...Array(20)].map((_, i) => (
-        <mesh
-          key={i}
-          position={[
-            (Math.random() - 0.5) * 15,
-            (Math.random() - 0.5) * 15,
-            (Math.random() - 0.5) * 15
-          ]}
-        >
-          <sphereGeometry args={[0.02, 6, 6]} />
-          <meshBasicMaterial color="#ffffff" transparent opacity={0.4} />
-        </mesh>
-      ))}
-    </group>
-  );
-};
-
-const Scene = () => {
+const Scene = ({ modelUrl }) => {
   return (
     <>
       <ambientLight intensity={0.5} />
-      <pointLight position={[10, 10, 10]} intensity={1} />
-      <Planet />
-      <PlanetAura />
-      <PlanetRings />
-      <Satellites />
-      <FloatingParticles />
-      <Stars radius={80} depth={30} count={2000} factor={3} saturation={0} fade />
+      <directionalLight position={[5, 5, 5]} intensity={0.9} castShadow />
+      <Environment preset="city" background={false} />
+
+      <group position={[0, 0, 0]}>
+        <Suspense fallback={<DecorativeFallback />}> 
+          {modelUrl ? (
+            <Float speed={1} rotationIntensity={0.5} floatIntensity={0.6}>
+              <MarketModel url={modelUrl} scale={1} position={[0, -0.6, 0]} />
+            </Float>
+          ) : (
+            <DecorativeFallback />
+          )}
+        </Suspense>
+      </group>
     </>
   );
 };
 
 const ThreeScene = () => {
+  // Pour charger un modèle depuis pmndrs market, placez le fichier sous public/models et
+  // changez la valeur ci-dessous, par ex: '/models/robot.glb'.
+  const modelUrl = '/3d_models/knowledge_network.glb';
+
   return (
-    <Canvas
-      camera={{ position: [2, 3, 4], fov: 75 }}
-      style={{ background: 'transparent' }}
-    >
+    <Canvas camera={{ position: [2.5, 2.2, 3.6], fov: 60 }} shadows style={{ background: 'transparent' }}>
       <Suspense fallback={null}>
-        <Scene />
-        <OrbitControls
-          enableZoom={true}
-          enablePan={true}
-          enableRotate={true}
-          zoomSpeed={0.6}
-          panSpeed={0.6}
-          rotateSpeed={0.6}
-        />
+        <Scene modelUrl={modelUrl} />
+        <OrbitControls enableZoom={true} enablePan={true} enableRotate={true} zoomSpeed={0.7} panSpeed={0.7} rotateSpeed={0.7} />
       </Suspense>
     </Canvas>
   );
 };
 
-export default ThreeScene; 
+export default ThreeScene;

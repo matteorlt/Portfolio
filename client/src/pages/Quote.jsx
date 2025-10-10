@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import BackgroundConstellation from '../components/BackgroundConstellation';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
@@ -318,6 +319,7 @@ const packages = [
 
 const Quote = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const formRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -346,6 +348,18 @@ const Quote = () => {
       return () => clearTimeout(timer);
     }
   }, [showNotification]);
+
+  // Scroll vers le formulaire lorsqu'une formule est sélectionnée
+  useEffect(() => {
+    if (selectedPackage) {
+      // Laisser le temps au formulaire de se monter avant de scroller
+      setTimeout(() => {
+        if (formRef.current) {
+          formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [selectedPackage]);
 
   const handlePackageSelect = (packageId) => {
     setSelectedPackage(packageId);
@@ -472,6 +486,7 @@ const Quote = () => {
 
   return (
     <QuoteContainer>
+      <BackgroundConstellation />
       {/* Notification de succès */}
       {showNotification && (
         <motion.div
@@ -597,6 +612,7 @@ const Quote = () => {
 
       {selectedPackage && (
         <QuoteForm
+          ref={formRef}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

@@ -228,6 +228,16 @@ const Projects = () => {
       code: 'https://github.com/matteorlt/Task-Manager'
     },
     {
+      id: 7,
+      title: 'Gym Phys',
+      description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
+      image: '🏋️',
+      tech: ['Wordpress', 'PHP'],
+      category: ['wordpress'],
+      demo: '/demo/gym-phys',
+      code: 'https://github.com/matteorlt'
+    },
+    {
       id: 2,
       title: 'ENI-Enchère',
       description: 'Projet ENI - Système d\'enchères développé en Java. Application complète avec gestion des utilisateurs et des enchères.',
@@ -277,16 +287,7 @@ const Projects = () => {
       demo: '/demo/jeu-memory',
       code: 'https://github.com/matteorlt'
     },
-    {
-      id: 7,
-      title: 'Gym Phys',
-      description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
-      image: '🛠️',
-      tech: ['Wordpress', 'PHP'],
-      category: ['wordpress'],
-      demo: '/demo/gym-phys',
-      code: 'https://github.com/matteorlt'
-    }
+    
   ];
 
   const filteredProjects = activeFilter === 'all' 
