@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Points, PointMaterial, Line2, LineMaterial, LineSegments2, LineSegmentsGeometry, OrbitControls } from '@react-three/drei';
+import { Points, PointMaterial, OrbitControls } from '@react-three/drei';
 
 // Génère des points aléatoires dans un cube [-range, range]
 function useRandomPoints(count, range) {
@@ -27,10 +27,10 @@ function Constellation({ count = 180, range = 6, linkDistance = 2.6, mouse, scro
   const frameRef = useRef(0);
   const [hasSegments, setHasSegments] = useState(false);
 
-  // Initialiser la géométrie des segments avec 0 positions pour éviter les formes parasites au centre
+  // Initialiser une géométrie vide pour les segments
   useEffect(() => {
     if (lineGeomRef.current) {
-      lineGeomRef.current.setPositions(new Float32Array(0));
+      lineGeomRef.current.setAttribute('position', new THREE.BufferAttribute(new Float32Array(0), 3));
       setHasSegments(false);
     }
   }, []);
@@ -57,7 +57,10 @@ function Constellation({ count = 180, range = 6, linkDistance = 2.6, mouse, scro
       }
     }
     const segArray = new Float32Array(segments);
-    lineGeomRef.current.setPositions(segArray);
+    if (lineGeomRef.current) {
+      lineGeomRef.current.setAttribute('position', new THREE.BufferAttribute(segArray, 3));
+      lineGeomRef.current.computeBoundingSphere();
+    }
     setHasSegments(segArray.length > 0);
   };
 
@@ -118,20 +121,12 @@ function Constellation({ count = 180, range = 6, linkDistance = 2.6, mouse, scro
         />
       </Points>
 
-      {/* Lignes fines entre points proches */}
+      {/* Lignes entre points proches (simple LineSegments basique, compatible Vite) */}
       {hasSegments && (
-        <LineSegments2 ref={linesRef}>
-          <LineSegmentsGeometry ref={lineGeomRef} />
-          <LineMaterial
-            color={colorStart}
-            linewidth={0.004}
-            resolution={resolution}
-            transparent
-            opacity={0.5}
-            depthWrite={false}
-            depthTest={false}
-          />
-        </LineSegments2>
+        <lineSegments ref={linesRef}>
+          <bufferGeometry ref={lineGeomRef} />
+          <lineBasicMaterial color={colorStart} transparent opacity={0.35} depthWrite={false} />
+        </lineSegments>
       )}
     </group>
   );
