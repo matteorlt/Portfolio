@@ -30,6 +30,15 @@ function App() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    // Injection différée de Google Tag Manager (desktop only)
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (!isMobile) {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N2CMQQZD';
+      document.head.appendChild(script);
+    }
+
     // Simulation du chargement des ressources
     const timer = setInterval(() => {
       setProgress(prev => {

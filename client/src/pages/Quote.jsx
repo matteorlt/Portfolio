@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import BackgroundConstellation from '../components/BackgroundConstellation';
+import React, { useState, useEffect, useRef } from 'react';
+let BackgroundConstellation = null;
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
@@ -319,6 +320,17 @@ const packages = [
 
 const Quote = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [showBackground, setShowBackground] = useState(false);
+
+  useEffect(() => {
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    if (isDesktop) {
+      import('../components/BackgroundConstellation').then(mod => {
+        BackgroundConstellation = mod.default;
+        setShowBackground(true);
+      }).catch(() => setShowBackground(false));
+    }
+  }, []);
   const formRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -486,7 +498,7 @@ const Quote = () => {
 
   return (
     <QuoteContainer>
-      <BackgroundConstellation />
+      {showBackground && BackgroundConstellation && <BackgroundConstellation />}
       {/* Notification de succès */}
       {showNotification && (
         <motion.div

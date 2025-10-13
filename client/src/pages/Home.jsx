@@ -74,7 +74,7 @@ const Name = styled(motion.h1)`
   }
 `;
 
-const Title = styled(motion.h3)`
+const Title = styled(motion.h2)`
   font-size: 1.5rem;
   color: #cccccc;
   margin-bottom: 2rem;
@@ -160,6 +160,11 @@ const SocialLink = styled(motion.a)`
     color: white;
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #4a90e2;
+    outline-offset: 3px;
   }
 `;
 
@@ -248,13 +253,13 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
           >
-            <SocialLink href="https://github.com/matteorlt" target="_blank" rel="noopener noreferrer">
+            <SocialLink href="https://github.com/matteorlt" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Mattéo Rannou Le Texier" title="GitHub de Mattéo Rannou Le Texier">
               <FiGithub />
             </SocialLink>
-            <SocialLink href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer">
+            <SocialLink href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn de Mattéo Rannou Le Texier" title="Profil LinkedIn de Mattéo Rannou Le Texier">
               <FiLinkedin />
             </SocialLink>
-            <SocialLink href="mailto:rannouletexiermatteo@gmail.com">
+            <SocialLink href="mailto:rannouletexiermatteo@gmail.com" aria-label="Envoyer un e-mail à Mattéo Rannou Le Texier" title="Envoyer un e-mail à Mattéo Rannou Le Texier">
               <FiMail />
             </SocialLink>
           </SocialLinks>

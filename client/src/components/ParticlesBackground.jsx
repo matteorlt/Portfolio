@@ -4,11 +4,26 @@ import { loadLinksPreset } from '@tsparticles/preset-links';
 
 const ParticlesBackground = () => {
   const [init, setInit] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
+    const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+    const prefersReduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const updateShouldRender = () => {
+      setShouldRender(!isMobile() && !prefersReduced());
+    };
+
+    updateShouldRender();
+    window.addEventListener('resize', updateShouldRender);
+
     initParticlesEngine(async (engine) => {
       await loadLinksPreset(engine);
     }).then(() => setInit(true));
+
+    return () => {
+      window.removeEventListener('resize', updateShouldRender);
+    };
   }, []);
 
   const options = {
@@ -16,6 +31,11 @@ const ParticlesBackground = () => {
     background: { color: { value: 'transparent' } },
     fullScreen: { enable: false },
     detectRetina: true,
+    fpsLimit: 45,
+    particles: {
+      number: { value: 40, density: { enable: true, value_area: 800 } },
+      move: { enable: true, speed: 1.2 }
+    },
     interactivity: {
       detectsOn: 'window',
       events: {
@@ -49,7 +69,7 @@ const ParticlesBackground = () => {
 
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none' }}>
-      {init && (
+      {init && shouldRender && (
       <Particles
         id="tsparticles"
         style={{ width: '100%', height: '100%', pointerEvents: 'auto' }}
