@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
-import ParticlesBackground from '../components/ParticlesBackground.jsx';
+// Chargement dynamique pour éviter de charger @tsparticles sur mobile
+let ParticlesBackground = null;
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
@@ -183,6 +184,18 @@ const CanvasContainer = styled.div`
 
 const Home = () => {
   const navigate = useNavigate();
+  const [showParticles, setShowParticles] = React.useState(false);
+
+  React.useEffect(() => {
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isDesktop && !prefersReduced) {
+      import('../components/ParticlesBackground.jsx').then(mod => {
+        ParticlesBackground = mod.default;
+        setShowParticles(true);
+      }).catch(() => setShowParticles(false));
+    }
+  }, []);
   return (
     <>
       <SEO 
@@ -195,7 +208,7 @@ const Home = () => {
     <HomeContainer>
       <CustomCursor />
       <BackgroundCanvas>
-        <ParticlesBackground />
+        {showParticles && ParticlesBackground && <ParticlesBackground />}
       </BackgroundCanvas>
 
       <Content>
