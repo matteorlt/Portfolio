@@ -415,6 +415,15 @@ const Quote = () => {
         // Afficher la notification de succès
         setShowNotification(true);
         
+        // Déclencher la conversion Google Ads
+        if (typeof window !== 'undefined' && window.gtag) {
+          window.gtag('event', 'conversion', {
+            'send_to': 'AW-17634174804/6HasCOPNoqkbENTO0NhB',
+            'value': 1.0,
+            'currency': 'EUR'
+          });
+        }
+        
         // Réinitialiser le formulaire
         setFormData({
           firstName: '',
