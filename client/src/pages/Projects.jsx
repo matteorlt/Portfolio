@@ -111,6 +111,13 @@ const ProjectImage = styled.div`
   }
 `;
 
+const ProjectImgTag = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+`;
+
 const ProjectContent = styled.div`
   padding: 1.5rem;
 `;
@@ -222,6 +229,7 @@ const Projects = () => {
       title: 'Task-Manager',
       description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
       image: '📋',
+      preview: '/preview/task-manager-preview.png',
       tech: ['TypeScript', 'React', 'Docker'],
       category: ['typescript'],
       demo: '/demo/task-manager',
@@ -232,6 +240,7 @@ const Projects = () => {
       title: 'Gym Phys',
       description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
       image: '🏋️',
+      preview: '/preview/gym-phys-preview.png',
       tech: ['Wordpress', 'PHP'],
       category: ['wordpress'],
       demo: '/demo/gym-phys',
@@ -340,7 +349,11 @@ const Projects = () => {
             whileHover={{ scale: 1.02 }}
           >
             <ProjectImage>
-              {project.image}
+              {project.preview ? (
+                <ProjectImgTag src={project.preview} alt={project.title} loading="lazy" />
+              ) : (
+                project.image
+              )}
             </ProjectImage>
             
             <ProjectContent>
