@@ -255,6 +255,7 @@ const Projects = () => {
       title: 'Live Chat',
       description: 'Application de chat en temps réel (React + Socket.IO) avec interface moderne et mode hors ligne.',
       image: '💬',
+      preview: '/preview/live-chat-preview.webp',
       tech: ['JavaScript', 'React', 'Socket.IO', 'Node.js'],
       category: ['javascript'],
       demo: '/demo/live-chat',

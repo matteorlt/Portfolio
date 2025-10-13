@@ -27,42 +27,28 @@ const ParticlesBackground = () => {
   }, []);
 
   const options = {
-    preset: 'links',
     background: { color: { value: 'transparent' } },
     fullScreen: { enable: false },
     detectRetina: true,
     fpsLimit: 45,
     particles: {
-      number: { value: 40, density: { enable: true, value_area: 800 } },
-      move: { enable: true, speed: 1.2 }
+      number: { value: 40, density: { enable: true, area: 800 } },
+      move: { enable: true, speed: 1.2 },
+      links: { enable: true, distance: 150, opacity: 0.4, width: 1 },
+      shape: { type: 'circle' },
+      size: { value: 2 }
     },
     interactivity: {
       detectsOn: 'window',
       events: {
-        onHover: {
-          enable: true,
-          mode: 'grab'
-        },
-        onClick: {
-          enable: true,
-          mode: 'push'
-        },
+        onHover: { enable: true, mode: 'grab' },
+        onClick: { enable: true, mode: 'push' },
         resize: true
       },
       modes: {
-        grab: {
-          distance: 140,
-          links: {
-            opacity: 0.5
-          }
-        },
-        repulse: {
-          distance: 120,
-          duration: 0.4
-        },
-        push: {
-          quantity: 2
-        }
+        grab: { distance: 140, links: { opacity: 0.5 } },
+        repulse: { distance: 120, duration: 0.4 },
+        push: { quantity: 2 }
       }
     },
     // Ajustements responsives selon la largeur de l'écran
@@ -71,14 +57,14 @@ const ParticlesBackground = () => {
         // Petits écrans (≤ 1024px)
         maxWidth: 1024,
         options: {
-          fpsLimit: 45,
           particles: {
-            number: { value: 30, density: { enable: true, value_area: 800 } },
-            move: { speed: 1.0 }
+            number: { value: 30, density: { enable: true, area: 800 } },
+            move: { speed: 1.0 },
+            links: { distance: 130 }
           },
           interactivity: {
             modes: {
-              grab: { distance: 120 },
+              grab: { distance: 120, links: { opacity: 0.5 } },
               repulse: { distance: 100 }
             }
           }
@@ -90,12 +76,13 @@ const ParticlesBackground = () => {
         maxWidth: 768,
         options: {
           particles: {
-            number: { value: 15, density: { enable: true, value_area: 700 } },
-            move: { speed: 0.8 }
+            number: { value: 15, density: { enable: true, area: 700 } },
+            move: { speed: 0.8 },
+            links: { distance: 100 }
           },
           interactivity: {
             modes: {
-              grab: { distance: 90 },
+              grab: { distance: 90, links: { opacity: 0.45 } },
               repulse: { distance: 80 }
             }
           }
@@ -106,12 +93,13 @@ const ParticlesBackground = () => {
         maxWidth: 99999,
         options: {
           particles: {
-            number: { value: 55, density: { enable: true, value_area: 1000 } },
-            move: { speed: 1.4 }
+            number: { value: 55, density: { enable: true, area: 1000 } },
+            move: { speed: 1.4 },
+            links: { distance: 170 }
           },
           interactivity: {
             modes: {
-              grab: { distance: 160 },
+              grab: { distance: 160, links: { opacity: 0.5 } },
               repulse: { distance: 140 }
             }
           }

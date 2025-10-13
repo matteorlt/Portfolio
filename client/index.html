@@ -43,8 +43,11 @@
     <link rel="icon" href="/ico/bright/favicon.ico" />
     <link rel="manifest" href="/ico/bright/site.webmanifest" />
     
-    <!-- Fonts optimisées pour les performances -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Fonts optimisées pour les performances: preload non-bloquant + fallback noscript -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
     
     <title>Mattéo Rannou Le Texier - Développeur Web & Web Mobile | Portfolio</title>
   </head>
