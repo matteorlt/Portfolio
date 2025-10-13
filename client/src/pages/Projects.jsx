@@ -75,6 +75,7 @@ const ProjectCard = styled(motion.div)`
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
+  will-change: transform;
 
   &:hover {
     transform: translateY(-10px);
@@ -109,6 +110,16 @@ const ProjectImage = styled.div`
   ${ProjectCard}:hover &::before {
     transform: translateX(100%);
   }
+`;
+
+const ProjectImgTag = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  image-rendering: auto;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 `;
 
 const ProjectContent = styled.div`
@@ -211,7 +222,6 @@ const Projects = () => {
   const filters = [
     { id: 'all', label: 'Tous' },
     { id: 'typescript', label: 'TypeScript' },
-    { id: 'java', label: 'Java' },
     { id: 'javascript', label: 'JavaScript' },
     { id: 'wordpress', label: 'WordPress' }
   ];
@@ -222,20 +232,34 @@ const Projects = () => {
       title: 'Task-Manager',
       description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
       image: '📋',
-      tech: ['TypeScript', 'React', 'Docker'],
+      preview: '/preview/task-manager-preview.webp',
+      tech: ['TypeScript', 'React', 'Docker', 'CI/CD'],
       category: ['typescript'],
       demo: '/demo/task-manager',
       code: 'https://github.com/matteorlt/Task-Manager'
     },
     {
+      id: 7,
+      title: 'Gym Phys',
+      description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
+      image: '🏋️',
+      preview: '/preview/gym-phys-preview.webp',
+      tech: ['Wordpress', 'PHP'],
+      category: ['wordpress'],
+      demo: '/demo/gym-phys',
+      code: 'https://github.com/matteorlt',
+      hideCode: true
+    },
+    {
       id: 2,
-      title: 'ENI-Enchère',
-      description: 'Projet ENI - Système d\'enchères développé en Java. Application complète avec gestion des utilisateurs et des enchères.',
-      image: '🏷️',
-      tech: ['Java', 'JSP', 'Servlet'],
-      category: ['java'],
-      demo: '/demo/eni-enchere',
-      code: 'https://github.com/matteorlt/ENI-Enchere'
+      title: 'Live Chat',
+      description: 'Application de chat en temps réel (React + Socket.IO) avec interface moderne et mode hors ligne.',
+      image: '💬',
+      preview: '/preview/live-chat-preview.webp',
+      tech: ['JavaScript', 'React', 'Socket.IO', 'Node.js'],
+      category: ['javascript'],
+      demo: '/demo/live-chat',
+      code: 'https://github.com/matteorlt/live-chat'
     },
     {
       id: 3,
@@ -267,26 +291,8 @@ const Projects = () => {
       demo: '/demo/site-react-openclassroom',
       code: 'https://github.com/matteorlt'
     },
-    {
-      id: 6,
-      title: 'Jeu Memory',
-      description: 'Jeu Memory interactif développé en JavaScript. Interface moderne avec animations et système de score.',
-      image: '🧠',
-      tech: ['JavaScript', 'HTML', 'CSS'],
-      category: ['javascript'],
-      demo: '/demo/jeu-memory',
-      code: 'https://github.com/matteorlt'
-    },
-    {
-      id: 7,
-      title: 'Gym Phys',
-      description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
-      image: '🛠️',
-      tech: ['Wordpress', 'PHP'],
-      category: ['wordpress'],
-      demo: '/demo/gym-phys',
-      code: 'https://github.com/matteorlt'
-    }
+    
+    
   ];
 
   const filteredProjects = activeFilter === 'all' 
@@ -339,7 +345,18 @@ const Projects = () => {
             whileHover={{ scale: 1.02 }}
           >
             <ProjectImage>
-              {project.image}
+              {project.preview ? (
+                <ProjectImgTag
+                  src={project.preview}
+                  alt={project.title}
+                  loading="lazy"
+                  decoding="async"
+                  srcSet={project.preview2x ? `${project.preview} 1x, ${project.preview2x} 2x` : undefined}
+                  sizes="(max-width: 768px) 100vw, 400px"
+                />
+              ) : (
+                project.image
+              )}
             </ProjectImage>
             
             <ProjectContent>
@@ -357,10 +374,12 @@ const Projects = () => {
                   <FiEye />
                   Demo
                 </ProjectLinkRouter>
-                <ProjectLink href={project.code} className="code" target="_blank" rel="noopener noreferrer">
-                  <FiGithub />
-                  Code
-                </ProjectLink>
+                {project.code && !project.hideCode && (
+                  <ProjectLink href={project.code} className="code" target="_blank" rel="noopener noreferrer">
+                    <FiGithub />
+                    Code
+                  </ProjectLink>
+                )}
               </ProjectLinks>
             </ProjectContent>
           </ProjectCard>

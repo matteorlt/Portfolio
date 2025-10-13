@@ -1,13 +1,15 @@
-import React, { Suspense, useRef, useState, useCallback, lazy } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
+// Chargement dynamique pour éviter de charger @tsparticles sur mobile
+let ParticlesBackground = null;
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
+import CustomCursor from '../components/CustomCursor.jsx';
 
-// Lazy loading pour Three.js
-const ThreeScene = lazy(() => import('../components/ThreeScene.jsx'));
+// Fond 3D Three.js retiré: tsParticles est utilisé en arrière-plan global
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -73,7 +75,7 @@ const Name = styled(motion.h1)`
   }
 `;
 
-const Title = styled(motion.h3)`
+const Title = styled(motion.h2)`
   font-size: 1.5rem;
   color: #cccccc;
   margin-bottom: 2rem;
@@ -160,6 +162,11 @@ const SocialLink = styled(motion.a)`
     transform: translateY(-3px);
     box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
   }
+
+  &:focus-visible {
+    outline: 2px solid #4a90e2;
+    outline-offset: 3px;
+  }
 `;
 
 const CanvasContainer = styled.div`
@@ -177,6 +184,18 @@ const CanvasContainer = styled.div`
 
 const Home = () => {
   const navigate = useNavigate();
+  const [showParticles, setShowParticles] = React.useState(false);
+
+  React.useEffect(() => {
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (isDesktop && !prefersReduced) {
+      import('../components/ParticlesBackground.jsx').then(mod => {
+        ParticlesBackground = mod.default;
+        setShowParticles(true);
+      }).catch(() => setShowParticles(false));
+    }
+  }, []);
   return (
     <>
       <SEO 
@@ -187,10 +206,9 @@ const Home = () => {
       />
       <StructuredData />
     <HomeContainer>
+      <CustomCursor />
       <BackgroundCanvas>
-        <Suspense fallback={<div style={{ background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)', width: '100%', height: '100%' }} />}>
-          <ThreeScene />
-        </Suspense>
+        {showParticles && ParticlesBackground && <ParticlesBackground />}
       </BackgroundCanvas>
 
       <Content>
@@ -208,7 +226,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Mattéo Rannou Le Texier
+            Mattéo
           </Name>
           
           <Title
@@ -225,7 +243,7 @@ const Home = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             Passionné par le développement web et mobile. 
-            Spécialisé en React, Java, PHP et JavaScript pour créer 
+            Spécialisé en React et JS/TS/Node.js pour créer 
             des applications modernes et performantes.
           </Description>
           
@@ -248,13 +266,13 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 1.2 }}
           >
-            <SocialLink href="https://github.com/matteorlt" target="_blank" rel="noopener noreferrer">
+            <SocialLink href="https://github.com/matteorlt" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Mattéo Rannou Le Texier" title="GitHub de Mattéo Rannou Le Texier">
               <FiGithub />
             </SocialLink>
-            <SocialLink href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer">
+            <SocialLink href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn de Mattéo Rannou Le Texier" title="Profil LinkedIn de Mattéo Rannou Le Texier">
               <FiLinkedin />
             </SocialLink>
-            <SocialLink href="mailto:rannouletexiermatteo@gmail.com">
+            <SocialLink href="mailto:rannouletexiermatteo@gmail.com" aria-label="Envoyer un e-mail à Mattéo Rannou Le Texier" title="Envoyer un e-mail à Mattéo Rannou Le Texier">
               <FiMail />
             </SocialLink>
           </SocialLinks>

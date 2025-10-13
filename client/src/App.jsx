@@ -1,11 +1,13 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
-import Navbar from './components/Navbar.jsx';
-import Footer from './components/Footer.jsx';
 import Loading from './components/Loading.jsx';
 import GlobalStyle from './styles/GlobalStyle.jsx';
-import ThemeIcons from './components/ThemeIcons.jsx';
+
+// Lazy-load des composants globaux pour réduire le JS initial
+const Navbar = React.lazy(() => import('./components/Navbar.jsx'));
+const Footer = React.lazy(() => import('./components/Footer.jsx'));
+const ThemeIcons = React.lazy(() => import('./components/ThemeIcons.jsx'));
 
 // Lazy loading pour améliorer les performances
 const Home = lazy(() => import('./pages/Home.jsx'));
@@ -20,7 +22,7 @@ const LegalNotices = lazy(() => import('./pages/LegalNotices.jsx'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  background: transparent;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
 `;
@@ -30,6 +32,25 @@ function App() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
+    // Injection GTM maxim. différée (desktop uniquement et après load + idle)
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const deferGTM = () => {
+      if (isMobile) return;
+      const loadScript = () => {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N2CMQQZD';
+        document.head.appendChild(script);
+      };
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(loadScript, { timeout: 3000 });
+      } else {
+        setTimeout(loadScript, 1500);
+      }
+    };
+    if (document.readyState === 'complete') deferGTM();
+    else window.addEventListener('load', deferGTM, { once: true });
+
     // Simulation du chargement des ressources
     const timer = setInterval(() => {
       setProgress(prev => {
@@ -42,7 +63,10 @@ function App() {
       });
     }, 100);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('load', deferGTM);
+    };
   }, []);
 
   if (isLoading) {
@@ -52,9 +76,13 @@ function App() {
   return (
     <Router>
       <GlobalStyle />
-      <ThemeIcons theme="auto" />
+      <Suspense fallback={null}>
+        <ThemeIcons theme="auto" />
+      </Suspense>
       <AppContainer>
-        <Navbar />
+        <Suspense fallback={null}>
+          <Navbar />
+        </Suspense>
         <Suspense fallback={<Loading progress={100} />}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -68,7 +96,9 @@ function App() {
           <Route path="/legal-notices" element={<LegalNotices />} />
         </Routes>
         </Suspense>
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </AppContainer>
     </Router>
   );

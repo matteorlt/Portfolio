@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+let BackgroundConstellation = null;
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
@@ -264,8 +265,8 @@ const packages = [
   {
     id: 'starter',
     title: 'Starter',
-    price: '300',
-    period: '2-3 semaines',
+    price: '500',
+    period: '1-2 semaines',
     features: [
       'Site WordPress (facile à utiliser)',
       'Jusqu\'à 4 pages',
@@ -279,8 +280,8 @@ const packages = [
   {
     id: 'professional',
     title: 'Professional',
-    price: '600',
-    period: '4-5 semaines',
+    price: '900',
+    period: '3-4 semaines',
     features: [
       'Design personnalisé selon vos goûts',
       'Jusqu\'à 10 pages',
@@ -297,7 +298,7 @@ const packages = [
   {
     id: 'premium',
     title: 'Premium',
-    price: '1 100',
+    price: '1 500',
     period: '6-8 semaines',
     features: [
       'Design haut de gamme personnalisé',
@@ -318,6 +319,18 @@ const packages = [
 
 const Quote = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
+  const [showBackground, setShowBackground] = useState(false);
+
+  useEffect(() => {
+    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
+    if (isDesktop) {
+      import('../components/BackgroundConstellation').then(mod => {
+        BackgroundConstellation = mod.default;
+        setShowBackground(true);
+      }).catch(() => setShowBackground(false));
+    }
+  }, []);
+  const formRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -346,6 +359,18 @@ const Quote = () => {
       return () => clearTimeout(timer);
     }
   }, [showNotification]);
+
+  // Scroll vers le formulaire lorsqu'une formule est sélectionnée
+  useEffect(() => {
+    if (selectedPackage) {
+      // Laisser le temps au formulaire de se monter avant de scroller
+      setTimeout(() => {
+        if (formRef.current) {
+          formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+  }, [selectedPackage]);
 
   const handlePackageSelect = (packageId) => {
     setSelectedPackage(packageId);
@@ -481,6 +506,7 @@ const Quote = () => {
 
   return (
     <QuoteContainer>
+      {showBackground && BackgroundConstellation && <BackgroundConstellation />}
       {/* Notification de succès */}
       {showNotification && (
         <motion.div
@@ -606,6 +632,7 @@ const Quote = () => {
 
       {selectedPackage && (
         <QuoteForm
+          ref={formRef}
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

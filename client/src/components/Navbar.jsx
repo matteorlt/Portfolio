@@ -43,7 +43,7 @@ const Logo = styled(Link)`
 
 const LogoImage = styled.img`
   height: 50px;
-  width: auto;
+  width: 50px;
   transition: all 0.3s ease;
   
   ${Logo}:hover & {
@@ -190,6 +190,10 @@ const Navbar = () => {
           <LogoImage 
             src="/logos/logo_dark.png" 
             alt="Logo Mattéo Rannou Le Texier"
+            width="50"
+            height="50"
+            loading="eager"
+            decoding="async"
           />
           <LogoText>Portfolio</LogoText>
         </Logo>
