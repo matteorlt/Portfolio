@@ -149,7 +149,14 @@ const About = () => {
     { name: 'TypeScript', icon: '📘' },
     { name: 'HTML/CSS', icon: '🎨' },
     { name: 'Docker', icon: '🐳' },
-    { name: 'Git', icon: '📦' }
+    { name: 'Git', icon: '📦' },
+    { name: 'Symfony', icon: '🧩' },
+    { name: 'Spring Boot', icon: '🍃' },
+    { name: 'SQL', icon: '🛢️' },
+    { name: 'WordPress', icon: '📝' },
+    { name: 'SEO', icon: '🔍' },
+    { name: 'API REST', icon: '🌐' },
+    { name: 'XML/JSON', icon: '📄' }
   ];
 
   return (
@@ -179,7 +186,7 @@ const About = () => {
           
           <Paragraph>
             J'ai déjà eu l'occasion de travailler sur plusieurs projets concrets : Task-Manager, 
-            ENI-Enchère, Auth, ticket-support-app et d'autres projets créatifs. 
+            Gym-Phys, un système d'authentification, un système de ticket support et d'autres projets créatifs. 
             J'accorde une grande importance à la qualité du code et à l'expérience utilisateur.
           </Paragraph>
           
@@ -200,7 +207,7 @@ const About = () => {
               transition={{ duration: 0.3 }}
             >
               <StatIcon>
-                <FiCode />
+                <FiTrendingUp />
               </StatIcon>
               <StatNumber>7</StatNumber>
               <StatLabel>Projets réalisés</StatLabel>
@@ -213,7 +220,7 @@ const About = () => {
               <StatIcon>
                 <FiUsers />
               </StatIcon>
-              <StatNumber>1+</StatNumber>
+              <StatNumber>100%</StatNumber>
               <StatLabel>Clients satisfaits</StatLabel>
             </StatCard>
             
@@ -233,10 +240,10 @@ const About = () => {
               transition={{ duration: 0.3 }}
             >
               <StatIcon>
-                <FiTrendingUp />
+                <FiCode />
               </StatIcon>
-              <StatNumber>100%</StatNumber>
-              <StatLabel>Taux de réussite</StatLabel>
+              <StatNumber>10+</StatNumber>
+              <StatLabel>Technologies maîtrisées</StatLabel>
             </StatCard>
           </StatsGrid>
         </motion.div>

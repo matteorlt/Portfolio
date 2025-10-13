@@ -6,6 +6,7 @@ import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
+import CustomCursor from '../components/CustomCursor.jsx';
 
 // Fond 3D Three.js retiré: tsParticles est utilisé en arrière-plan global
 
@@ -187,6 +188,7 @@ const Home = () => {
       />
       <StructuredData />
     <HomeContainer>
+      <CustomCursor />
       <BackgroundCanvas>
         <ParticlesBackground />
       </BackgroundCanvas>
