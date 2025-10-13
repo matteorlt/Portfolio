@@ -75,6 +75,7 @@ const ProjectCard = styled(motion.div)`
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
+  will-change: transform;
 
   &:hover {
     transform: translateY(-10px);
@@ -116,6 +117,9 @@ const ProjectImgTag = styled.img`
   height: 100%;
   object-fit: cover;
   display: block;
+  image-rendering: auto;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 `;
 
 const ProjectContent = styled.div`
@@ -229,7 +233,7 @@ const Projects = () => {
       title: 'Task-Manager',
       description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
       image: '📋',
-      preview: '/preview/task-manager-preview.png',
+      preview: '/preview/task-manager-preview.webp',
       tech: ['TypeScript', 'React', 'Docker'],
       category: ['typescript'],
       demo: '/demo/task-manager',
@@ -240,7 +244,7 @@ const Projects = () => {
       title: 'Gym Phys',
       description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
       image: '🏋️',
-      preview: '/preview/gym-phys-preview.png',
+      preview: '/preview/gym-phys-preview.webp',
       tech: ['Wordpress', 'PHP'],
       category: ['wordpress'],
       demo: '/demo/gym-phys',
@@ -350,7 +354,14 @@ const Projects = () => {
           >
             <ProjectImage>
               {project.preview ? (
-                <ProjectImgTag src={project.preview} alt={project.title} loading="lazy" />
+                <ProjectImgTag
+                  src={project.preview}
+                  alt={project.title}
+                  loading="lazy"
+                  decoding="async"
+                  srcSet={project.preview2x ? `${project.preview} 1x, ${project.preview2x} 2x` : undefined}
+                  sizes="(max-width: 768px) 100vw, 400px"
+                />
               ) : (
                 project.image
               )}
