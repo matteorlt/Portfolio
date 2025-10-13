@@ -1,4 +1,5 @@
-import React, { Suspense, useRef, useState, useCallback, lazy } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
+import ParticlesBackground from '../components/ParticlesBackground.jsx';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiGithub, FiLinkedin, FiMail, FiDownload } from 'react-icons/fi';
@@ -6,8 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
 
-// Lazy loading pour Three.js
-const ThreeScene = lazy(() => import('../components/ThreeScene.jsx'));
+// Fond 3D Three.js retiré: tsParticles est utilisé en arrière-plan global
 
 const HomeContainer = styled.div`
   min-height: 100vh;
@@ -188,9 +188,7 @@ const Home = () => {
       <StructuredData />
     <HomeContainer>
       <BackgroundCanvas>
-        <Suspense fallback={<div style={{ background: 'linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%)', width: '100%', height: '100%' }} />}>
-          <ThreeScene />
-        </Suspense>
+        <ParticlesBackground />
       </BackgroundCanvas>
 
       <Content>
@@ -208,7 +206,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Mattéo Rannou Le Texier
+            Mattéo
           </Name>
           
           <Title
@@ -225,7 +223,7 @@ const Home = () => {
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             Passionné par le développement web et mobile. 
-            Spécialisé en React, Java, PHP et JavaScript pour créer 
+            Spécialisé en React et JS/TS/Node.js pour créer 
             des applications modernes et performantes.
           </Description>
           
