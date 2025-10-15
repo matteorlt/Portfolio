@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { buildContactNotificationEmail } = require('./templates');
 
 exports.handler = async (event) => {
   try {
@@ -19,17 +20,8 @@ exports.handler = async (event) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
-      logger: true,
-      debug: true,
     });
 
-    console.log('[SMTP CONFIG]', {
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: process.env.SMTP_SECURE,
-      user: process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO || process.env.EMAIL_USER,
-    });
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
@@ -37,16 +29,7 @@ exports.handler = async (event) => {
       subject: `Nouveau message de contact: ${subject}`,
       replyTo: email,
       text: `Nouveau message de contact\n\nNom: ${name}\nEmail: ${email}\nSujet: ${subject}\n\nMessage:\n${message}`,
-      html: `
-        <div style="font-family:Inter,Segoe UI,Arial,sans-serif;color:#111;">
-          <h2>Nouveau message de contact</h2>
-          <p><strong>Nom:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Sujet:</strong> ${subject}</p>
-          <h3>Message</h3>
-          <p>${String(message).replace(/\n/g, '<br>')}</p>
-        </div>
-      `,
+      html: buildContactNotificationEmail({ name, email, subject, message }),
     };
 
     await transporter.sendMail(mailOptions);

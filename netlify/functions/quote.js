@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const { buildQuoteNotificationEmail, buildQuoteConfirmationEmail } = require('./templates');
 
 exports.handler = async (event) => {
   try {
@@ -20,17 +21,8 @@ exports.handler = async (event) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
-      logger: true,
-      debug: true,
     });
 
-    console.log('[SMTP CONFIG]', {
-      host: process.env.SMTP_HOST,
-      port: process.env.SMTP_PORT,
-      secure: process.env.SMTP_SECURE,
-      user: process.env.EMAIL_USER,
-      to: process.env.EMAIL_TO || process.env.EMAIL_USER,
-    });
 
     const notify = {
       from: process.env.EMAIL_USER,
@@ -38,20 +30,7 @@ exports.handler = async (event) => {
       subject: `Nouvelle demande de devis - ${packageDetails?.title || 'Formule inconnue'}`,
       replyTo: email,
       text: `Formule: ${packageDetails?.title} (EUR ${packageDetails?.price})\nPériode: ${packageDetails?.period}\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nTéléphone: ${phone || 'Non renseigné'}\nEntreprise: ${company || 'Non renseignée'}\n\nMessage:\n${message || 'Aucun message'}`,
-      html: `
-        <div style="font-family:Inter,Segoe UI,Arial,sans-serif;color:#111;">
-          <h2>Nouvelle demande de devis</h2>
-          <p><strong>Formule:</strong> ${packageDetails?.title} (€${packageDetails?.price})</p>
-          <p><strong>Période:</strong> ${packageDetails?.period}</p>
-          <h3>Client</h3>
-          <p><strong>Nom:</strong> ${firstName} ${lastName}<br/>
-          <strong>Email:</strong> ${email}<br/>
-          <strong>Téléphone:</strong> ${phone || 'Non renseigné'}<br/>
-          <strong>Entreprise:</strong> ${company || 'Non renseignée'}</p>
-          <h3>Message</h3>
-          <p>${String(message || 'Aucun message').replace(/\n/g, '<br>')}</p>
-        </div>
-      `,
+      html: buildQuoteNotificationEmail({ firstName, lastName, email, phone, company, message, packageDetails }),
     };
 
     const confirm = {
@@ -60,16 +39,7 @@ exports.handler = async (event) => {
       subject: 'Confirmation de votre demande de devis',
       replyTo: process.env.EMAIL_USER,
       text: `Bonjour ${firstName},\nMerci pour votre demande.\nFormule: ${packageDetails?.title}\nPrix: EUR ${packageDetails?.price}\nPériode: ${packageDetails?.period}\n\nJe reviens vers vous rapidement.`,
-      html: `
-        <div style="font-family:Inter,Segoe UI,Arial,sans-serif;color:#111;">
-          <p>Bonjour ${firstName},</p>
-          <p>Merci pour votre demande de devis. Voici un récapitulatif:</p>
-          <p><strong>Formule:</strong> ${packageDetails?.title} (€${packageDetails?.price})<br/>
-          <strong>Période:</strong> ${packageDetails?.period}</p>
-          <p>Je reviens vers vous très rapidement.</p>
-          <p>Cordialement,<br/>Mattéo Rannou‑Le Texier</p>
-        </div>
-      `,
+      html: buildQuoteConfirmationEmail({ firstName, packageDetails }),
     };
 
     await transporter.sendMail(notify);

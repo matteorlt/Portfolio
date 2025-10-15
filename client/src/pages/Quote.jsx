@@ -540,7 +540,7 @@ const Quote = () => {
           >
             <PackageTitle>{pkg.title}</PackageTitle>
             <PackagePrice>€{pkg.price}</PackagePrice>
-            <PackagePriceNote>Prix approximatif</PackagePriceNote>
+            <PackagePriceNote>Prix approximatif HT</PackagePriceNote>
             <PackagePeriod>{pkg.period}</PackagePeriod>
             
             <FeaturesList>
