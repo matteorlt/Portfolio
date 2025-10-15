@@ -514,26 +514,6 @@ const Contact = () => {
             <FiSend />
             {isSubmitting ? 'Envoi en cours...' : 'Envoyer le message'}
           </SubmitButton>
-
-          {import.meta.env.MODE !== 'production' && (
-            <SubmitButton
-              type="button"
-              style={{ marginTop: '0.75rem', background: '#555' }}
-              onClick={async () => {
-                try {
-                  const res = await fetch('/api/test-email', { method: 'POST' });
-                  const data = await res.json();
-                  alert(data.success ? `Test OK: ${data.response || ''}` : `Test KO: ${data.message || 'Erreur'}`);
-                } catch (e) {
-                  alert(`Erreur test: ${e.message}`);
-                }
-              }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Tester l'envoi (serveur)
-            </SubmitButton>
-          )}
         </ContactForm>
       </ContactGrid>
     </ContactContainer>
