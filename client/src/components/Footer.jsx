@@ -25,7 +25,7 @@ const FooterContent = styled.div`
   }
 `;
 
-const FooterSection = styled.div`
+const FooterSection = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -57,7 +57,7 @@ const FooterText = styled.p`
   line-height: 1.4;
 `;
 
-const FooterBottom = styled.div`
+const FooterBottom = styled(motion.div)`
   border-top: 1px solid rgba(74, 144, 226, 0.1);
   margin-top: 2rem;
   padding-top: 1rem;
@@ -118,7 +118,7 @@ const Footer = () => {
           viewport={{ once: true }}
         >
           <FooterTitle>Contact</FooterTitle>
-          <FooterText>📧 rannouletexiermatteo@gmail.com</FooterText>
+          <FooterText>📧 contact@matteo-rlt.fr</FooterText>
           <FooterText>🌐 matteo-rlt.fr</FooterText>
           <FooterText>📍 Rennes, France</FooterText>
         </FooterSection>

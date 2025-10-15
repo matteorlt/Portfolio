@@ -38,6 +38,57 @@ app.get('/api/health', (req, res) => {
   res.json({ message: 'Portfolio API is running!' });
 });
 
+// Route pour envoyer les messages de contact via SMTP
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ success: false, message: 'Champs requis manquants' });
+    }
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+      to: process.env.EMAIL_TO || 'contact@matteo-rlt.fr',
+      subject: `Nouveau message de contact: ${subject}`,
+      html: `
+        <h2>Nouveau message de contact</h2>
+        <ul>
+          <li><strong>Nom:</strong> ${name}</li>
+          <li><strong>Email:</strong> ${email}</li>
+          <li><strong>Sujet:</strong> ${subject}</li>
+        </ul>
+        <h3>Message</h3>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+        <hr>
+        <p><em>Envoyé le ${new Date().toLocaleString('fr-FR')}</em></p>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true, message: 'Message envoyé avec succès' });
+  } catch (error) {
+    console.error('❌ Erreur contact:', error);
+    res.status(500).json({ success: false, message: error.message, code: error.code });
+  }
+});
+// Endpoint de test pour vérifier l'envoi d'email côté serveur
+app.post('/api/test-email', async (req, res) => {
+  try {
+    const testTo = process.env.EMAIL_TO || 'contact@matteo-rlt.fr';
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+      to: testTo,
+      subject: '✅ Test SMTP - Portfolio',
+      text: 'Ceci est un email de test envoyé via l\'endpoint /api/test-email.',
+      html: '<p>Ceci est un email de <strong>test</strong> envoyé via l\'endpoint <code>/api/test-email</code>.</p>'
+    });
+    res.json({ success: true, message: 'Test envoyé', envelope: info.envelope, response: info.response });
+  } catch (error) {
+    console.error('❌ Test email error:', error);
+    res.status(500).json({ success: false, message: error.message, code: error.code });
+  }
+});
+
 // Route pour envoyer les devis
 app.post('/api/quote', async (req, res) => {
   try {
