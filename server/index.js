@@ -7,12 +7,14 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Configuration du transporteur email
+
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.SMTP_HOST || 'smtp.zoho.com',
+  port: Number(process.env.SMTP_PORT || 465), // 465 SSL, 587 STARTTLS
+  secure: (process.env.SMTP_SECURE || 'true') === 'true', // true pour 465
   auth: {
     user: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
-    pass: process.env.EMAIL_PASS || 'votre-mot-de-passe-app'
+    pass: process.env.EMAIL_PASS // DOIT être un mot de passe d'application
   }
 });
 
@@ -73,7 +75,7 @@ app.post('/api/quote', async (req, res) => {
 
     // Email de confirmation pour le client
     const confirmationMailOptions = {
-      from: process.env.EMAIL_USER || 'votre-email@gmail.com',
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
       to: email,
       subject: 'Confirmation de votre demande de devis',
       html: `
