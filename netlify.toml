@@ -10,6 +10,9 @@
   directory = "../netlify/functions"
   node_bundler = "esbuild"
 
+[[plugins]]
+  package = "@netlify/plugin-functions-install-core"
+
 [[redirects]]
   from = "/api/contact"
   to = "/.netlify/functions/contact"
