@@ -356,7 +356,7 @@ const Contact = () => {
     {
       icon: <FiMail />,
       label: 'Email',
-      value: 'rannouletexiermatteo@gmail.com'
+      value: 'contact@matteo-rlt.fr'
     },
     {
       icon: <FiMapPin />,

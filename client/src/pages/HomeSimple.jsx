@@ -309,7 +309,7 @@ const HomeSimple = () => {
             <SocialLink href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer">
               <FiLinkedin />
             </SocialLink>
-            <SocialLink href="mailto:rannouletexiermatteo@gmail.com">
+            <SocialLink href="mailto:contact@matteo-rlt.fr">
               <FiMail />
             </SocialLink>
           </SocialLinks>

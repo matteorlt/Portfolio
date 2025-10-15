@@ -272,7 +272,7 @@ const Home = () => {
             <SocialLink href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer" aria-label="Profil LinkedIn de Mattéo Rannou Le Texier" title="Profil LinkedIn de Mattéo Rannou Le Texier">
               <FiLinkedin />
             </SocialLink>
-            <SocialLink href="mailto:rannouletexiermatteo@gmail.com" aria-label="Envoyer un e-mail à Mattéo Rannou Le Texier" title="Envoyer un e-mail à Mattéo Rannou Le Texier">
+            <SocialLink href="mailto:contact@matteo-rlt.fr" aria-label="Envoyer un e-mail à Mattéo Rannou Le Texier" title="Envoyer un e-mail à Mattéo Rannou Le Texier">
               <FiMail />
             </SocialLink>
           </SocialLinks>

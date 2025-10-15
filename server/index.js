@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'votre-email@gmail.com',
+    user: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
     pass: process.env.EMAIL_PASS || 'votre-mot-de-passe-app'
   }
 });
@@ -43,8 +43,8 @@ app.post('/api/quote', async (req, res) => {
 
     // Email pour vous (notification)
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'votre-email@gmail.com',
-      to: process.env.EMAIL_TO || 'votre-email@gmail.com',
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+      to: process.env.EMAIL_TO || 'contact@matteo-rlt.fr',
       subject: `Nouvelle demande de devis - ${packageDetails?.title || 'Formule inconnue'}`,
       html: `
         <h2>Nouvelle demande de devis</h2>
