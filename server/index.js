@@ -29,7 +29,7 @@ transporter.verify((error, success) => {
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Routes API
 app.get('/api/health', (req, res) => {
@@ -133,11 +133,12 @@ app.post('/api/quote', async (req, res) => {
 
 // Route pour servir l'app React en production
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur le port ${PORT}`);
-  console.log(`📱 Frontend: http://localhost:3000`);
-  console.log(`🔧 Backend: http://localhost:${PORT}`);
+  console.log(`🌐 Application disponible sur: http://localhost:${PORT}`);
+  console.log(`📧 API Email configurée: ${process.env.EMAIL_USER ? '✅' : '❌'}`);
+  console.log(`🔧 Environnement: ${process.env.NODE_ENV || 'development'}`);
 }); 
