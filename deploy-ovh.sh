@@ -52,6 +52,13 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+log_info "Vérification des fichiers de configuration..."
+if [ ! -f ".env" ]; then
+    log_warn "Fichier .env manquant. Copie du template..."
+    cp env.example .env
+    log_warn "⚠️  Veuillez configurer le fichier .env avec vos vraies valeurs avant de continuer"
+fi
+
 # Vérifier si PM2 est installé
 if ! command -v pm2 &> /dev/null; then
     log_warn "PM2 n'est pas installé. Installation..."

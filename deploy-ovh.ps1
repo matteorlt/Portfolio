@@ -53,6 +53,13 @@ if ($LASTEXITCODE -ne 0) {
     exit 1
 }
 
+Log-Info "Vérification des fichiers de configuration..."
+if (-not (Test-Path ".env")) {
+    Log-Warn "Fichier .env manquant. Copie du template..."
+    Copy-Item "env.example" ".env"
+    Log-Warn "⚠️  Veuillez configurer le fichier .env avec vos vraies valeurs avant de continuer"
+}
+
 # Vérifier si PM2 est installé
 try {
     $pm2Version = pm2 --version

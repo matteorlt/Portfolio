@@ -6,9 +6,14 @@ Créez un fichier `.env` à la racine du projet avec :
 ```env
 NODE_ENV=production
 PORT=5000
-EMAIL_USER=votre-email@gmail.com
-EMAIL_PASS=votre-mot-de-passe-app
-EMAIL_TO=votre-email@gmail.com
+
+# Configuration SMTP (Zoho Mail recommandé pour OVH)
+SMTP_HOST=smtp.zoho.com
+SMTP_PORT=465
+SMTP_SECURE=true
+EMAIL_USER=contact@matteo-rlt.fr
+EMAIL_PASS=votre-mot-de-passe-app-zoho
+EMAIL_TO=contact@matteo-rlt.fr
 ```
 
 ## Installation sur OVH
@@ -20,30 +25,54 @@ EMAIL_TO=votre-email@gmail.com
    cd Portfolio
    ```
 
-3. **Installez les dépendances** :
+3. **Testez la configuration** :
+   ```bash
+   chmod +x test-deployment.sh
+   ./test-deployment.sh
+   ```
+
+4. **Configurez les variables d'environnement** :
+   ```bash
+   cp env.example .env
+   nano .env  # Éditez avec vos vraies valeurs
+   ```
+
+5. **Installez les dépendances** :
    ```bash
    npm run install-all
    ```
 
-4. **Construisez le frontend** :
+6. **Construisez le frontend** :
    ```bash
-   npm run build
+   npm run build:prod
    ```
 
-5. **Installez PM2** (gestionnaire de processus) :
+7. **Installez PM2** (gestionnaire de processus) :
    ```bash
    npm install -g pm2
    ```
 
-6. **Démarrez l'application** :
+8. **Déployez automatiquement** :
    ```bash
-   pm2 start ecosystem.config.js --env production
+   chmod +x deploy-ovh.sh
+   ./deploy-ovh.sh
    ```
 
-7. **Configurez PM2 pour le démarrage automatique** :
-   ```bash
-   pm2 startup
-   pm2 save
+## Configuration Email (Zoho Mail)
+
+Pour utiliser Zoho Mail avec OVH :
+
+1. **Créez un compte Zoho Mail** ou utilisez votre domaine existant
+2. **Générez un mot de passe d'application** :
+   - Allez dans Paramètres > Sécurité > Mots de passe d'application
+   - Créez un nouveau mot de passe pour "Mail"
+3. **Configurez dans .env** :
+   ```env
+   SMTP_HOST=smtp.zoho.com
+   SMTP_PORT=465
+   SMTP_SECURE=true
+   EMAIL_USER=votre-email@votre-domaine.com
+   EMAIL_PASS=votre-mot-de-passe-app
    ```
 
 ## Commandes utiles
@@ -52,6 +81,14 @@ EMAIL_TO=votre-email@gmail.com
 - **Redémarrer** : `pm2 restart portfolio`
 - **Arrêter** : `pm2 stop portfolio`
 - **Statut** : `pm2 status`
+- **Tester l'email** : `curl -X POST http://localhost:5000/api/test-email`
+
+## Endpoints API disponibles
+
+- `GET /api/health` - Vérification de l'API
+- `POST /api/contact` - Envoi de messages de contact
+- `POST /api/quote` - Envoi de demandes de devis
+- `POST /api/test-email` - Test d'envoi d'email
 
 ## Configuration Nginx (optionnel)
 
@@ -74,4 +111,26 @@ server {
         proxy_cache_bypass $http_upgrade;
     }
 }
+```
+
+## Dépannage
+
+### Problèmes courants
+
+1. **Erreur SMTP** : Vérifiez vos identifiants Zoho Mail
+2. **Port déjà utilisé** : Changez le PORT dans .env
+3. **PM2 ne démarre pas** : Vérifiez les logs avec `pm2 logs portfolio`
+4. **Frontend ne se charge pas** : Vérifiez que `npm run build:prod` s'est bien exécuté
+
+### Logs utiles
+
+```bash
+# Logs de l'application
+pm2 logs portfolio
+
+# Logs système
+journalctl -u nginx -f
+
+# Test de connectivité
+curl http://localhost:5000/api/health
 ```
