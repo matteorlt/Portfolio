@@ -6,13 +6,20 @@ require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const {
+  buildQuoteNotificationEmail,
+  buildQuoteConfirmationEmail,
+  buildContactNotificationEmail,
+} = require('./templates/emailTemplates');
 
-// Configuration du transporteur email
+
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.SMTP_HOST || 'smtp.zoho.com',
+  port: Number(process.env.SMTP_PORT || 465), // 465 SSL, 587 STARTTLS
+  secure: (process.env.SMTP_SECURE || 'true') === 'true', // true pour 465
   auth: {
-    user: process.env.EMAIL_USER || 'votre-email@gmail.com',
-    pass: process.env.EMAIL_PASS || 'votre-mot-de-passe-app'
+    user: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+    pass: process.env.EMAIL_PASS // DOIT être un mot de passe d'application
   }
 });
 
@@ -36,6 +43,48 @@ app.get('/api/health', (req, res) => {
   res.json({ message: 'Portfolio API is running!' });
 });
 
+// Route pour envoyer les messages de contact via SMTP
+app.post('/api/contact', async (req, res) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ success: false, message: 'Champs requis manquants' });
+    }
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+      to: process.env.EMAIL_TO || 'contact@matteo-rlt.fr',
+      subject: `Nouveau message de contact: ${subject}`,
+      replyTo: email,
+      text: `Nouveau message de contact\n\nNom: ${name}\nEmail: ${email}\nSujet: ${subject}\n\nMessage:\n${message}`,
+      html: buildContactNotificationEmail({ name, email, subject, message })
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true, message: 'Message envoyé avec succès' });
+  } catch (error) {
+    console.error('❌ Erreur contact:', error);
+    res.status(500).json({ success: false, message: error.message, code: error.code });
+  }
+});
+// Endpoint de test pour vérifier l'envoi d'email côté serveur
+app.post('/api/test-email', async (req, res) => {
+  try {
+    const testTo = process.env.EMAIL_TO || 'contact@matteo-rlt.fr';
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+      to: testTo,
+      subject: '✅ Test SMTP - Portfolio',
+      text: 'Ceci est un email de test envoyé via l\'endpoint /api/test-email.',
+      html: '<p>Ceci est un email de <strong>test</strong> envoyé via l\'endpoint <code>/api/test-email</code>.</p>'
+    });
+    res.json({ success: true, message: 'Test envoyé', envelope: info.envelope, response: info.response });
+  } catch (error) {
+    console.error('❌ Test email error:', error);
+    res.status(500).json({ success: false, message: error.message, code: error.code });
+  }
+});
+
 // Route pour envoyer les devis
 app.post('/api/quote', async (req, res) => {
   try {
@@ -43,66 +92,30 @@ app.post('/api/quote', async (req, res) => {
 
     // Email pour vous (notification)
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'votre-email@gmail.com',
-      to: process.env.EMAIL_TO || 'votre-email@gmail.com',
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+      to: process.env.EMAIL_TO || 'contact@matteo-rlt.fr',
       subject: `Nouvelle demande de devis - ${packageDetails?.title || 'Formule inconnue'}`,
-      html: `
-        <h2>Nouvelle demande de devis</h2>
-        <h3>Formule sélectionnée: ${packageDetails?.title || 'Non spécifiée'} (€${packageDetails?.price || 'N/A'})</h3>
-        
-        <h4>Informations client:</h4>
-        <ul>
-          <li><strong>Nom:</strong> ${firstName} ${lastName}</li>
-          <li><strong>Email:</strong> ${email}</li>
-          <li><strong>Téléphone:</strong> ${phone || 'Non renseigné'}</li>
-          <li><strong>Entreprise:</strong> ${company || 'Non renseignée'}</li>
-        </ul>
-        
-        <h4>Message:</h4>
-        <p>${message || 'Aucun message'}</p>
-        
-        <h4>Détails de la formule:</h4>
-        <ul>
-          ${packageDetails?.features?.map(feature => `<li>${feature}</li>`).join('') || ''}
-        </ul>
-        
-        <hr>
-        <p><em>Demande envoyée le ${new Date().toLocaleString('fr-FR')}</em></p>
-      `
+      replyTo: email,
+      text: `Nouvelle demande de devis\n\nFormule: ${packageDetails?.title || 'Non spécifiée'} (EUR ${packageDetails?.price || 'N/A'})\nPériode: ${packageDetails?.period || 'N/A'}\n\nClient: ${firstName} ${lastName}\nEmail: ${email}\nTéléphone: ${phone || 'Non renseigné'}\nEntreprise: ${company || 'Non renseignée'}\n\nMessage:\n${message || 'Aucun message'}`,
+      html: buildQuoteNotificationEmail({
+        firstName,
+        lastName,
+        email,
+        phone,
+        company,
+        message,
+        packageDetails,
+      }),
     };
 
     // Email de confirmation pour le client
     const confirmationMailOptions = {
-      from: process.env.EMAIL_USER || 'votre-email@gmail.com',
+      from: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
       to: email,
       subject: 'Confirmation de votre demande de devis',
-      html: `
-        <h2>Merci pour votre demande de devis !</h2>
-        
-        <p>Bonjour ${firstName},</p>
-        
-        <p>Nous avons bien reçu votre demande de devis pour la formule <strong>${packageDetails?.title}</strong>.</p>
-        
-        <h3>Récapitulatif de votre demande:</h3>
-        <ul>
-          <li><strong>Formule:</strong> ${packageDetails?.title} (€${packageDetails?.price})</li>
-          <li><strong>Période:</strong> ${packageDetails?.period}</li>
-        </ul>
-        
-        <h3>Fonctionnalités incluses:</h3>
-        <ul>
-          ${packageDetails?.features?.map(feature => `<li>${feature}</li>`).join('') || ''}
-        </ul>
-        
-        <p>Nous étudions votre demande et vous recontacterons dans les plus brefs délais pour discuter de votre projet.</p>
-        
-        <p>Cordialement,<br>
-        Mattéo Rannou-Le Texier<br>
-        Développeur Web</p>
-        
-        <hr>
-        <p><em>Email envoyé automatiquement le ${new Date().toLocaleString('fr-FR')}</em></p>
-      `
+      replyTo: process.env.EMAIL_USER || 'contact@matteo-rlt.fr',
+      text: `Bonjour ${firstName},\n\nMerci pour votre demande de devis.\nFormule: ${packageDetails?.title}\nPrix: EUR ${packageDetails?.price}\nPériode: ${packageDetails?.period}\n\nJe reviens vers vous rapidement.\n\nCordialement,\nMattéo Rannou-Le Texier`,
+      html: buildQuoteConfirmationEmail({ firstName, packageDetails }),
     };
 
     // Envoi des emails

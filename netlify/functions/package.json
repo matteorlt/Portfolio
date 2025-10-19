@@ -1,0 +1,10 @@
+{
+  "name": "portfolio-functions",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "nodemailer": "^6.9.13"
+  }
+}
+
+

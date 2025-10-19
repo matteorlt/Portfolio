@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-let BackgroundConstellation = null;
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
-import { EMAILJS_CONFIG } from '../config/emailjs';
+// Envoi via backend SMTP (Zoho)
 
 const QuoteContainer = styled.div`
   min-height: 100vh;
@@ -319,17 +317,6 @@ const packages = [
 
 const Quote = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
-  const [showBackground, setShowBackground] = useState(false);
-
-  useEffect(() => {
-    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
-    if (isDesktop) {
-      import('../components/BackgroundConstellation').then(mod => {
-        BackgroundConstellation = mod.default;
-        setShowBackground(true);
-      }).catch(() => setShowBackground(false));
-    }
-  }, []);
   const formRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -388,55 +375,24 @@ const Quote = () => {
     setIsSubmitting(true);
 
     try {
-      // Vérifier si EmailJS est configuré
-      if (EMAILJS_CONFIG.serviceId === 'service_xxxxxxx' || 
-          EMAILJS_CONFIG.templateId === 'template_xxxxxxx' || 
-          EMAILJS_CONFIG.publicKey === 'your_public_key_here') {
-        alert('EmailJS n\'est pas encore configuré. Veuillez configurer les identifiants EmailJS dans le fichier de configuration.');
-        return;
-      }
-
       const packageDetails = packages.find(p => p.id === selectedPackage);
-      
-      // Préparer les données pour EmailJS
-      const templateParams = {
-        from_name: `${formData.firstName} ${formData.lastName}`,
-        from_email: formData.email,
-        phone: formData.phone || 'Non renseigné',
-        company: formData.company || 'Non renseignée',
-        website: formData.website || 'Non renseigné',
-        budget: formData.budget || 'Non renseigné',
-        timeline: formData.timeline || 'Non renseigné',
-        project_type: formData.projectType || 'Non renseigné',
-        target_audience: formData.targetAudience || 'Non renseigné',
-        competitors: formData.competitors || 'Non renseigné',
-        message: formData.message || 'Aucun message',
-        package_title: packageDetails?.title || 'Non spécifiée',
-        package_price: packageDetails?.price || 'N/A',
-        package_period: packageDetails?.period || 'Non spécifiée',
-        package_features: packageDetails?.features?.join(', ') || 'Aucune fonctionnalité',
-        timestamp: new Date().toLocaleString('fr-FR')
-      };
-
-      // Debug: Afficher les données envoyées
-      console.log('Données EmailJS:', {
-        serviceId: EMAILJS_CONFIG.serviceId,
-        templateId: EMAILJS_CONFIG.templateId,
-        publicKey: EMAILJS_CONFIG.publicKey,
-        templateParams: templateParams
+      // Envoi via API backend
+      const res = await fetch('/api/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          message: formData.message,
+          selectedPackage,
+          packageDetails
+        })
       });
 
-      // Envoyer l'email via EmailJS
-      const response = await emailjs.send(
-        EMAILJS_CONFIG.serviceId,
-        EMAILJS_CONFIG.templateId,
-        templateParams,
-        EMAILJS_CONFIG.publicKey
-      );
-
-      console.log('Réponse EmailJS:', response);
-
-      if (response.status === 200) {
+      if (res.ok) {
         // Afficher la notification de succès
         setShowNotification(true);
         
@@ -466,34 +422,13 @@ const Quote = () => {
         });
         setSelectedPackage(null);
       } else {
-        throw new Error('Erreur lors de l\'envoi');
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || 'Erreur lors de l\'envoi');
       }
 
     } catch (error) {
       console.error('Erreur détaillée:', error);
-      console.error('Message d\'erreur:', error.message);
-      console.error('Code d\'erreur:', error.code);
-      console.error('Status:', error.status);
-      
-      let errorMessage = 'Erreur lors de l\'envoi du devis. ';
-      
-      if (error.message && error.message.includes('Invalid template')) {
-        errorMessage += 'Template EmailJS invalide. Vérifiez votre Template ID.';
-      } else if (error.message && error.message.includes('Invalid service')) {
-        errorMessage += 'Service EmailJS invalide. Vérifiez votre Service ID.';
-      } else if (error.message && error.message.includes('Invalid public key')) {
-        errorMessage += 'Clé publique EmailJS invalide. Vérifiez votre Public Key.';
-      } else if (error.status === 422) {
-        errorMessage += 'Données invalides (422). Vérifiez que toutes les variables du template sont correctement définies dans EmailJS.';
-      } else if (error.status === 400) {
-        errorMessage += 'Requête invalide (400). Vérifiez vos identifiants EmailJS.';
-      } else if (error.status === 401) {
-        errorMessage += 'Non autorisé (401). Vérifiez votre clé publique EmailJS.';
-      } else {
-        errorMessage += `Erreur ${error.status || 'inconnue'}. Vérifiez la console pour plus de détails.`;
-      }
-      
-      alert(errorMessage);
+      alert(`Erreur lors de l\'envoi du devis: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -506,7 +441,6 @@ const Quote = () => {
 
   return (
     <QuoteContainer>
-      {showBackground && BackgroundConstellation && <BackgroundConstellation />}
       {/* Notification de succès */}
       {showNotification && (
         <motion.div
@@ -606,7 +540,7 @@ const Quote = () => {
           >
             <PackageTitle>{pkg.title}</PackageTitle>
             <PackagePrice>€{pkg.price}</PackagePrice>
-            <PackagePriceNote>Prix approximatif</PackagePriceNote>
+            <PackagePriceNote>Prix approximatif HT</PackagePriceNote>
             <PackagePeriod>{pkg.period}</PackagePeriod>
             
             <FeaturesList>

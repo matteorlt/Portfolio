@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiMail, FiMapPin, FiSend, FiGithub, FiLinkedin, FiCode } from 'react-icons/fi';
-import emailjs from '@emailjs/browser';
-import { EMAILJS_CONFIG } from '../config/emailjs';
+// Envoi via backend SMTP (Zoho)
 
 const ContactContainer = styled.div`
   min-height: 100vh;
@@ -266,44 +265,19 @@ const Contact = () => {
     setIsSubmitting(true);
 
     try {
-      // Vérifier si EmailJS est configuré
-      if (EMAILJS_CONFIG.serviceId === 'service_xxxxxxx' || 
-          EMAILJS_CONFIG.contactTemplateId === 'template_VOTRE_TEMPLATE_CONTACT_ID' || 
-          EMAILJS_CONFIG.publicKey === 'your_public_key_here') {
-        alert('EmailJS n\'est pas encore configuré. Veuillez configurer les identifiants EmailJS dans le fichier de configuration.');
-        return;
-      }
-
-      // Préparer les données pour EmailJS
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
-        timestamp: new Date().toLocaleString('fr-FR')
-      };
-
-      // Debug: Afficher les données envoyées
-      console.log('Données EmailJS Contact:', {
-        serviceId: EMAILJS_CONFIG.serviceId,
-        templateId: EMAILJS_CONFIG.contactTemplateId,
-        publicKey: EMAILJS_CONFIG.publicKey,
-        templateParams: templateParams
+      // Envoi via API backend
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          subject: formData.subject,
+          message: formData.message
+        })
       });
 
-      // Envoyer l'email via EmailJS
-      const response = await emailjs.send(
-        EMAILJS_CONFIG.serviceId,
-        EMAILJS_CONFIG.contactTemplateId, // Utilise le template pour le contact
-        templateParams,
-        EMAILJS_CONFIG.publicKey
-      );
-
-      console.log('Réponse EmailJS Contact:', response);
-      console.log('Status:', response.status);
-      console.log('Text:', response.text);
-
-      if (response.status === 200) {
+      if (res.ok) {
         // Afficher la notification de succès
         setShowNotification(true);
         
@@ -319,34 +293,13 @@ const Contact = () => {
         // Réinitialiser le formulaire
         setFormData({ name: '', email: '', subject: '', message: '' });
       } else {
-        throw new Error('Erreur lors de l\'envoi');
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.message || 'Erreur lors de l\'envoi');
       }
 
     } catch (error) {
       console.error('Erreur détaillée Contact:', error);
-      console.error('Message d\'erreur:', error.message);
-      console.error('Code d\'erreur:', error.code);
-      console.error('Status:', error.status);
-      
-      let errorMessage = 'Erreur lors de l\'envoi du message. ';
-      
-      if (error.message && error.message.includes('Invalid template')) {
-        errorMessage += 'Template EmailJS invalide. Vérifiez votre Template ID.';
-      } else if (error.message && error.message.includes('Invalid service')) {
-        errorMessage += 'Service EmailJS invalide. Vérifiez votre Service ID.';
-      } else if (error.message && error.message.includes('Invalid public key')) {
-        errorMessage += 'Clé publique EmailJS invalide. Vérifiez votre Public Key.';
-      } else if (error.status === 422) {
-        errorMessage += 'Données invalides (422). Vérifiez que toutes les variables du template sont correctement définies dans EmailJS.';
-      } else if (error.status === 400) {
-        errorMessage += 'Requête invalide (400). Vérifiez vos identifiants EmailJS.';
-      } else if (error.status === 401) {
-        errorMessage += 'Non autorisé (401). Vérifiez votre clé publique EmailJS.';
-      } else {
-        errorMessage += `Erreur ${error.status || 'inconnue'}. Vérifiez la console pour plus de détails.`;
-      }
-      
-      alert(errorMessage);
+      alert(`Erreur lors de l\'envoi du message: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -356,7 +309,7 @@ const Contact = () => {
     {
       icon: <FiMail />,
       label: 'Email',
-      value: 'rannouletexiermatteo@gmail.com'
+      value: 'contact@matteo-rlt.fr'
     },
     {
       icon: <FiMapPin />,

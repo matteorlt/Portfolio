@@ -266,6 +266,7 @@ const Projects = () => {
       title: 'Auth',
       description: 'Système d\'authentification sécurisé développé en JavaScript. Gestion des sessions et protection des routes.',
       image: '🔐',
+      preview: '/preview/auth-preview.png',
       tech: ['JavaScript', 'Node.js', 'Express'],
       category: ['javascript'],
       demo: '/demo/auth',
