@@ -1,8 +1,6 @@
-name: Deploy Portfolio to OVH FTP
+name: Deploy Portfolio to OVH FTP (Test)
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -36,9 +34,9 @@ jobs:
     - name: 🚀 Deploy to OVH FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PASS }}
+        server: ftp.cluster021.hosting.ovh.net
+        username: tattooa
+        password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./
         server-dir: /www/
         exclude: |
