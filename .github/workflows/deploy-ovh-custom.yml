@@ -1,4 +1,4 @@
-name: Deploy Portfolio to OVH FTP.
+name: Deploy Portfolio to OVH FTP (Custom)
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: prod
     
     steps:
     - name: 📥 Checkout code
@@ -21,8 +20,7 @@ jobs:
         cache: 'npm'
         
     - name: 📦 Install dependencies
-      run: |
-        npm run install-all
+      run: npm run install-all
         
     - name: 🏗️ Build frontend
       run: npm run build:prod
@@ -35,31 +33,21 @@ jobs:
         fi
         echo "✅ Build successful - dist folder found"
         
-    - name: 🚀 Deploy to OVH FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PASS }}
-        local-dir: ./client/dist/
-        server-dir: /www/
-        log-level: verbose
-        dangerous-clean-slate: true
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          **/.env
-          **/.env.*
-          **/README.md
-          **/deploy-*.sh
-          **/deploy-*.ps1
-          **/test-deployment.sh
-          **/OVH-DEPLOYMENT.md
-          **/ecosystem.config.js
-          **/GIT-FTP-SOLUTIONS.md
-          **/git-deploy-ftp.sh
-          **/.github/**
+    - name: 📦 Install lftp
+      run: sudo apt-get update && sudo apt-get install -y lftp
+        
+    - name: 🚀 Deploy to OVH FTP (Custom)
+      run: |
+        lftp -c "
+        set ftp:ssl-allow no
+        set ftp:passive-mode on
+        set ftp:list-options -a
+        open ftp://${{ secrets.FTP_USER }}:${{ secrets.FTP_PASS }}@${{ secrets.FTP_HOST }}
+        lcd client/dist
+        cd /www
+        mirror -R --delete --verbose --exclude-glob .git* --exclude-glob node_modules/ --exclude-glob .env*
+        bye
+        "
           
     - name: ✅ Deployment success
       run: |
