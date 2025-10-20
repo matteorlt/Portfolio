@@ -1,26 +1,12 @@
 {
-  "version": 2,
-  "builds": [
+  "buildCommand": "npm run build:prod",
+  "outputDirectory": "client/dist",
+  "installCommand": "npm run install-all",
+  "redirects": [
     {
-      "src": "client/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "server/index.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/server/index.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/client/$1"
+      "source": "www.matteo-rlt.fr",
+      "destination": "https://matteo-rlt.fr",
+      "permanent": true
     }
   ]
 }

@@ -1,0 +1,50 @@
+name: Deploy Portfolio to Vercel
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📦 Install dependencies
+      run: npm run install-all
+        
+    - name: 🏗️ Build frontend
+      run: npm run build:prod
+      
+    - name: 🧪 Verify build
+      run: |
+        if [ ! -d "client/dist" ]; then
+          echo "❌ Build failed - dist folder not found"
+          exit 1
+        fi
+        echo "✅ Build successful"
+        echo "📊 Files: $(find client/dist -type f | wc -l)"
+        echo "📊 Size: $(du -sh client/dist)"
+        
+    - name: 🚀 Deploy to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./client
+        vercel-args: '--prod'
+        
+    - name: ✅ Success
+      run: |
+        echo "🎉 Portfolio déployé avec succès sur Vercel !"
+        echo "🌐 Site en ligne sur Vercel"

@@ -8,7 +8,14 @@
     "server": "nodemon server/index.js",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
-    "install-all": "npm install && cd client && npm install"
+    "build:prod": "cd client && npm run build:prod",
+    "install-all": "npm install && cd client && npm install",
+    "start": "node server/index.js",
+    "start:pm2": "pm2 start ecosystem.config.js --env production",
+    "stop:pm2": "pm2 stop portfolio",
+    "restart:pm2": "pm2 restart portfolio",
+    "logs:pm2": "pm2 logs portfolio",
+    "deploy": "npm run build:prod && npm run start:pm2"
   },
   "keywords": ["portfolio", "react", "node.js", "three.js"],
   "author": "Votre Nom",
@@ -21,6 +28,11 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.1",
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "pm2": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 } 
