@@ -1,5 +1,12 @@
 {
   "buildCommand": "npm run build:prod",
   "outputDirectory": "client/dist",
-  "installCommand": "npm run install-all"
+  "installCommand": "npm run install-all",
+  "redirects": [
+    {
+      "source": "matteo-rlt.fr",
+      "destination": "https://www.matteo-rlt.fr",
+      "permanent": true
+    }
+  ]
 }
