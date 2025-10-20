@@ -4,8 +4,8 @@
   "installCommand": "npm run install-all",
   "redirects": [
     {
-      "source": "matteo-rlt.fr",
-      "destination": "https://www.matteo-rlt.fr",
+      "source": "www.matteo-rlt.fr",
+      "destination": "https://matteo-rlt.fr",
       "permanent": true
     }
   ]
