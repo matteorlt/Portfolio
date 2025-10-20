@@ -4,8 +4,9 @@
   "installCommand": "cd client && npm ci",
   "redirects": [
     {
-      "source": "www.matteo-rlt.fr",
-      "destination": "https://matteo-rlt.fr",
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.matteo-rlt.fr" }],
+      "destination": "https://matteo-rlt.fr/$1",
       "permanent": true
     }
   ]
