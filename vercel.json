@@ -1,7 +1,7 @@
 {
-  "buildCommand": "npm run build:prod",
+  "buildCommand": "cd client && npm run build:prod",
   "outputDirectory": "client/dist",
-  "installCommand": "npm run install-all",
+  "installCommand": "npm install && cd client && npm install",
   "redirects": [
     {
       "source": "www.matteo-rlt.fr",
