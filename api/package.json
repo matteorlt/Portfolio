@@ -1,7 +1,12 @@
 {
   "name": "portfolio-api",
   "version": "1.0.0",
+  "description": "API functions for Portfolio",
+  "main": "index.js",
   "dependencies": {
     "nodemailer": "^6.9.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
