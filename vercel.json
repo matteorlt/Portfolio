@@ -2,14 +2,6 @@
   "buildCommand": "npm run build:prod",
   "outputDirectory": "client/dist",
   "installCommand": "npm run install-all",
-  "functions": {
-    "api/contact.js": {
-      "runtime": "nodejs18.x"
-    },
-    "api/quote.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "redirects": [
     {
       "source": "www.matteo-rlt.fr",
