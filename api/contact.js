@@ -24,7 +24,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.zoho.com',
       port: Number(process.env.SMTP_PORT || 465),
       secure: (process.env.SMTP_SECURE || 'true') === 'true',
