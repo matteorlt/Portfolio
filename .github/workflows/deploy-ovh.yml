@@ -1,4 +1,4 @@
-name: Deploy Portfolio to OVH FTP.
+name: Deploy Portfolio to OVH
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: prod
     
     steps:
     - name: 📥 Checkout code
@@ -21,47 +20,43 @@ jobs:
         cache: 'npm'
         
     - name: 📦 Install dependencies
-      run: |
-        npm run install-all
+      run: npm run install-all
         
     - name: 🏗️ Build frontend
       run: npm run build:prod
       
-    - name: 🧪 Test build
+    - name: 🧪 Verify build
       run: |
         if [ ! -d "client/dist" ]; then
           echo "❌ Build failed - dist folder not found"
           exit 1
         fi
-        echo "✅ Build successful - dist folder found"
+        echo "✅ Build successful"
+        echo "📊 Files: $(find client/dist -type f | wc -l)"
+        echo "📊 Size: $(du -sh client/dist)"
         
-    - name: 🚀 Deploy to OVH FTP
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-      with:
-        server: ${{ secrets.FTP_HOST }}
-        username: ${{ secrets.FTP_USER }}
-        password: ${{ secrets.FTP_PASS }}
-        local-dir: ./client/dist/
-        server-dir: /www/
-        log-level: verbose
-        dangerous-clean-slate: true
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          **/.env
-          **/.env.*
-          **/README.md
-          **/deploy-*.sh
-          **/deploy-*.ps1
-          **/test-deployment.sh
-          **/OVH-DEPLOYMENT.md
-          **/ecosystem.config.js
-          **/GIT-FTP-SOLUTIONS.md
-          **/git-deploy-ftp.sh
-          **/.github/**
-          
-    - name: ✅ Deployment success
+    - name: 📦 Install FTP client
+      run: sudo apt-get update && sudo apt-get install -y lftp
+        
+    - name: 🚀 Deploy to OVH
       run: |
-        echo "🎉 Portfolio déployé avec succès sur OVH !"
-        echo "🌐 Votre site est maintenant en ligne"
+        echo "🚀 Deploying website to OVH..."
+        
+        lftp -c "
+        set ftp:ssl-allow no
+        set ftp:passive-mode on
+        set ftp:list-options -a
+        set net:timeout 60
+        set net:max-retries 2
+        open ftp://${{ secrets.FTP_USER }}:${{ secrets.FTP_PASS }}@${{ secrets.FTP_HOST }}
+        lcd client/dist
+        cd /www
+        echo '🔄 Syncing website files...'
+        mirror -R --delete --verbose
+        bye
+        "
+        
+    - name: ✅ Success
+      run: |
+        echo "🎉 Portfolio déployé avec succès !"
+        echo "🌐 Site en ligne sur OVH"
