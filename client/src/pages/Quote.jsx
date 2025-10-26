@@ -279,7 +279,7 @@ const packages = [
   {
     id: 'professional',
     title: 'Professional',
-    price: '1200',
+    price: '1 200',
     period: '3-4 semaines',
     features: [
       'Design personnalisé selon vos goûts',
