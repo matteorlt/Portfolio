@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiMail, FiMapPin, FiSend, FiGithub, FiLinkedin, FiCode } from 'react-icons/fi';
+import { trackFormEvent, trackClick } from '../utils/analytics';
 // Envoi via backend SMTP (Zoho)
 
 const ContactContainer = styled.div`
@@ -263,6 +264,9 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Tracker l'événement de soumission de formulaire
+    trackFormEvent('Contact Form', 'submit');
 
     try {
       // Envoi via API backend
@@ -280,6 +284,9 @@ const Contact = () => {
       if (res.ok) {
         // Afficher la notification de succès
         setShowNotification(true);
+        
+        // Tracker la conversion avec notre système
+        trackFormEvent('Contact Form', 'success');
         
         // Déclencher la conversion Google Ads
         if (typeof window !== 'undefined' && window.gtag) {
@@ -299,6 +306,10 @@ const Contact = () => {
 
     } catch (error) {
       console.error('Erreur détaillée Contact:', error);
+      // Tracker l'erreur de soumission
+      trackFormEvent('Contact Form', 'error', {
+        error_message: error.message
+      });
       alert(`Erreur lors de l\'envoi du message: ${error.message}`);
     } finally {
       setIsSubmitting(false);
@@ -438,6 +449,10 @@ const Contact = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
                   whileHover={{ scale: 1.1 }}
+                  onClick={() => {
+                    const platform = social.url.includes('github') ? 'GitHub' : 'LinkedIn';
+                    trackClick(`${platform} - Contact Page`, 'social_media');
+                  }}
                 >
                   {social.icon}
                 </SocialLink>

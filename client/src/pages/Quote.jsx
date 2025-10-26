@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { trackClick, trackFormEvent, trackConversion } from '../utils/analytics';
 // Envoi via backend SMTP (Zoho)
 
 const QuoteContainer = styled.div`
@@ -360,6 +361,11 @@ const Quote = () => {
   }, [selectedPackage]);
 
   const handlePackageSelect = (packageId) => {
+    trackClick(`Quote Package - ${packageId}`, 'package_selection', 1);
+    const packageDetails = packages.find(p => p.id === packageId);
+    if (packageDetails) {
+      trackClick(`Package: ${packageDetails.title}`, 'quote_page', packageDetails.price);
+    }
     setSelectedPackage(packageId);
   };
 
@@ -373,6 +379,11 @@ const Quote = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Tracker l'événement de soumission de formulaire
+    trackFormEvent('Quote Form', 'submit', {
+      package_id: selectedPackage
+    });
 
     try {
       const packageDetails = packages.find(p => p.id === selectedPackage);
@@ -395,6 +406,9 @@ const Quote = () => {
       if (res.ok) {
         // Afficher la notification de succès
         setShowNotification(true);
+        
+        // Tracker la conversion avec notre système
+        trackConversion('Quote Request', packageDetails?.price || 0, 'EUR');
         
         // Déclencher la conversion Google Ads
         if (typeof window !== 'undefined' && window.gtag) {
@@ -428,6 +442,10 @@ const Quote = () => {
 
     } catch (error) {
       console.error('Erreur détaillée:', error);
+      // Tracker l'erreur de soumission
+      trackFormEvent('Quote Form', 'error', {
+        error_message: error.message
+      });
       alert(`Erreur lors de l\'envoi du devis: ${error.message}`);
     } finally {
       setIsSubmitting(false);

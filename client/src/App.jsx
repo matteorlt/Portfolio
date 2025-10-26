@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
 import Loading from './components/Loading.jsx';
 import GlobalStyle from './styles/GlobalStyle.jsx';
+import usePageTracking from './hooks/usePageTracking.jsx';
 
 // Lazy-load des composants globaux pour réduire le JS initial
 const Navbar = React.lazy(() => import('./components/Navbar.jsx'));
@@ -27,7 +28,11 @@ const AppContainer = styled.div`
   font-family: 'Inter', sans-serif;
 `;
 
-function App() {
+// Composant interne pour avoir accès au Router
+function AppContent() {
+  // Activer le tracking automatique des pages
+  usePageTracking();
+  
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
@@ -74,7 +79,7 @@ function App() {
   }
 
   return (
-    <Router>
+    <>
       <GlobalStyle />
       <Suspense fallback={null}>
         <ThemeIcons theme="auto" />
@@ -100,6 +105,14 @@ function App() {
           <Footer />
         </Suspense>
       </AppContainer>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
