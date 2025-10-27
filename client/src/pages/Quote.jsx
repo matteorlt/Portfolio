@@ -264,7 +264,7 @@ const packages = [
   {
     id: 'starter',
     title: 'Starter',
-    price: '600',
+    price: '700',
     period: '1-2 semaines',
     features: [
       'Site WordPress (facile à utiliser)',
@@ -279,7 +279,7 @@ const packages = [
   {
     id: 'professional',
     title: 'Professional',
-    price: '1 200',
+    price: '1 500',
     period: '3-4 semaines',
     features: [
       'Design personnalisé selon vos goûts',
@@ -297,7 +297,7 @@ const packages = [
   {
     id: 'premium',
     title: 'Premium',
-    price: '2 400',
+    price: '2 600',
     period: '6-8 semaines',
     features: [
       'Design haut de gamme personnalisé',
