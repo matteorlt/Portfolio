@@ -35,13 +35,29 @@ jobs:
         echo "📊 Files: $(find client/dist -type f | wc -l)"
         echo "📊 Size: $(du -sh client/dist)"
         
+    - name: 🔍 Verify secrets
+      run: |
+        if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
+          echo "❌ ERROR: VERCEL_TOKEN secret is missing or empty"
+          exit 1
+        fi
+        if [ -z "${{ secrets.VERCEL_ORG_ID }}" ]; then
+          echo "❌ ERROR: VERCEL_ORG_ID secret is missing or empty"
+          exit 1
+        fi
+        if [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
+          echo "❌ ERROR: VERCEL_PROJECT_ID secret is missing or empty"
+          exit 1
+        fi
+        echo "✅ All secrets are configured"
+        
     - name: 🚀 Deploy to Vercel
       uses: amondnet/vercel-action@v25
       with:
         vercel-token: ${{ secrets.VERCEL_TOKEN }}
         vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
         vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-        working-directory: ./client
+        working-directory: ./
         vercel-args: '--prod'
         
     - name: ✅ Success
