@@ -20,10 +20,15 @@ export const usePageTracking = () => {
         '/projects': 'Projects',
         '/skills': 'Skills',
         '/contact': 'Contact',
-        '/quote': 'Quote',
+        '/offres': 'Offers',
         '/privacy-policy': 'Privacy Policy',
         '/legal-notices': 'Legal Notices'
       };
+      
+      // Si c'est une page 404
+      if (pathname && !Object.keys(pageMap).includes(pathname) && !pathname.startsWith('/demo/')) {
+        return '404 Not Found';
+      }
       
       // Si c'est une démo de projet
       if (pathname.startsWith('/demo/')) {

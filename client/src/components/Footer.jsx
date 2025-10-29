@@ -93,7 +93,7 @@ const Footer = () => {
           viewport={{ once: true }}
         >
           <FooterTitle>Services</FooterTitle>
-          <FooterLink to="/quote">Demander un devis</FooterLink>
+          <FooterLink to="/offres">Voir les offres</FooterLink>
           <FooterLink to="/projects">Mes projets</FooterLink>
           <FooterLink to="/skills">Compétences</FooterLink>
           <FooterLink to="/contact">Contact</FooterLink>

@@ -76,6 +76,8 @@ const ProjectCard = styled(motion.div)`
   transition: all 0.3s ease;
   position: relative;
   will-change: transform;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-10px);
@@ -124,13 +126,16 @@ const ProjectImgTag = styled.img`
 
 const ProjectContent = styled.div`
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
 const ProjectTitle = styled.h3`
   font-size: 1.3rem;
   font-weight: 600;
   color: #ffffff;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0;
 `;
 
 const ProjectDescription = styled.p`
@@ -138,6 +143,24 @@ const ProjectDescription = styled.p`
   line-height: 1.6;
   margin-bottom: 1rem;
   font-size: 0.95rem;
+`;
+
+const ProjectHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+`;
+
+const ProjectTypeBadge = styled.span`
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: ${props => (props.$type === 'pro' ? '#e67e22' : '#2ecc71')};
+  white-space: nowrap;
 `;
 
 const ProjectTech = styled.div`
@@ -159,6 +182,7 @@ const TechTag = styled.span`
 const ProjectLinks = styled.div`
   display: flex;
   gap: 1rem;
+  margin-top: auto;
 `;
 
 const ProjectLink = styled(motion.a)`
@@ -221,6 +245,8 @@ const Projects = () => {
 
   const filters = [
     { id: 'all', label: 'Tous' },
+    { id: 'pro', label: 'Projet Pro' },
+    { id: 'perso', label: 'Projet Perso' },
     { id: 'typescript', label: 'TypeScript' },
     { id: 'javascript', label: 'JavaScript' },
     { id: 'wordpress', label: 'WordPress' }
@@ -235,6 +261,7 @@ const Projects = () => {
       preview: '/preview/task-manager-preview.webp',
       tech: ['TypeScript', 'React', 'Docker', 'CI/CD'],
       category: ['typescript'],
+      projectType: 'perso',
       demo: '/demo/task-manager',
       code: 'https://github.com/matteorlt/Task-Manager'
     },
@@ -246,7 +273,8 @@ const Projects = () => {
       preview: '/preview/gym-phys-preview.webp',
       tech: ['Wordpress', 'PHP'],
       category: ['wordpress'],
-      demo: '/demo/gym-phys',
+      projectType: 'pro',
+      siteUrl: 'https://www.gym-phys-ploermel.fr/',
       code: 'https://github.com/matteorlt',
       hideCode: true
     },
@@ -258,6 +286,7 @@ const Projects = () => {
       preview: '/preview/live-chat-preview.webp',
       tech: ['JavaScript', 'React', 'Socket.IO', 'Node.js'],
       category: ['javascript'],
+      projectType: 'perso',
       demo: '/demo/live-chat',
       code: 'https://github.com/matteorlt/live-chat'
     },
@@ -269,6 +298,7 @@ const Projects = () => {
       preview: '/preview/auth-preview.png',
       tech: ['JavaScript', 'Node.js', 'Express'],
       category: ['javascript'],
+      projectType: 'perso',
       demo: '/demo/auth',
       code: 'https://github.com/matteorlt/Auth'
     },
@@ -279,6 +309,7 @@ const Projects = () => {
       image: '🎫',
       tech: ['JavaScript', 'React', 'Node.js'],
       category: ['javascript'],
+      projectType: 'perso',
       demo: '/demo/ticket-support-app',
       code: 'https://github.com/matteorlt/ticket-support-app'
     },
@@ -289,6 +320,7 @@ const Projects = () => {
       image: '⚛️',
       tech: ['React', 'JavaScript', 'CSS'],
       category: ['javascript'],
+      projectType: 'perso',
       demo: '/demo/site-react-openclassroom',
       code: 'https://github.com/matteorlt'
     },
@@ -296,9 +328,15 @@ const Projects = () => {
     
   ];
 
-  const filteredProjects = activeFilter === 'all' 
-    ? projects 
-    : projects.filter(project => project.category.includes(activeFilter));
+  const filteredProjects = (() => {
+    if (activeFilter === 'all') {
+      return projects;
+    }
+    if (activeFilter === 'pro' || activeFilter === 'perso') {
+      return projects.filter(project => project.projectType === activeFilter);
+    }
+    return projects.filter(project => project.category.includes(activeFilter));
+  })();
 
   return (
     <ProjectsContainer>
@@ -361,7 +399,14 @@ const Projects = () => {
             </ProjectImage>
             
             <ProjectContent>
-              <ProjectTitle>{project.title}</ProjectTitle>
+              <ProjectHeader>
+                <ProjectTitle>{project.title}</ProjectTitle>
+                {project.projectType && (
+                  <ProjectTypeBadge $type={project.projectType} aria-label={`Type de projet: ${project.projectType}`}>
+                    {project.projectType === 'pro' ? 'Projet Pro' : 'Projet Perso'}
+                  </ProjectTypeBadge>
+                )}
+              </ProjectHeader>
               <ProjectDescription>{project.description}</ProjectDescription>
               
               <ProjectTech>
@@ -371,10 +416,17 @@ const Projects = () => {
               </ProjectTech>
               
               <ProjectLinks>
-                <ProjectLinkRouter to={project.demo} className="demo">
-                  <FiEye />
-                  Demo
-                </ProjectLinkRouter>
+                {project.siteUrl ? (
+                  <ProjectLink href={project.siteUrl} className="demo" target="_blank" rel="noopener noreferrer">
+                    <FiEye />
+                    Voir le site
+                  </ProjectLink>
+                ) : (
+                  <ProjectLinkRouter to={project.demo} className="demo">
+                    <FiEye />
+                    Demo
+                  </ProjectLinkRouter>
+                )}
                 {project.code && !project.hideCode && (
                   <ProjectLink href={project.code} className="code" target="_blank" rel="noopener noreferrer">
                     <FiGithub />

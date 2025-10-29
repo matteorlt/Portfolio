@@ -7,8 +7,9 @@ import { trackClick, trackFormEvent, trackConversion } from '../utils/analytics'
 const QuoteContainer = styled.div`
   min-height: 100vh;
   padding: 100px 2rem 2rem;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
+  width: 100%;
 `;
 
 const Title = styled(motion.h1)`
@@ -35,23 +36,55 @@ const Subtitle = styled(motion.p)`
 
 const PackagesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
   margin-bottom: 4rem;
+  max-width: 95vw;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  justify-items: center;
+  padding: 0 3rem;
 
-  @media (max-width: 768px) {
+  @media (min-width: 1200px) {
+    /* Toutes les cartes sur une seule ligne - compact */
+    grid-template-columns: repeat(5, 1fr);
+    max-width: 95vw;
+    gap: 1.5rem;
+    padding: 0 4rem;
+  }
+
+  @media (min-width: 900px) and (max-width: 1199px) {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 95vw;
+    padding: 0 3rem;
+  }
+
+  @media (min-width: 600px) and (max-width: 899px) {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 95vw;
+    padding: 0 2rem;
+  }
+
+  @media (max-width: 599px) {
     grid-template-columns: 1fr;
+    max-width: 95vw;
+    padding: 0 1.5rem;
   }
 `;
 
 const PackageCard = styled(motion.div)`
   background: rgba(74, 144, 226, 0.05);
   border: 1px solid rgba(74, 144, 226, 0.1);
-  border-radius: 16px;
-  padding: 2rem;
+  border-radius: 12px;
+  padding: 1.25rem;
   text-align: center;
   position: relative;
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-5px);
@@ -66,71 +99,75 @@ const PackageCard = styled(motion.div)`
     &::before {
       content: 'Populaire';
       position: absolute;
-      top: -10px;
+      top: -8px;
       left: 50%;
       transform: translateX(-50%);
       background: #4a90e2;
       color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
+      padding: 0.3rem 0.7rem;
+      border-radius: 15px;
+      font-size: 0.65rem;
       font-weight: 600;
     }
   }
 `;
 
 const PackageTitle = styled.h3`
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #4a90e2;
-  margin-bottom: 1rem;
-`;
-
-const PackagePrice = styled.div`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #ffffff;
   margin-bottom: 0.5rem;
 `;
 
+const PackagePrice = styled.div`
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+`;
+
 const PackagePriceNote = styled.div`
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   color: #aaaaaa;
   font-style: italic;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 `;
 
 const PackagePeriod = styled.div`
   color: #aaaaaa;
-  margin-bottom: 2rem;
+  font-size: 0.75rem;
+  margin-bottom: 0.75rem;
 `;
 
 const FeaturesList = styled.ul`
   list-style: none;
   padding: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 0.75rem;
+  flex: 1;
 `;
 
 const FeatureItem = styled.li`
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin-bottom: 0.4rem;
   color: #cccccc;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
 `;
 
 const SelectButton = styled(motion.button)`
   width: 100%;
-  padding: 1rem;
+  padding: 0.6rem;
   background: ${props => props.popular ? '#4a90e2' : 'transparent'};
   color: ${props => props.popular ? 'white' : '#4a90e2'};
   border: 1px solid #4a90e2;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  margin-top: auto;
 
   &:hover {
     background: #4a90e2;
@@ -313,8 +350,66 @@ const packages = [
       'Les avantages du pack "Professional"'
     ],
     popular: false
+  },
+  {
+    id: 'refonte',
+    title: 'Refonte de site web',
+    price: '800',
+    period: 'Selon projet',
+    features: [
+      'Analyse complète de votre site actuel',
+      'Modernisation du design',
+      'Optimisation des performances',
+      'Migration des données sécurisée',
+      'Amélioration du référencement',
+      'Formation à la nouvelle interface',
+      'Support post-lancement',
+      'Compatible mobile et tablette'
+    ],
+    popular: false
+  },
+  {
+    id: 'maintenance',
+    title: 'Maintenance (Abonnement)',
+    price: '90',
+    period: 'Par mois',
+    subscription: true,
+    features: [
+      'Mises à jour régulières',
+      'Sauvegardes automatiques hebdomadaires',
+      'Support technique réactif',
+      'Surveillance de la disponibilité',
+      'Correction des bugs',
+      'Optimisation continue',
+      'Sécurité renforcée',
+      'Rapport mensuel d\'activité'
+    ],
+    popular: false
   }
 ];
+
+const OptionalToggle = styled(motion.button)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(74, 144, 226, 0.1);
+  color: #4a90e2;
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  cursor: pointer;
+  font-weight: 600;
+  margin: 0.5rem 0 1rem;
+  &:hover { background: rgba(74, 144, 226, 0.2); }
+`;
+
+const OptionalSection = styled(motion.div)`
+  overflow: hidden;
+  border: 1px dashed rgba(74, 144, 226, 0.2);
+  border-radius: 12px;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+`;
 
 const Quote = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
@@ -326,7 +421,6 @@ const Quote = () => {
     phone: '',
     company: '',
     website: '',
-    budget: '',
     timeline: '',
     projectType: '',
     targetAudience: '',
@@ -336,6 +430,7 @@ const Quote = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [showOptional, setShowOptional] = useState(false);
 
   // Effet pour masquer la notification automatiquement
   useEffect(() => {
@@ -361,10 +456,10 @@ const Quote = () => {
   }, [selectedPackage]);
 
   const handlePackageSelect = (packageId) => {
-    trackClick(`Quote Package - ${packageId}`, 'package_selection', 1);
+    trackClick(`Offer Package - ${packageId}`, 'package_selection', 1);
     const packageDetails = packages.find(p => p.id === packageId);
     if (packageDetails) {
-      trackClick(`Package: ${packageDetails.title}`, 'quote_page', packageDetails.price);
+      trackClick(`Package: ${packageDetails.title}`, 'offers_page', packageDetails.price);
     }
     setSelectedPackage(packageId);
   };
@@ -381,7 +476,7 @@ const Quote = () => {
     setIsSubmitting(true);
     
     // Tracker l'événement de soumission de formulaire
-    trackFormEvent('Quote Form', 'submit', {
+    trackFormEvent('Offer Form', 'submit', {
       package_id: selectedPackage
     });
 
@@ -408,7 +503,7 @@ const Quote = () => {
         setShowNotification(true);
         
         // Tracker la conversion avec notre système
-        trackConversion('Quote Request', packageDetails?.price || 0, 'EUR');
+        trackConversion('Offer Request', packageDetails?.price || 0, 'EUR');
         
         // Déclencher la conversion Google Ads
         if (typeof window !== 'undefined' && window.gtag) {
@@ -427,7 +522,6 @@ const Quote = () => {
           phone: '',
           company: '',
           website: '',
-          budget: '',
           timeline: '',
           projectType: '',
           targetAudience: '',
@@ -443,10 +537,10 @@ const Quote = () => {
     } catch (error) {
       console.error('Erreur détaillée:', error);
       // Tracker l'erreur de soumission
-      trackFormEvent('Quote Form', 'error', {
+      trackFormEvent('Offer Form', 'error', {
         error_message: error.message
       });
-      alert(`Erreur lors de l\'envoi du devis: ${error.message}`);
+      alert(`Erreur lors de l\'envoi de l'offre: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -523,7 +617,7 @@ const Quote = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        Choisissez la formule qui correspond à vos besoins et obtenez un devis personnalisé
+        Choisissez la formule qui correspond à vos besoins et obtenez un devis personnalisée
       </Subtitle>
 
       <motion.div
@@ -543,7 +637,7 @@ const Quote = () => {
       >
         <p style={{ color: '#cccccc', margin: 0, fontSize: '0.9rem' }}>
           💡 <strong>Note importante :</strong> Les prix affichés sont approximatifs et peuvent varier selon la complexité de votre projet. 
-          Pour obtenir un devis précis et personnalisé, veuillez remplir le formulaire ci-dessous.
+          Pour obtenir un devis précise et personnalisée, veuillez remplir le formulaire ci-dessous.
         </p>
       </motion.div>
 
@@ -557,8 +651,23 @@ const Quote = () => {
             transition={{ duration: 0.8, delay: 0.4 + index * 0.1 }}
           >
             <PackageTitle>{pkg.title}</PackageTitle>
-            <PackagePrice>€{pkg.price}</PackagePrice>
-            <PackagePriceNote>Prix approximatif HT</PackagePriceNote>
+            <PackagePrice>
+              {pkg.price === 'Sur devis' ? (
+                pkg.price
+              ) : (
+                <>
+                  €{pkg.price}
+                  {pkg.subscription && <span style={{ fontSize: '1.2rem' }}>/mois</span>}
+                </>
+              )}
+            </PackagePrice>
+            <PackagePriceNote>
+              {pkg.price === 'Sur devis' 
+                ? 'Prix personnalisé selon votre projet'
+                : pkg.subscription
+                ? 'Abonnement mensuel'
+                : 'Prix approximatif HT'}
+            </PackagePriceNote>
             <PackagePeriod>{pkg.period}</PackagePeriod>
             
             <FeaturesList>
@@ -594,7 +703,7 @@ const Quote = () => {
           {!isSubmitted ? (
             <>
               <FormTitle>
-                Demande de devis - {packages.find(p => p.id === selectedPackage)?.title}
+                Demande d'offre - {packages.find(p => p.id === selectedPackage)?.title}
               </FormTitle>
               
               <form onSubmit={handleSubmit}>
@@ -644,57 +753,59 @@ const Quote = () => {
 
                 <FormGroup>
                   <Label>
-                    📞 Téléphone
-                  </Label>
-                  <Input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="06 12 34 56 78"
-                  />
-                </FormGroup>
-
-                <FormGroup>
-                  <Label>
-                    🏢 Entreprise
+                    🏢 Entreprise / Association
                   </Label>
                   <Input
                     type="text"
                     name="company"
                     value={formData.company}
                     onChange={handleInputChange}
-                    placeholder="Nom de votre entreprise"
+                    placeholder="Nom de votre entreprise ou association"
                   />
                 </FormGroup>
 
-                <FormGroup>
-                  <Label>
-                    🌐 Site web existant (optionnel)
-                  </Label>
-                  <Input
-                    type="url"
-                    name="website"
-                    value={formData.website}
-                    onChange={handleInputChange}
-                    placeholder="https://votre-site.com"
-                  />
-                </FormGroup>
+                <OptionalToggle
+                  type="button"
+                  onClick={() => setShowOptional(!showOptional)}
+                  aria-expanded={showOptional}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {showOptional ? '− Masquer les options' : '+ Plus d\'options (facultatif)'}
+                </OptionalToggle>
 
-                <FormGrid>
+                <OptionalSection
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={showOptional ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  aria-hidden={!showOptional}
+                >
                   <FormGroup>
                     <Label>
-                      💰 Budget approximatif (optionnel)
+                      📞 Téléphone (optionnel)
                     </Label>
                     <Input
-                      type="text"
-                      name="budget"
-                      value={formData.budget}
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
                       onChange={handleInputChange}
-                      placeholder="Ex: 500-1000€"
+                      placeholder="06 12 34 56 78"
                     />
                   </FormGroup>
-                  
+
+                  <FormGroup>
+                    <Label>
+                      🌐 Site web existant (optionnel)
+                    </Label>
+                    <Input
+                      type="url"
+                      name="website"
+                      value={formData.website}
+                      onChange={handleInputChange}
+                      placeholder="https://votre-site.com"
+                    />
+                  </FormGroup>
+
                   <FormGroup>
                     <Label>
                       ⏰ Délai souhaité (optionnel)
@@ -707,56 +818,56 @@ const Quote = () => {
                       placeholder="Ex: 1 mois"
                     />
                   </FormGroup>
-                </FormGrid>
 
-                <FormGroup>
-                  <Label>
-                    🎯 Type de projet (optionnel)
-                  </Label>
-                  <Input
-                    type="text"
-                    name="projectType"
-                    value={formData.projectType}
-                    onChange={handleInputChange}
-                    placeholder="Ex: Site vitrine, E-commerce, Application web..."
-                  />
-                </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      🎯 Type de projet (optionnel)
+                    </Label>
+                    <Input
+                      type="text"
+                      name="projectType"
+                      value={formData.projectType}
+                      onChange={handleInputChange}
+                      placeholder="Ex: Site vitrine, E-commerce, Application web..."
+                    />
+                  </FormGroup>
 
-                <FormGroup>
-                  <Label>
-                    👥 Public cible (optionnel)
-                  </Label>
-                  <Input
-                    type="text"
-                    name="targetAudience"
-                    value={formData.targetAudience}
-                    onChange={handleInputChange}
-                    placeholder="Ex: Particuliers, Professionnels, Étudiants..."
-                  />
-                </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      👥 Public cible (optionnel)
+                    </Label>
+                    <Input
+                      type="text"
+                      name="targetAudience"
+                      value={formData.targetAudience}
+                      onChange={handleInputChange}
+                      placeholder="Ex: Particuliers, Professionnels, Étudiants..."
+                    />
+                  </FormGroup>
 
-                <FormGroup>
-                  <Label>
-                    🏆 Sites d'exemple (optionnel)
-                  </Label>
-                  <Input
-                    type="text"
-                    name="competitors"
-                    value={formData.competitors}
-                    onChange={handleInputChange}
-                    placeholder="Ex: site1.com, site2.com..."
-                  />
-                </FormGroup>
+                  <FormGroup>
+                    <Label>
+                      🏆 Sites d'exemple (optionnel)
+                    </Label>
+                    <Input
+                      type="text"
+                      name="competitors"
+                      value={formData.competitors}
+                      onChange={handleInputChange}
+                      placeholder="Ex: site1.com, site2.com..."
+                    />
+                  </FormGroup>
 
-                <FormGroup>
-                  <Label>Message (optionnel)</Label>
-                  <TextArea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder="Décrivez vos besoins spécifiques, vos objectifs, vos préférences..."
-                  />
-                </FormGroup>
+                  <FormGroup>
+                    <Label>Message (optionnel)</Label>
+                    <TextArea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Décrivez vos besoins spécifiques, vos objectifs, vos préférences..."
+                    />
+                  </FormGroup>
+                </OptionalSection>
 
                 <SubmitButton
                   type="submit"

@@ -49,6 +49,22 @@ const Title = styled(motion.h1)`
   }
 `;
 
+const TitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+`;
+
+const DemoTypeBadge = styled.span`
+  padding: 0.35rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: ${props => (props.$type === 'pro' ? '#e67e22' : '#2ecc71')};
+  white-space: nowrap;
+`;
+
 const Subtitle = styled(motion.p)`
   font-size: 1.2rem;
   color: #cccccc;
@@ -273,6 +289,13 @@ const projectsData = {
     videoUrl: '/videos/Task Manager.mp4',
     codeUrl: 'https://github.com/matteorlt/Task-Manager'
   },
+  'live-chat': {
+    title: 'Live Chat',
+    description: 'Application de chat en temps réel (React + Socket.IO) avec interface moderne et mode hors ligne.',
+    tech: ['JavaScript', 'React', 'Socket.IO', 'Node.js'],
+    videoUrl: null,
+    codeUrl: 'https://github.com/matteorlt/live-chat'
+  },
   'gym-phys': {
     title: 'Gym Phys',
     description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
@@ -351,7 +374,18 @@ const ProjectDemo = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
       >
-        {project.title}
+        <TitleRow>
+          <span>{project.title}</span>
+          {/* Déduit le type à partir du titre connu, sinon n'affiche rien */}
+          {(() => {
+            const type = project.title === 'Gym Phys' ? 'pro' : 'perso';
+            return (
+              <DemoTypeBadge $type={type} aria-label={`Type de projet: ${type}`}>
+                {type === 'pro' ? 'Projet Pro' : 'Projet Perso'}
+              </DemoTypeBadge>
+            );
+          })()}
+        </TitleRow>
       </Title>
 
       <Subtitle

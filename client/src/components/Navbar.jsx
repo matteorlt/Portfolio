@@ -170,7 +170,7 @@ const Navbar = () => {
     { path: '/about', label: 'À propos' },
     { path: '/projects', label: 'Projets' },
     { path: '/skills', label: 'Compétences' },
-    { path: '/quote', label: 'Devis' },
+    { path: '/offres', label: 'Offres' },
     { path: '/contact', label: 'Contact' }
   ];
 

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Loading from './components/Loading.jsx';
 import GlobalStyle from './styles/GlobalStyle.jsx';
 import usePageTracking from './hooks/usePageTracking.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
 
 // Lazy-load des composants globaux pour réduire le JS initial
 const Navbar = React.lazy(() => import('./components/Navbar.jsx'));
@@ -20,6 +21,7 @@ const ProjectDemo = lazy(() => import('./pages/ProjectDemo.jsx'));
 const Quote = lazy(() => import('./pages/Quote.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
 const LegalNotices = lazy(() => import('./pages/LegalNotices.jsx'));
+const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
@@ -96,9 +98,10 @@ function AppContent() {
           <Route path="/skills" element={<Skills />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/demo/:projectId" element={<ProjectDemo />} />
-          <Route path="/quote" element={<Quote />} />
+          <Route path="/offres" element={<Quote />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/legal-notices" element={<LegalNotices />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         </Suspense>
         <Suspense fallback={null}>
@@ -111,9 +114,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <AppContent />
+      </Router>
+    </ErrorBoundary>
   );
 }
 
