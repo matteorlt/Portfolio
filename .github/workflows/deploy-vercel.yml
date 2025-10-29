@@ -5,6 +5,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Permissions explicites pour accéder aux secrets
+permissions:
+  contents: read
+  deployments: write
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -35,21 +40,39 @@ jobs:
         echo "📊 Files: $(find client/dist -type f | wc -l)"
         echo "📊 Size: $(du -sh client/dist)"
         
-    - name: 🔍 Verify secrets
+    - name: 🔍 Verify secrets access
       run: |
-        if [ -z "${{ secrets.VERCEL_TOKEN }}" ]; then
-          echo "❌ ERROR: VERCEL_TOKEN secret is missing or empty"
+        echo "Testing secrets access..."
+        
+        # Stocker dans des variables locales
+        TOKEN_VALUE="${{ secrets.VERCEL_TOKEN }}"
+        ORG_VALUE="${{ secrets.VERCEL_ORG_ID }}"
+        PROJECT_VALUE="${{ secrets.VERCEL_PROJECT_ID }}"
+        
+        # Vérifier chaque secret
+        if [ -z "$TOKEN_VALUE" ] || [ "$TOKEN_VALUE" = "" ]; then
+          echo "❌ VERCEL_TOKEN is empty or not accessible"
+          echo ""
+          echo "🔍 Vérifications à faire :"
+          echo "1. Allez dans : Settings → Secrets and variables → Actions"
+          echo "2. Assurez-vous que 'VERCEL_TOKEN' existe sous 'Repository secrets' (PAS Organization secrets)"
+          echo "3. Vérifiez les fautes de frappe : doit être exactement 'VERCEL_TOKEN' (pas d'espaces, bonne casse)"
+          echo "4. Essayez de supprimer et recréer le secret"
+          echo "5. Vérifiez que vous êtes dans le bon repository"
           exit 1
         fi
-        if [ -z "${{ secrets.VERCEL_ORG_ID }}" ]; then
-          echo "❌ ERROR: VERCEL_ORG_ID secret is missing or empty"
+        
+        if [ -z "$ORG_VALUE" ] || [ "$ORG_VALUE" = "" ]; then
+          echo "❌ VERCEL_ORG_ID is empty or not accessible"
           exit 1
         fi
-        if [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
-          echo "❌ ERROR: VERCEL_PROJECT_ID secret is missing or empty"
+        
+        if [ -z "$PROJECT_VALUE" ] || [ "$PROJECT_VALUE" = "" ]; then
+          echo "❌ VERCEL_PROJECT_ID is empty or not accessible"
           exit 1
         fi
-        echo "✅ All secrets are configured"
+        
+        echo "✅ Tous les secrets sont accessibles"
         
     - name: 🚀 Deploy to Vercel
       uses: amondnet/vercel-action@v25
