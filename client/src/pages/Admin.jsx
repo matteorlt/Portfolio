@@ -19,24 +19,40 @@ export default function Admin() {
   const [me, setMe] = useState(null);
   const [summary, setSummary] = useState(null);
   const [offers, setOffers] = useState({ starter: '700', professional: '1500', premium: '2600' });
-  const [captcha, setCaptcha] = useState(null);
-  const [captchaAnswer, setCaptchaAnswer] = useState('');
+  const [turnstileReady, setTurnstileReady] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
   const [code, setCode] = useState(new URLSearchParams(window.location.search).get('code') || '');
 
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.json()).then(setMe).catch(() => setMe({ authenticated: false }));
   }, []);
 
+  // Préparer Turnstile (Cloudflare)
   useEffect(() => {
     if (!me || me.authenticated) return;
-    fetch('/api/auth/captcha').then(r => r.json()).then(setCaptcha).catch(() => setCaptcha(null));
-  }, [me]);
+    const onReady = () => {
+      if (window.turnstile && !turnstileReady) {
+        setTurnstileReady(true);
+        try {
+          window.turnstile.render('#turnstile-container', {
+            sitekey: import.meta.env.VITE_TURNSTILE_SITE_KEY,
+            callback: (token) => setCaptchaToken(token),
+            'error-callback': () => setCaptchaToken(''),
+            'expired-callback': () => setCaptchaToken('')
+          });
+        } catch {}
+      }
+    };
+    if (window.turnstile) onReady();
+    else window.addEventListener('turnstile-load', onReady, { once: true });
+    return () => window.removeEventListener && window.removeEventListener('turnstile-load', onReady);
+  }, [me, turnstileReady]);
 
   const requestCode = async () => {
-    if (!captcha) return;
+    if (!captchaToken) return alert('Veuillez compléter le captcha');
     const r = await fetch('/api/auth/request-code', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ a: captcha.a, b: captcha.b, answer: Number(captchaAnswer), signature: captcha.signature })
+      body: JSON.stringify({ token: captchaToken })
     });
     if (r.ok) alert('Code envoyé par e-mail'); else alert('Échec captcha ou envoi');
   };
@@ -75,15 +91,8 @@ export default function Admin() {
       <Container>
         <Card>
           <h2>Accès Admin par Code</h2>
-          {captcha ? (
-            <div style={{ marginBottom: 12 }}>
-              <div>Captcha: {captcha.a} + {captcha.b} = ?</div>
-              <input placeholder="Réponse" value={captchaAnswer} onChange={e => setCaptchaAnswer(e.target.value)} style={{ display: 'block', marginTop: 6, marginBottom: 10 }} />
-              <button onClick={requestCode}>Envoyer le code par e‑mail</button>
-            </div>
-          ) : (
-            <div>Chargement captcha…</div>
-          )}
+          <div id="turnstile-container" style={{ marginBottom: 12 }} />
+          <button onClick={requestCode}>Envoyer le code par e‑mail</button>
           <div style={{ marginTop: 12 }}>
             <input placeholder="Entrez le code reçu" value={code} onChange={e => setCode(e.target.value)} style={{ display: 'block', marginBottom: 8 }} />
             <button onClick={verifyCode}>Valider le code</button>

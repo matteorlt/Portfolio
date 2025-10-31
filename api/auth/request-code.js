@@ -2,13 +2,6 @@ import prisma from '../_lib/db';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
-function verifyCaptcha(a, b, signature) {
-  const secret = process.env.CAPTCHA_SECRET;
-  if (!secret) return false;
-  const expected = crypto.createHmac('sha256', secret).update(`${a}|${b}`).digest('hex');
-  return expected === signature;
-}
-
 function generateCode() {
   return crypto.randomBytes(24).toString('base64url');
 }
@@ -33,13 +26,20 @@ async function sendEmail(to, code) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   try {
-    const { a, b, answer, signature } = req.body || {};
-    if (typeof a !== 'number' || typeof b !== 'number' || typeof answer !== 'number' || !signature) {
-      return res.status(400).json({ message: 'captcha invalid' });
-    }
-    if (!verifyCaptcha(a, b, signature) || answer !== a + b) {
-      return res.status(400).json({ message: 'captcha failed' });
-    }
+    const { token } = req.body || {};
+    if (!token) return res.status(400).json({ message: 'missing token' });
+
+    const tsSecret = process.env.TURNSTILE_SECRET_KEY;
+    if (!tsSecret) return res.status(500).json({ message: 'turnstile not configured' });
+
+    const verifyResp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ secret: tsSecret, response: token })
+    });
+    const verifyJson = await verifyResp.json().catch(() => ({}));
+    if (!verifyJson.success) return res.status(400).json({ message: 'captcha failed' });
+
     const email = 'contact@matteo-rlt.fr';
     const code = generateCode();
     const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
