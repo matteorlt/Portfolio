@@ -33,4 +33,13 @@ model Setting {
   updatedAt DateTime @updatedAt
 }
 
+model MagicCode {
+  id        String   @id @default(cuid())
+  email     String
+  code      String   @unique
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
+
 

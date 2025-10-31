@@ -17,23 +17,38 @@ const Card = styled.div`
 
 export default function Admin() {
   const [me, setMe] = useState(null);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [summary, setSummary] = useState(null);
   const [offers, setOffers] = useState({ starter: '700', professional: '1500', premium: '2600' });
+  const [captcha, setCaptcha] = useState(null);
+  const [captchaAnswer, setCaptchaAnswer] = useState('');
+  const [code, setCode] = useState(new URLSearchParams(window.location.search).get('code') || '');
 
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.json()).then(setMe).catch(() => setMe({ authenticated: false }));
   }, []);
 
-  const login = async (e) => {
-    e.preventDefault();
-    const r = await fetch('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+  useEffect(() => {
+    if (!me || me.authenticated) return;
+    fetch('/api/auth/captcha').then(r => r.json()).then(setCaptcha).catch(() => setCaptcha(null));
+  }, [me]);
+
+  const requestCode = async () => {
+    if (!captcha) return;
+    const r = await fetch('/api/auth/request-code', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ a: captcha.a, b: captcha.b, answer: Number(captchaAnswer), signature: captcha.signature })
+    });
+    if (r.ok) alert('Code envoyé par e-mail'); else alert('Échec captcha ou envoi');
+  };
+
+  const verifyCode = async () => {
+    if (!code) return;
+    const r = await fetch('/api/auth/verify-code', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
     if (r.ok) {
       const m = await fetch('/api/auth/me').then(r => r.json());
       setMe(m);
     } else {
-      alert('Identifiants invalides');
+      alert('Code invalide/expiré');
     }
   };
 
@@ -59,14 +74,20 @@ export default function Admin() {
     return (
       <Container>
         <Card>
-          <h2>Connexion Admin</h2>
-          <form onSubmit={login}>
-            <label>Email</label>
-            <input value={email} onChange={e => setEmail(e.target.value)} style={{ display: 'block', marginBottom: 8 }} />
-            <label>Mot de passe</label>
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} style={{ display: 'block', marginBottom: 12 }} />
-            <button type="submit">Se connecter</button>
-          </form>
+          <h2>Accès Admin par Code</h2>
+          {captcha ? (
+            <div style={{ marginBottom: 12 }}>
+              <div>Captcha: {captcha.a} + {captcha.b} = ?</div>
+              <input placeholder="Réponse" value={captchaAnswer} onChange={e => setCaptchaAnswer(e.target.value)} style={{ display: 'block', marginTop: 6, marginBottom: 10 }} />
+              <button onClick={requestCode}>Envoyer le code par e‑mail</button>
+            </div>
+          ) : (
+            <div>Chargement captcha…</div>
+          )}
+          <div style={{ marginTop: 12 }}>
+            <input placeholder="Entrez le code reçu" value={code} onChange={e => setCode(e.target.value)} style={{ display: 'block', marginBottom: 8 }} />
+            <button onClick={verifyCode}>Valider le code</button>
+          </div>
         </Card>
       </Container>
     );
