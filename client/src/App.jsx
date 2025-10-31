@@ -20,6 +20,7 @@ const Skills = lazy(() => import('./pages/Skills.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const ProjectDemo = lazy(() => import('./pages/ProjectDemo.jsx'));
 const Quote = lazy(() => import('./pages/Quote.jsx'));
+const Admin = lazy(() => import('./pages/Admin.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
 const LegalNotices = lazy(() => import('./pages/LegalNotices.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
@@ -101,6 +102,7 @@ function AppContent() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/demo/:projectId" element={<ProjectDemo />} />
           <Route path="/offres" element={<Quote />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/legal-notices" element={<LegalNotices />} />
           <Route path="*" element={<NotFound />} />

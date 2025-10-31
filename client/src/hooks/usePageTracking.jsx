@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { trackPageView, trackTimeOnPage } from '../utils/analytics';
+import { trackPageViewServer } from '../utils/telemetry';
 
 /**
  * Hook personnalisé pour tracker automatiquement les visites de page
@@ -44,6 +45,7 @@ export const usePageTracking = () => {
     
     // Track la nouvelle page
     trackPageView(pageName);
+    trackPageViewServer(pageName);
     
     // Reset le timer
     startTimeRef.current = Date.now();

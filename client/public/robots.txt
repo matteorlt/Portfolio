@@ -1,4 +1,9 @@
 User-agent: *
+Disallow: /admin
+
+Sitemap: https://matteo-rlt.fr/sitemap.xml
+
+User-agent: *
 Allow: /
 
 # Sitemap
