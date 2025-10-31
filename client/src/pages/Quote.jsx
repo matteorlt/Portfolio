@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { trackClick, trackFormEvent, trackConversion } from '../utils/analytics';
+import SEO from '../components/SEO.jsx';
 // Envoi via backend SMTP (Zoho)
 
 const QuoteContainer = styled.div`
@@ -553,6 +554,12 @@ const Quote = () => {
 
   return (
     <QuoteContainer>
+      <SEO
+        title="Offres | Portfolio Mattéo Rannou Le Texier"
+        description="Offres et services: sites vitrines, applications sur-mesure, optimisation performance & SEO."
+        url="https://matteo-rlt.fr/offres"
+        image="/logos/og-image.jpg"
+      />
       {/* Notification de succès */}
       {showNotification && (
         <motion.div

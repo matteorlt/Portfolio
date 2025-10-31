@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiCode, FiDatabase, FiSmartphone, FiServer } from 'react-icons/fi';
+import SEO from '../components/SEO.jsx';
 
 const SkillsContainer = styled.div`
   min-height: 100vh;
@@ -258,6 +259,12 @@ const Skills = () => {
 
   return (
     <SkillsContainer>
+      <SEO
+        title="Compétences | Portfolio Mattéo Rannou Le Texier"
+        description="Compétences frontend, backend et DevOps: React, TypeScript, Node.js, Java, PHP, Docker, Git."
+        url="https://matteo-rlt.fr/skills"
+        image="/logos/og-image.jpg"
+      />
       <Title
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}

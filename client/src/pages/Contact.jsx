@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiMail, FiMapPin, FiSend, FiGithub, FiLinkedin, FiCode } from 'react-icons/fi';
 import { trackFormEvent, trackClick } from '../utils/analytics';
+import SEO from '../components/SEO.jsx';
 // Envoi via backend SMTP (Zoho)
 
 const ContactContainer = styled.div`
@@ -341,6 +342,12 @@ const Contact = () => {
 
   return (
     <ContactContainer>
+      <SEO
+        title="Contact | Portfolio Mattéo Rannou Le Texier"
+        description="Contactez-moi pour discuter de votre projet web ou mobile, devis et disponibilités."
+        url="https://matteo-rlt.fr/contact"
+        image="/logos/og-image.jpg"
+      />
       {/* Notification de succès */}
       {showNotification && (
         <motion.div

@@ -1,4 +1,6 @@
 import React from 'react';
+import { useEffect, useRef, useState } from 'react';
+import SEO from '../components/SEO.jsx';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -287,6 +289,7 @@ const projectsData = {
     description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
     tech: ['TypeScript', 'React', 'Docker'],
     videoUrl: '/videos/Task Manager.mp4',
+    posterUrl: '/preview/task-manager-preview.webp',
     codeUrl: 'https://github.com/matteorlt/Task-Manager'
   },
   'live-chat': {
@@ -402,10 +405,63 @@ const ProjectDemo = () => {
         transition={{ duration: 0.8, delay: 0.4 }}
       >
         {project.videoUrl ? (
-          <Video controls muted>
-            <source src={project.videoUrl} type="video/mp4" />
-            Votre navigateur ne supporte pas la lecture vidéo.
-          </Video>
+          (() => {
+            // Lazy mount: n'affiche la vidéo qu'une fois visible
+            // pour éviter les multiples requêtes réseau et améliorer LCP
+            const LazyVideo = () => {
+              const containerRef = useRef(null);
+              const [isInView, setIsInView] = useState(false);
+
+              useEffect(() => {
+                const el = containerRef.current;
+                if (!el) return;
+                const observer = new IntersectionObserver(
+                  (entries) => {
+                    entries.forEach((entry) => {
+                      if (entry.isIntersecting) {
+                        setIsInView(true);
+                        observer.disconnect();
+                      }
+                    });
+                  },
+                  { rootMargin: '200px' }
+                );
+                observer.observe(el);
+                return () => observer.disconnect();
+              }, []);
+
+              return (
+                <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
+                  {isInView ? (
+                    <Video
+                      controls
+                      muted
+                      preload="metadata"
+                      poster={project.posterUrl}
+                      playsInline
+                    >
+                      {/* Propose webm si disponible, fallback mp4 */}
+                      <source src={(project.videoUrl || '').replace('.mp4', '.webm')} type="video/webm" />
+                      <source src={project.videoUrl} type="video/mp4" />
+                      Votre navigateur ne supporte pas la lecture vidéo.
+                    </Video>
+                  ) : (
+                    <VideoPlaceholder>
+                      <PlayIcon>
+                        <FiPlay />
+                      </PlayIcon>
+                      <PlaceholderText>Vidéo de démonstration</PlaceholderText>
+                      <PlaceholderSubtext>
+                        Le média se chargera automatiquement
+                      </PlaceholderSubtext>
+                    </VideoPlaceholder>
+                  )}
+                </div>
+              );
+            };
+
+            return <LazyVideo />;
+          })()
         ) : (
           <VideoPlaceholder>
             <PlayIcon>
@@ -418,6 +474,15 @@ const ProjectDemo = () => {
           </VideoPlaceholder>
         )}
       </VideoContainer>
+
+      {/* SEO spécifique à la page de démo */}
+      <SEO
+        title={`${project.title} - Démo | Portfolio Mattéo Rannou Le Texier`}
+        description={`Démonstration du projet ${project.title}. ${project.description}`}
+        url={`https://matteo-rlt.fr/demo/${projectId}`}
+        image={project.posterUrl || '/logos/og-image.jpg'}
+        type="video.other"
+      />
 
       <ProjectInfo
         initial={{ opacity: 0, y: 50 }}

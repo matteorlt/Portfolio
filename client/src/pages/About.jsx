@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiCode, FiUsers, FiAward, FiTrendingUp } from 'react-icons/fi';
+import SEO from '../components/SEO.jsx';
 
 const AboutContainer = styled.div`
   min-height: 100vh;
@@ -161,6 +162,12 @@ const About = () => {
 
   return (
     <AboutContainer>
+      <SEO
+        title="À propos | Portfolio Mattéo Rannou Le Texier"
+        description="À propos de moi: développeur web & mobile, passionné par React, Java, PHP et la création d'applications performantes."
+        url="https://matteo-rlt.fr/about"
+        image="/logos/og-image.jpg"
+      />
       <Section
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}

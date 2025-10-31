@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiGithub, FiEye } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO.jsx';
 
 const ProjectsContainer = styled.div`
   min-height: 100vh;
@@ -60,11 +61,12 @@ const FilterButton = styled(motion.button)`
 
 const ProjectsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 2rem;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 `;
 
@@ -112,6 +114,10 @@ const ProjectImage = styled.div`
   ${ProjectCard}:hover &::before {
     transform: translateX(100%);
   }
+
+  @media (max-width: 768px) {
+    height: 150px;
+  }
 `;
 
 const ProjectImgTag = styled.img`
@@ -125,14 +131,14 @@ const ProjectImgTag = styled.img`
 `;
 
 const ProjectContent = styled.div`
-  padding: 1.5rem;
+  padding: 1rem 1rem 1.25rem;
   display: flex;
   flex-direction: column;
   flex: 1;
 `;
 
 const ProjectTitle = styled.h3`
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 600;
   color: #ffffff;
   margin-bottom: 0;
@@ -141,8 +147,8 @@ const ProjectTitle = styled.h3`
 const ProjectDescription = styled.p`
   color: #aaaaaa;
   line-height: 1.6;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
 `;
 
 const ProjectHeader = styled.div`
@@ -173,9 +179,9 @@ const ProjectTech = styled.div`
 const TechTag = styled.span`
   background: rgba(74, 144, 226, 0.1);
   color: #4a90e2;
-  padding: 0.25rem 0.75rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 15px;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
 `;
 
@@ -189,10 +195,10 @@ const ProjectLink = styled(motion.a)`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 8px;
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
   transition: all 0.3s ease;
 
@@ -340,6 +346,12 @@ const Projects = () => {
 
   return (
     <ProjectsContainer>
+      <SEO
+        title="Mes Projets | Portfolio Mattéo Rannou Le Texier"
+        description="Découvrez mes réalisations: applications web modernes, TypeScript/React, WordPress et plus."
+        url="https://matteo-rlt.fr/projects"
+        image="/logos/og-image.jpg"
+      />
       <Title
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}

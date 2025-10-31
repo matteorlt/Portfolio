@@ -5,7 +5,7 @@
 
 // Fonction pour tracker un événement de page vue
 export const trackPageView = (pageName) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'page_view', {
       page_title: pageName,
       page_location: window.location.href,
@@ -21,7 +21,7 @@ export const trackPageView = (pageName) => {
 
 // Fonction pour tracker les clics
 export const trackClick = (elementName, category = 'user_action', value = null) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'click', {
       event_category: category,
       event_label: elementName,
@@ -38,7 +38,7 @@ export const trackClick = (elementName, category = 'user_action', value = null) 
 
 // Fonction pour tracker les téléchargements
 export const trackDownload = (fileName, category = 'download') => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'file_download', {
       file_name: fileName,
       event_category: category,
@@ -53,7 +53,7 @@ export const trackDownload = (fileName, category = 'download') => {
 
 // Fonction pour tracker les liens externes
 export const trackExternalLink = (url, category = 'external_link') => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'external_link_click', {
       event_category: category,
       event_label: url,
@@ -68,7 +68,7 @@ export const trackExternalLink = (url, category = 'external_link') => {
 
 // Fonction pour tracker les interactions de formulaire
 export const trackFormEvent = (formName, eventType, data = {}) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'form_' + eventType, {
       event_category: 'form',
       form_name: formName,
@@ -83,7 +83,7 @@ export const trackFormEvent = (formName, eventType, data = {}) => {
 
 // Fonction pour tracker les vidéos
 export const trackVideo = (videoName, action, category = 'video') => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'video_' + action, {
       video_title: videoName,
       event_category: category
@@ -97,7 +97,7 @@ export const trackVideo = (videoName, action, category = 'video') => {
 
 // Fonction pour tracker le scroll
 export const trackScroll = (percentage) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'scroll', {
       event_category: 'engagement',
       value: percentage
@@ -111,7 +111,7 @@ export const trackScroll = (percentage) => {
 
 // Fonction pour tracker le temps passé sur une page
 export const trackTimeOnPage = (pageName, timeInSeconds) => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'time_on_page', {
       page_title: pageName,
       value: Math.round(timeInSeconds),
@@ -126,7 +126,7 @@ export const trackTimeOnPage = (pageName, timeInSeconds) => {
 
 // Fonction pour tracker les conversions (ex: devis, contact)
 export const trackConversion = (conversionType, value = null, currency = 'EUR') => {
-  if (typeof window.gtag !== 'undefined') {
+  if (typeof window.gtag !== 'undefined' && window.__consentGranted === true) {
     window.gtag('event', 'conversion', {
       event_category: 'conversion',
       event_label: conversionType,
