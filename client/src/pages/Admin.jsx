@@ -19,42 +19,32 @@ export default function Admin() {
   const [me, setMe] = useState(null);
   const [summary, setSummary] = useState(null);
   const [offers, setOffers] = useState({ starter: '700', professional: '1500', premium: '2600' });
-  const [turnstileReady, setTurnstileReady] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState('');
   const [code, setCode] = useState(new URLSearchParams(window.location.search).get('code') || '');
+  const [isRequesting, setIsRequesting] = useState(false);
 
   useEffect(() => {
     fetch('/api/auth/me').then(r => r.json()).then(setMe).catch(() => setMe({ authenticated: false }));
   }, []);
 
-  // Préparer Turnstile (Cloudflare)
-  useEffect(() => {
-    if (!me || me.authenticated) return;
-    const onReady = () => {
-      if (window.turnstile && !turnstileReady) {
-        setTurnstileReady(true);
-        try {
-          window.turnstile.render('#turnstile-container', {
-            sitekey: import.meta.env.VITE_TURNSTILE_SITE_KEY,
-            callback: (token) => setCaptchaToken(token),
-            'error-callback': () => setCaptchaToken(''),
-            'expired-callback': () => setCaptchaToken('')
-          });
-        } catch {}
-      }
-    };
-    if (window.turnstile) onReady();
-    else window.addEventListener('turnstile-load', onReady, { once: true });
-    return () => window.removeEventListener && window.removeEventListener('turnstile-load', onReady);
-  }, [me, turnstileReady]);
-
   const requestCode = async () => {
-    if (!captchaToken) return alert('Veuillez compléter le captcha');
-    const r = await fetch('/api/auth/request-code', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: captchaToken })
-    });
-    if (r.ok) alert('Code envoyé par e-mail'); else alert('Échec captcha ou envoi');
+    setIsRequesting(true);
+    try {
+      const r = await fetch('/api/auth/request-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      });
+      if (r.ok) {
+        alert('Code envoyé par e-mail ! Vérifiez votre boîte de réception.');
+      } else {
+        const err = await r.json().catch(() => ({}));
+        alert(err.message || 'Erreur lors de l\'envoi du code');
+      }
+    } catch (error) {
+      alert('Erreur lors de la demande de code');
+    } finally {
+      setIsRequesting(false);
+    }
   };
 
   const verifyCode = async () => {
@@ -90,12 +80,57 @@ export default function Admin() {
     return (
       <Container>
         <Card>
-          <h2>Accès Admin par Code</h2>
-          <div id="turnstile-container" style={{ marginBottom: 12 }} />
-          <button onClick={requestCode}>Envoyer le code par e‑mail</button>
-          <div style={{ marginTop: 12 }}>
-            <input placeholder="Entrez le code reçu" value={code} onChange={e => setCode(e.target.value)} style={{ display: 'block', marginBottom: 8 }} />
-            <button onClick={verifyCode}>Valider le code</button>
+          <h2>Accès Admin</h2>
+          <p style={{ color: '#cccccc', marginBottom: '1rem' }}>
+            Un code d'accès vous sera envoyé par e-mail à <strong>contact@matteo-rlt.fr</strong>
+          </p>
+          <button 
+            onClick={requestCode} 
+            disabled={isRequesting}
+            style={{
+              padding: '0.75rem 1.5rem',
+              background: '#4a90e2',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              cursor: isRequesting ? 'not-allowed' : 'pointer',
+              opacity: isRequesting ? 0.6 : 1,
+              marginBottom: '1rem'
+            }}
+          >
+            {isRequesting ? 'Envoi en cours...' : 'Envoyer le code par e-mail'}
+          </button>
+          <div style={{ marginTop: '1rem' }}>
+            <input 
+              placeholder="Entrez le code reçu" 
+              value={code} 
+              onChange={e => setCode(e.target.value)} 
+              style={{ 
+                display: 'block', 
+                width: '100%',
+                padding: '0.75rem',
+                marginBottom: '0.5rem',
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(74, 144, 226, 0.2)',
+                borderRadius: '8px',
+                color: '#ffffff',
+                fontSize: '1rem'
+              }} 
+            />
+            <button 
+              onClick={verifyCode}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: '#4a90e2',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                width: '100%'
+              }}
+            >
+              Valider le code
+            </button>
           </div>
         </Card>
       </Container>

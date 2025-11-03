@@ -19,6 +19,9 @@ SMTP_HOST=smtp.zoho.com
 SMTP_PORT=465
 SMTP_SECURE=true
 NODE_ENV=production
+
+# Session sécurisée (minimum 32 caractères)
+SESSION_PASSWORD=votre-mot-de-passe-session-securise-minimum-32-caracteres
 ```
 
 ### 🔐 Configuration Zoho Mail
@@ -27,6 +30,22 @@ NODE_ENV=production
 2. **Paramètres → Sécurité → Mots de passe d'application**
 3. **Créez un nouveau mot de passe pour "Mail"**
 4. **Utilisez ce mot de passe dans `EMAIL_PASS`**
+
+### 🔐 Configuration Session (Sécurité)
+
+**Générez un mot de passe sécurisé pour les sessions** :
+
+```bash
+# Avec Node.js
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+
+# Ou avec OpenSSL
+openssl rand -hex 32
+```
+
+Copiez le résultat dans `SESSION_PASSWORD` (minimum 32 caractères requis).
+
+📖 **Guide d'authentification** : Voir `AUTH-SIMPLE-GUIDE.md`
 
 ### 🚀 Redéploiement
 

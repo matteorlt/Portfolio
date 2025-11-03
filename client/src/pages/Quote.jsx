@@ -456,6 +456,7 @@ const Quote = () => {
     }
   }, [selectedPackage]);
 
+
   const handlePackageSelect = (packageId) => {
     trackClick(`Offer Package - ${packageId}`, 'package_selection', 1);
     const packageDetails = packages.find(p => p.id === packageId);

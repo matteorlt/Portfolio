@@ -23,30 +23,57 @@ async function sendEmail(to, code) {
   });
 }
 
+// Rate limiting simple : limite à 3 demandes par heure par IP
+const rateLimit = new Map(); // IP -> { count: number, resetAt: Date }
+
+function getClientIP(req) {
+  return req.headers['x-forwarded-for']?.split(',')[0] || 
+         req.headers['x-real-ip'] || 
+         req.connection?.remoteAddress || 
+         'unknown';
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
   try {
-    const { token } = req.body || {};
-    if (!token) return res.status(400).json({ message: 'missing token' });
+    // Rate limiting simple
+    const clientIP = getClientIP(req);
+    const now = new Date();
+    const limit = rateLimit.get(clientIP);
+    
+    if (limit) {
+      if (now < limit.resetAt) {
+        if (limit.count >= 3) {
+          return res.status(429).json({ 
+            message: 'Trop de demandes. Veuillez réessayer dans quelques minutes.' 
+          });
+        }
+        limit.count++;
+      } else {
+        // Reset après 1 heure
+        rateLimit.set(clientIP, { count: 1, resetAt: new Date(now.getTime() + 60 * 60 * 1000) });
+      }
+    } else {
+      rateLimit.set(clientIP, { count: 1, resetAt: new Date(now.getTime() + 60 * 60 * 1000) });
+    }
 
-    const tsSecret = process.env.TURNSTILE_SECRET_KEY;
-    if (!tsSecret) return res.status(500).json({ message: 'turnstile not configured' });
-
-    const verifyResp = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ secret: tsSecret, response: token })
-    });
-    const verifyJson = await verifyResp.json().catch(() => ({}));
-    if (!verifyJson.success) return res.status(400).json({ message: 'captcha failed' });
+    // Nettoyer les anciennes entrées (garbage collection simple)
+    if (Math.random() < 0.1) { // 10% de chance de nettoyer
+      for (const [ip, data] of rateLimit.entries()) {
+        if (now >= data.resetAt) {
+          rateLimit.delete(ip);
+        }
+      }
+    }
 
     const email = 'contact@matteo-rlt.fr';
     const code = generateCode();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
+    const expiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
     await prisma.magicCode.create({ data: { email, code, expiresAt } });
     await sendEmail(email, code);
     return res.status(200).json({ ok: true });
   } catch (e) {
+    console.error('Erreur request-code:', e);
     return res.status(500).json({ message: 'Server error' });
   }
 }
