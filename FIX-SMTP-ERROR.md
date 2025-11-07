@@ -28,7 +28,7 @@ L'erreur `Invalid login: 535 Authentication Failed` signifie que l'authentificat
 Dans votre fichier `.env` à la racine, remplacez :
 
 ```env
-EMAIL_PASS=ApDfQ7i5Zak3
+EMAIL_PASS=mdp app mail
 ```
 
 Par le nouveau mot de passe d'application que vous venez de générer :
