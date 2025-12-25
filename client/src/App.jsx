@@ -1,7 +1,6 @@
-import React, { useState, useEffect, Suspense, lazy } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import styled from 'styled-components';
-import Loading from './components/Loading.jsx';
 import GlobalStyle from './styles/GlobalStyle.jsx';
 import usePageTracking from './hooks/usePageTracking.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
@@ -27,7 +26,8 @@ const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
-  background: transparent;
+  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  background-attachment: fixed;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
 `;
@@ -36,9 +36,6 @@ const AppContainer = styled.div`
 function AppContent() {
   // Activer le tracking automatique des pages
   usePageTracking();
-  
-  const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     // Injection GTM maxim. différée (desktop uniquement et après load + idle)
@@ -60,27 +57,10 @@ function AppContent() {
     if (document.readyState === 'complete') deferGTM();
     else window.addEventListener('load', deferGTM, { once: true });
 
-    // Simulation du chargement des ressources
-    const timer = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(timer);
-          setTimeout(() => setIsLoading(false), 500);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 100);
-
     return () => {
-      clearInterval(timer);
       window.removeEventListener('load', deferGTM);
     };
   }, []);
-
-  if (isLoading) {
-    return <Loading progress={progress} />;
-  }
 
   return (
     <>
@@ -93,7 +73,7 @@ function AppContent() {
         <Suspense fallback={null}>
           <Navbar />
         </Suspense>
-        <Suspense fallback={<Loading progress={100} />}>
+        <Suspense fallback={null}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

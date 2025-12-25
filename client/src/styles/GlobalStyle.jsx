@@ -9,6 +9,9 @@ const GlobalStyle = createGlobalStyle`
 
   html {
     scroll-behavior: smooth;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background-attachment: fixed;
+    min-height: 100%;
   }
 
   body {
@@ -18,8 +21,18 @@ const GlobalStyle = createGlobalStyle`
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background-attachment: fixed;
     color: #ffffff;
     overflow-x: hidden;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+  #root {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+    background-attachment: fixed;
   }
 
   code {
