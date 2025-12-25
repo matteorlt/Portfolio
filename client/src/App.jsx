@@ -1,6 +1,7 @@
 import React, { useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
 import GlobalStyle from './styles/GlobalStyle.jsx';
 import usePageTracking from './hooks/usePageTracking.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
@@ -30,7 +31,82 @@ const AppContainer = styled.div`
   background-attachment: fixed;
   color: #ffffff;
   font-family: 'Inter', sans-serif;
+  position: relative;
+  overflow-x: hidden;
 `;
+
+const PageWrapper = styled(motion.div)`
+  width: 100%;
+  min-height: calc(100vh - 80px);
+`;
+
+const pageVariants = {
+  initial: {
+    opacity: 0,
+    y: 30,
+    scale: 0.98
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -30,
+    scale: 0.98,
+    transition: {
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1]
+    }
+  }
+};
+
+// Composant pour les routes avec animations
+function AnimatedRoutes() {
+  const location = useLocation();
+
+  // Scroll vers le haut à chaque changement de page
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'instant'
+    });
+  }, [location.pathname]);
+
+  return (
+    <AnimatePresence mode="wait">
+      <PageWrapper
+        key={location.pathname}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={pageVariants}
+      >
+        <Suspense fallback={null}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/demo/:projectId" element={<ProjectDemo />} />
+            <Route path="/offres" element={<Quote />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/legal-notices" element={<LegalNotices />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </PageWrapper>
+    </AnimatePresence>
+  );
+}
 
 // Composant interne pour avoir accès au Router
 function AppContent() {
@@ -73,21 +149,7 @@ function AppContent() {
         <Suspense fallback={null}>
           <Navbar />
         </Suspense>
-        <Suspense fallback={null}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/demo/:projectId" element={<ProjectDemo />} />
-          <Route path="/offres" element={<Quote />} />
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/legal-notices" element={<LegalNotices />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        </Suspense>
+        <AnimatedRoutes />
         <Suspense fallback={null}>
           <Footer />
         </Suspense>
