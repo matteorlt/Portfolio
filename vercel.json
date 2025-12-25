@@ -1,7 +1,7 @@
 {
   "buildCommand": "cd client && npm run build:prod",
   "outputDirectory": "client/dist",
-  "installCommand": "cd client && npm ci && cd ../api && npm ci && cd .. && npm run prisma:generate",
+  "installCommand": "npm ci && cd client && npm ci && cd ../api && npm ci && cd .. && npx prisma@6.18.0 generate",
   "rewrites": [
     {
       "source": "/(.*)",
