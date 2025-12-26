@@ -3,7 +3,7 @@ import React from 'react';
 let ParticlesBackground = null;
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail, FiCode, FiServer, FiSmartphone, FiTrendingUp, FiUsers, FiAward, FiArrowRight, FiEye, FiZap, FiStar, FiCheckCircle, FiHelpCircle, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiMail, FiCode, FiServer, FiSmartphone, FiTrendingUp, FiUsers, FiAward, FiArrowRight, FiEye, FiZap, FiStar, FiCheckCircle, FiHelpCircle, FiChevronDown, FiChevronUp, FiLayers } from 'react-icons/fi';
 import { useNavigate, Link } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
@@ -613,7 +613,7 @@ const Home = () => {
       link: '/offres'
     },
     {
-      icon: <FiCode />,
+      icon: <FiLayers />,
       title: 'Site sur-mesure',
       description: 'Site web professionnel avec design personnalisé, interface d\'administration et fonctionnalités avancées.',
       price: 'À partir de 1500€',
@@ -646,12 +646,12 @@ const Home = () => {
       link: 'https://www.gym-phys-ploermel.fr/'
     },
     {
-      id: 2,
-      title: 'Live Chat',
-      description: 'Application de chat en temps réel avec React et Socket.IO, interface moderne et mode hors ligne.',
-      preview: '/preview/live-chat-preview.webp',
-      tech: ['JavaScript', 'React', 'Socket.IO'],
-      link: '/demo/live-chat'
+      id: 8,
+      title: 'Driva',
+      description: 'SaaS moderne pour auto-écoles qui simplifie la gestion quotidienne : planning, réservations, suivi des heures et paiements.',
+      preview: '/preview/driva-preview.webp',
+      tech: ['Next.js 14', 'TypeScript', 'PostgreSQL'],
+      link: '/projects'
     }
   ];
 

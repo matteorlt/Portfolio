@@ -260,6 +260,17 @@ const Projects = () => {
 
   const projects = [
     {
+      id: 8,
+      title: 'Driva',
+      description: 'SaaS moderne pour auto-écoles qui simplifie la gestion quotidienne : planning des moniteurs, réservations des élèves, suivi des heures, paiements et communication automatique. Projet professionnel bientôt disponible au grand public.',
+      image: '🚗',
+      preview: '/preview/driva-preview.webp',
+      tech: ['Next.js 14', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Stripe', 'Tailwind CSS'],
+      category: ['typescript'],
+      projectType: 'pro',
+      hideCode: true
+    },
+    {
       id: 1,
       title: 'Task-Manager',
       description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
@@ -301,7 +312,7 @@ const Projects = () => {
       title: 'Auth',
       description: 'Système d\'authentification sécurisé développé en JavaScript. Gestion des sessions et protection des routes.',
       image: '🔐',
-      preview: '/preview/auth-preview.png',
+      preview: '/preview/auth-preview.webp',
       tech: ['JavaScript', 'Node.js', 'Express'],
       category: ['javascript'],
       projectType: 'perso',
@@ -329,9 +340,7 @@ const Projects = () => {
       projectType: 'perso',
       demo: '/demo/site-react-openclassroom',
       code: 'https://github.com/matteorlt'
-    },
-    
-    
+    }
   ];
 
   const filteredProjects = (() => {
