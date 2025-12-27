@@ -164,7 +164,7 @@ const About = () => {
     <AboutContainer>
       <SEO
         title="À propos | Portfolio Mattéo Rannou Le Texier"
-        description="À propos de moi: développeur web & mobile, passionné par React, Java, PHP et la création d'applications performantes."
+        description="Développeur web freelance indépendant, diplômé d'un Bac+2 en développement web. Spécialisé dans React, Next.js, TypeScript et la création d'applications web modernes."
         url="https://matteo-rlt.fr/about"
         image="/logos/og-image.jpg"
       />
@@ -175,7 +175,7 @@ const About = () => {
       >
         <Title>À propos de moi</Title>
         <Subtitle>
-          Passionné par le développement web et les technologies innovantes
+          Développeur web freelance spécialisé dans la création d'applications modernes et performantes
         </Subtitle>
       </Section>
 
@@ -186,20 +186,20 @@ const About = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <Paragraph>
-            Je m'appelle Mattéo Rannou Le Texier, développeur web en formation Bac+2 à L'ENI Rennes. 
-            Passionné par le code, les projets créatifs et l'apprentissage continu. 
-            J'aime créer, tester et même casser puis réparer du code !
+            Je m'appelle Mattéo Rannou Le Texier, développeur web freelance indépendant, diplômé d'un Bac+2 en développement web de L'ENI Rennes. 
+            Spécialisé dans la création d'applications web modernes et performantes, je transforme vos idées en solutions numériques concrètes.
           </Paragraph>
           
           <Paragraph>
-            J'ai déjà eu l'occasion de travailler sur plusieurs projets concrets : Task-Manager, 
-            Gym-Phys, un système d'authentification, un système de ticket support et d'autres projets créatifs. 
-            J'accorde une grande importance à la qualité du code et à l'expérience utilisateur.
+            Fort d'une expérience variée sur des projets professionnels et personnels, j'ai développé des compétences solides dans la création 
+            d'applications web complètes : systèmes d'authentification sécurisés, plateformes de gestion, interfaces utilisateur intuitives, 
+            et intégration de services tiers. Chaque projet est l'occasion d'appliquer les meilleures pratiques du développement web moderne.
           </Paragraph>
           
           <Paragraph>
-            Autonome, mais aussi à l'aise en collaboration, je suis toujours à la recherche de nouveaux défis et 
-            d'opportunités pour progresser et construire des projets utiles, clairs, bien structurés.
+            En tant que développeur freelance, je privilégie une approche personnalisée et un suivi rigoureux de chaque projet. 
+            Mon expertise couvre l'ensemble de la stack web, du frontend au backend, en passant par la gestion de bases de données et le déploiement. 
+            Je m'engage à livrer des solutions de qualité, maintenables et évolutives, adaptées aux besoins spécifiques de chaque client.
           </Paragraph>
         </TextContent>
 
@@ -210,7 +210,7 @@ const About = () => {
         >
           <StatsGrid>
             <StatCard
-              whileHover={{ scale: 1.05 }}quick 
+              whileHover={{ scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
               <StatIcon>

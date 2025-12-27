@@ -1,7 +1,7 @@
 export async function sendEvent(event) {
   try {
     if (typeof window !== 'undefined' && window.__consentGranted !== true) return;
-    await fetch('/api/analytics/track', {
+    const response = await fetch('/api/analytics/track', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -12,7 +12,13 @@ export async function sendEvent(event) {
         ts: Date.now()
       })
     });
-  } catch (_) {}
+    // Ne pas afficher d'erreur si la réponse n'est pas OK (évite les erreurs 500 dans la console)
+    if (!response.ok) {
+      return;
+    }
+  } catch (_) {
+    // Erreur silencieuse pour éviter le bruit dans la console
+  }
 }
 
 export function trackButtonClick(label, metadata = {}) {

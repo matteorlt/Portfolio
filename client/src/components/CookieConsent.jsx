@@ -50,13 +50,35 @@ function enableConsentAndLoadTags() {
   window.__consentGranted = true;
   window.dataLayer = window.dataLayer || [];
   function gtag(){ window.dataLayer.push(arguments); }
+  window.gtag = gtag;
   gtag('js', new Date());
+  
   // Charger GA4
   injectScript('https://www.googletagmanager.com/gtag/js?id=G-F9XDS90C1K');
-  gtag('config', 'G-F9XDS90C1K');
+  gtag('config', 'G-F9XDS90C1K', {
+    anonymize_ip: true,
+    cookie_flags: 'SameSite=None;Secure'
+  });
+  
   // Charger Google Ads si souhaité
   injectScript('https://www.googletagmanager.com/gtag/js?id=AW-17634174804');
-  gtag('config', 'AW-17634174804');
+  gtag('config', 'AW-17634174804', {
+    anonymize_ip: true,
+    cookie_flags: 'SameSite=None;Secure'
+  });
+  
+  // Charger GTM après un court délai pour éviter les conflits
+  setTimeout(() => {
+    if (!document.querySelector('script[src*="googletagmanager.com/gtm.js"]')) {
+      const gtmScript = document.createElement('script');
+      gtmScript.async = true;
+      gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N2CMQQZD';
+      document.head.appendChild(gtmScript);
+    }
+  }, 500);
+  
+  // Déclencher un événement pour que App.jsx sache que le consentement a été donné
+  window.dispatchEvent(new Event('consentGranted'));
 }
 
 const CookieConsent = () => {

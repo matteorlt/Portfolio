@@ -268,6 +268,7 @@ const Projects = () => {
       tech: ['Next.js 14', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Stripe', 'Tailwind CSS'],
       category: ['typescript'],
       projectType: 'pro',
+      demo: '/demo/driva',
       hideCode: true
     },
     {
@@ -329,17 +330,6 @@ const Projects = () => {
       projectType: 'perso',
       demo: '/demo/ticket-support-app',
       code: 'https://github.com/matteorlt/ticket-support-app'
-    },
-    {
-      id: 5,
-      title: 'Site React (OpenClassroom)',
-      description: 'Projet Fils Rouge OpenClassroom - Site web moderne développé avec React et animations fluides.',
-      image: '⚛️',
-      tech: ['React', 'JavaScript', 'CSS'],
-      category: ['javascript'],
-      projectType: 'perso',
-      demo: '/demo/site-react-openclassroom',
-      code: 'https://github.com/matteorlt'
     }
   ];
 

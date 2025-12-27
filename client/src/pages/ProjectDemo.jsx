@@ -341,6 +341,16 @@ const projectsData = {
     tech: ['JavaScript', 'HTML', 'CSS'],
     videoUrl: null,
     codeUrl: 'https://github.com/matteorlt'
+  },
+  'driva': {
+    title: 'Driva',
+    description: 'SaaS moderne pour auto-écoles qui simplifie la gestion quotidienne : planning des moniteurs, réservations des élèves, suivi des heures, paiements et communication automatique. Projet professionnel bientôt disponible au grand public.',
+    tech: ['Next.js 14', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Stripe', 'Tailwind CSS'],
+    videoUrl: null,
+    posterUrl: '/preview/driva-preview.webp',
+    codeUrl: null,
+    projectType: 'pro',
+    comingSoon: true
   }
 };
 
@@ -379,9 +389,9 @@ const ProjectDemo = () => {
       >
         <TitleRow>
           <span>{project.title}</span>
-          {/* Déduit le type à partir du titre connu, sinon n'affiche rien */}
+          {/* Déduit le type à partir du titre connu ou de la propriété projectType */}
           {(() => {
-            const type = project.title === 'Gym Phys' ? 'pro' : 'perso';
+            const type = project.projectType || (project.title === 'Gym Phys' ? 'pro' : 'perso');
             return (
               <DemoTypeBadge $type={type} aria-label={`Type de projet: ${type}`}>
                 {type === 'pro' ? 'Projet Pro' : 'Projet Perso'}
@@ -462,6 +472,44 @@ const ProjectDemo = () => {
 
             return <LazyVideo />;
           })()
+        ) : project.comingSoon ? (
+          <VideoPlaceholder>
+            {project.posterUrl ? (
+              <img 
+                src={project.posterUrl} 
+                alt={project.title}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  opacity: 0.7
+                }}
+              />
+            ) : null}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(0, 0, 0, 0.5)',
+              color: 'white',
+              textAlign: 'center',
+              padding: '2rem'
+            }}>
+              <PlayIcon>
+                <FiPlay />
+              </PlayIcon>
+              <PlaceholderText>Projet bientôt disponible</PlaceholderText>
+              <PlaceholderSubtext>
+                Ce projet professionnel sera prochainement accessible au grand public
+              </PlaceholderSubtext>
+            </div>
+          </VideoPlaceholder>
         ) : (
           <VideoPlaceholder>
             <PlayIcon>
@@ -511,17 +559,19 @@ const ProjectDemo = () => {
               Voir le projet
             </ActionButton>
           )}
-          <ActionButton
-            href={project.codeUrl}
-            className="secondary"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FiArrowLeft />
-            Voir le code
-          </ActionButton>
+          {project.codeUrl && (
+            <ActionButton
+              href={project.codeUrl}
+              className="secondary"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FiArrowLeft />
+              Voir le code
+            </ActionButton>
+          )}
         </ActionButtons>
       </ProjectInfo>
     </DemoContainer>
