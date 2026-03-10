@@ -268,7 +268,7 @@ const Projects = () => {
       tech: ['Next.js 14', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Stripe', 'Tailwind CSS'],
       category: ['typescript'],
       projectType: 'pro',
-      demo: '/demo/driva',
+      siteUrl: 'https://driva-auto.fr/',
       hideCode: true
     },
     {
