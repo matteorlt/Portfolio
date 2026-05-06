@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet';
 
 /** Icône unique onglet / mobile — inchangée selon le thème (logo noir sur fond clair d’onglet). */
-const SITE_ICON = '/logos/logo_black.jpg';
+const SITE_ICON = '/logos/logo_black-192.webp';
 
 export default function ThemeIcons() {
   return (

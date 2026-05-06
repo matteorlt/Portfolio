@@ -719,7 +719,8 @@ const Home = () => {
       outcome:
         'Outil métier pour auto-écoles : planning, réservations et suivi des élèves centralisés pour gagner du temps au quotidien.',
       tech: ['Next.js', 'TypeScript', 'PostgreSQL'],
-      preview: '/preview/driva-preview-2026.webp',
+      preview: '/preview/driva-preview-2026-md.webp',
+      previewMobile: '/preview/driva-preview-2026-sm.webp',
       link: 'https://driva-auto.fr/',
       external: true
     },
@@ -729,7 +730,8 @@ const Home = () => {
       outcome:
         'Application de gestion de tâches avec authentification : équipes qui voient clairement priorités et avancement.',
       tech: ['TypeScript', 'Node.js', 'Docker'],
-      preview: '/preview/task-manager-preview.webp',
+      preview: '/preview/task-manager-preview-md.webp',
+      previewMobile: '/preview/task-manager-preview-sm.webp',
       link: '/demo/task-manager',
       external: false
     },
@@ -739,7 +741,8 @@ const Home = () => {
       outcome:
         'Site vitrine pour une association sportive : informations, actualités et prise de contact accessibles sur mobile.',
       tech: ['WordPress', 'PHP'],
-      preview: '/preview/gym-phys-preview.webp',
+      preview: '/preview/gym-phys-preview-md.webp',
+      previewMobile: '/preview/gym-phys-preview-sm.webp',
       link: 'https://www.gym-phys-ploermel.fr/',
       external: true
     },
@@ -749,7 +752,8 @@ const Home = () => {
       outcome:
         'Messagerie temps réel pour démontrer des interactions fluides côté utilisateur et robustesse côté serveur.',
       tech: ['JavaScript', 'Socket.IO', 'Node.js'],
-      preview: '/preview/live-chat-preview.webp',
+      preview: '/preview/live-chat-preview-md.webp',
+      previewMobile: '/preview/live-chat-preview-sm.webp',
       link: '/demo/live-chat',
       external: false
     }
@@ -937,7 +941,14 @@ const Home = () => {
               <ProjectCard key={p.id} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 * i }}>
                 <ProjectThumb>
                   {p.preview ? (
-                    <ProjectImg src={p.preview} alt={`Aperçu ${p.title}`} loading="lazy" decoding="async" />
+                    <ProjectImg
+                      src={p.preview}
+                      srcSet={`${p.previewMobile} 594w, ${p.preview} 960w`}
+                      sizes="(max-width: 639px) 100vw, 594px"
+                      alt={`Aperçu ${p.title}`}
+                      loading="lazy"
+                      decoding="async"
+                    />
                   ) : null}
                 </ProjectThumb>
                 <ProjectBody>

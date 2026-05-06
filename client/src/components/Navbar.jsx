@@ -259,7 +259,7 @@ const Navbar = () => {
       <NavContent>
         <Logo to="/" aria-label="Accueil Mattéo Rannou Le Texier">
           <LogoImage
-            src="/logos/logo_black.jpg"
+            src="/logos/logo_black-80.webp"
             alt=""
             width={40}
             height={40}

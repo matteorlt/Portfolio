@@ -3,9 +3,9 @@
   "short_name": "Mattéo RLT",
   "icons": [
     {
-      "src": "/logos/logo_black.jpg",
-      "sizes": "512x512",
-      "type": "image/jpeg",
+      "src": "/logos/logo_black-192.webp",
+      "sizes": "192x192",
+      "type": "image/webp",
       "purpose": "any"
     }
   ],

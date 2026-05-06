@@ -33,26 +33,38 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://matteo-rlt.fr" />
     
-    <!-- Preconnect pour les performances -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    
     <!-- Favicon (logo du site) -->
-    <link rel="icon" type="image/jpeg" href="/logos/logo_black.jpg" />
-    <link rel="apple-touch-icon" href="/logos/logo_black.jpg" />
+    <link rel="icon" type="image/webp" href="/logos/logo_black-192.webp" />
+    <link rel="apple-touch-icon" href="/logos/logo_black-192.webp" />
     <link rel="manifest" href="/ico/bright/site.webmanifest" />
     
-    <!-- Fonts optimisées pour les performances: preload non-bloquant + fallback noscript -->
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Syne:wght@600;700;800&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <!-- Fonts décalées hors chemin critique -->
+    <script>
+      (function () {
+        var href =
+          'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Syne:wght@600;700;800&display=swap';
+        var loadFonts = function () {
+          if (document.querySelector('link[data-google-fonts="1"]')) return;
+          var link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = href;
+          link.setAttribute('data-google-fonts', '1');
+          document.head.appendChild(link);
+        };
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadFonts, { timeout: 2500 });
+        } else {
+          window.addEventListener('load', loadFonts, { once: true });
+          setTimeout(loadFonts, 2500);
+        }
+      })();
+    </script>
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     </noscript>
 
     <!-- Google Ads également chargé après consentement -->
 
-    <!-- Cloudflare Turnstile (captcha) -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    
     <title>Mattéo Rannou Le Texier — Développeur web freelance | matteo-rlt.fr</title>
   </head>
   <body>

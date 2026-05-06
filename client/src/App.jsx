@@ -105,55 +105,6 @@ function AppContent() {
   // Activer le tracking automatique des pages
   usePageTracking();
 
-  useEffect(() => {
-    // Ne charger GTM que si le consentement a été accordé
-    const checkConsentAndLoadGTM = () => {
-      const consent = localStorage.getItem('cookie_consent_v1');
-      if (consent !== 'granted') return;
-      
-      // Vérifier si GTM n'est pas déjà chargé
-      if (document.querySelector('script[src*="googletagmanager.com/gtm.js"]')) return;
-      
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      if (isMobile) return;
-      
-      const loadScript = () => {
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtm.js?id=GTM-N2CMQQZD';
-        document.head.appendChild(script);
-      };
-      
-      if ('requestIdleCallback' in window) {
-        window.requestIdleCallback(loadScript, { timeout: 3000 });
-      } else {
-        setTimeout(loadScript, 1500);
-      }
-    };
-    
-    // Vérifier immédiatement si le consentement existe déjà
-    checkConsentAndLoadGTM();
-    
-    // Écouter l'événement de consentement accordé
-    const handleConsentGranted = () => {
-      checkConsentAndLoadGTM();
-    };
-    window.addEventListener('consentGranted', handleConsentGranted);
-    
-    // Écouter les changements de consentement via localStorage (autres onglets)
-    const handleStorageChange = (e) => {
-      if (e.key === 'cookie_consent_v1' && e.newValue === 'granted') {
-        checkConsentAndLoadGTM();
-      }
-    };
-    window.addEventListener('storage', handleStorageChange);
-    
-    return () => {
-      window.removeEventListener('consentGranted', handleConsentGranted);
-      window.removeEventListener('storage', handleStorageChange);
-    };
-  }, []);
-
   return (
     <>
       <GlobalStyle />

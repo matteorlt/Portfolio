@@ -294,7 +294,7 @@ const projectsData = {
     description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
     tech: ['TypeScript', 'Node.js', 'Docker'],
     videoUrl: '/videos/Task Manager.mp4',
-    posterUrl: '/preview/task-manager-preview.webp',
+    posterUrl: '/preview/task-manager-preview-md.webp',
     codeUrl: 'https://github.com/matteorlt/Task-Manager'
   },
   'live-chat': {
@@ -352,7 +352,7 @@ const projectsData = {
     description: 'SaaS moderne pour auto-écoles qui simplifie la gestion quotidienne : planning des moniteurs, réservations des élèves, suivi des heures, paiements et communication automatique. Projet professionnel bientôt disponible au grand public.',
     tech: ['Next.js 14', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Stripe', 'Tailwind CSS'],
     videoUrl: null,
-    posterUrl: '/preview/driva-preview-2026.webp',
+    posterUrl: '/preview/driva-preview-2026-md.webp',
     codeUrl: null,
     projectType: 'pro',
     comingSoon: true
@@ -482,6 +482,8 @@ const ProjectDemo = () => {
             {project.posterUrl ? (
               <img 
                 src={project.posterUrl} 
+                srcSet={`${project.posterUrl.replace('-md.webp', '-sm.webp')} 594w, ${project.posterUrl} 960w`}
+                sizes="(max-width: 768px) 100vw, 800px"
                 alt={project.title}
                 style={{
                   width: '100%',
