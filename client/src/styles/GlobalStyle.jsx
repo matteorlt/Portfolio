@@ -5,15 +5,16 @@ const GlobalStyle = createGlobalStyle`
     --color-bg: #0a0a0a;
     --color-surface: #111111;
     --color-surface-elevated: #161616;
-    --color-accent: #60a5fa;
-    --color-accent-muted: rgba(96, 165, 250, 0.14);
+    /* Bleu plus foncé / désaturé — lisible sur fond sombre sans effet « flashy » */
+    --color-accent: #5b7aad;
+    --color-accent-muted: rgba(91, 122, 173, 0.16);
     --color-text: #f4f4f0;
     --color-muted: #a3a3a3;
     --font-display: 'Syne', system-ui, sans-serif;
     --font-body: 'Inter', system-ui, sans-serif;
     --font-hero: 'Outfit', system-ui, sans-serif;
-    --page-pad-x: max(1rem, env(safe-area-inset-left, 0px));
-    --page-pad-r: max(1rem, env(safe-area-inset-right, 0px));
+    --page-pad-x: max(24px, env(safe-area-inset-left, 0px));
+    --page-pad-r: max(24px, env(safe-area-inset-right, 0px));
     --page-pad-b: max(0.5rem, env(safe-area-inset-bottom, 0px));
     --nav-h: 72px;
     --scroll-margin: calc(var(--nav-h) + 20px + env(safe-area-inset-top, 0px));

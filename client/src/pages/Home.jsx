@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import {
   FiLayout,
   FiLayers,
@@ -10,12 +11,15 @@ import {
   FiLinkedin,
   FiMail,
   FiGlobe,
-  FiClock
+  FiClock,
+  FiCheckCircle,
+  FiUser
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
 import ContactForm from '../components/ContactForm.jsx';
+import OffersSection from '../components/OffersSection.jsx';
 
 const ACCENT = 'var(--color-accent)';
 const MUTED = 'var(--color-muted)';
@@ -29,19 +33,18 @@ const Page = styled.div`
 
 const Hero = styled.section`
   position: relative;
-  min-height: min(88dvh, 900px);
+  min-height: 0;
   display: flex;
   align-items: center;
-  padding: 6.5rem var(--page-pad-x) 2.5rem;
+  padding: max(5.5rem, calc(var(--nav-h) + 1rem)) var(--page-pad-x) 1.75rem;
   padding-right: var(--page-pad-r);
-  max-width: 1120px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding-top: max(6.5rem, calc(var(--nav-h) + 1.5rem + env(safe-area-inset-top, 0px)));
+  padding-top: max(5.5rem, calc(var(--nav-h) + 1rem + env(safe-area-inset-top, 0px)));
 
   @media (min-width: 768px) {
-    min-height: min(92vh, 900px);
-    padding: 8rem 2rem 5rem;
-    padding-top: max(8rem, calc(var(--nav-h) + 2rem));
+    padding: max(6rem, calc(var(--nav-h) + 1.5rem)) 2rem 2.25rem;
+    padding-top: max(6rem, calc(var(--nav-h) + 1.5rem + env(safe-area-inset-top, 0px)));
   }
 `;
 
@@ -86,7 +89,7 @@ const ArtGlow = styled.div`
   inset: -22% -25% -15% -30%;
   background: radial-gradient(
     ellipse 60% 55% at 55% 45%,
-    rgba(96, 165, 250, 0.18),
+    rgba(91, 122, 173, 0.18),
     transparent 68%
   );
   pointer-events: none;
@@ -101,8 +104,8 @@ const ArtBento = styled.div`
   grid-template-rows: 1fr 1fr;
   gap: 11px;
   width: 100%;
-  min-height: 280px;
-  max-height: 340px;
+  min-height: 260px;
+  max-height: 320px;
 
   @media (max-width: 639px) {
     grid-template-columns: 1fr 1fr;
@@ -118,7 +121,7 @@ const ArtCellMain = styled.div`
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.09);
   background:
-    radial-gradient(ellipse 90% 80% at 15% 85%, rgba(96, 165, 250, 0.14), transparent 52%),
+    radial-gradient(ellipse 90% 80% at 15% 85%, rgba(91, 122, 173, 0.14), transparent 52%),
     linear-gradient(168deg, #151515 0%, #0a0a0a 100%);
   overflow: hidden;
   padding: 1.15rem 1.15rem 1rem;
@@ -169,50 +172,52 @@ const ArtCaption = styled.p`
 
 const ArtCellSmall = styled.div`
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(255, 255, 255, 0.028);
-  padding: 0.95rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1.1rem 1.15rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.3rem;
+  gap: 0.4rem;
   transition: border-color 0.2s ease, background 0.2s ease;
-  min-height: 92px;
+  min-height: 112px;
 
   &:hover {
-    border-color: rgba(96, 165, 250, 0.22);
-    background: rgba(96, 165, 250, 0.04);
+    border-color: rgba(91, 122, 173, 0.35);
+    background: rgba(91, 122, 173, 0.07);
   }
 
   @media (max-width: 639px) {
     grid-row: 2;
-    padding: 0.75rem 0.65rem;
-    min-height: 0;
+    padding: 0.9rem 0.8rem;
+    min-height: 100px;
   }
 
   @media (max-width: 380px) {
-    padding: 0.65rem 0.5rem;
+    padding: 0.75rem 0.6rem;
   }
 `;
 
 const ArtCellIcon = styled.div`
   color: var(--color-accent);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   line-height: 1;
+  display: flex;
+  align-items: center;
 `;
 
 const ArtCellTitle = styled.span`
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.98rem;
+  font-weight: 600;
   font-family: var(--font-display);
   color: var(--color-text);
   letter-spacing: -0.02em;
 `;
 
 const ArtCellHint = styled.span`
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: var(--color-muted);
-  line-height: 1.35;
+  line-height: 1.4;
 `;
 
 const Eyebrow = styled.p`
@@ -249,16 +254,16 @@ const HeadlineAccent = styled.span`
   line-height: 1.05;
   background: linear-gradient(
     115deg,
-    #f0f9ff 0%,
-    #7dd3fc 28%,
-    #60a5fa 52%,
-    #38bdf8 85%,
-    #bae6fd 100%
+    #e8edf5 0%,
+    #8e9eb8 22%,
+    #5b7aad 48%,
+    #6a7fa3 72%,
+    #c4ccd8 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 28px rgba(96, 165, 250, 0.22));
+  filter: drop-shadow(0 0 24px rgba(91, 122, 173, 0.22));
 
   @media (max-width: 480px) {
     margin-top: 0.18em;
@@ -269,7 +274,7 @@ const Subhead = styled(motion.p)`
   font-size: clamp(1.05rem, 2vw, 1.2rem);
   line-height: 1.65;
   color: ${MUTED};
-  margin-bottom: 2rem;
+  margin-bottom: 1.35rem;
   max-width: 560px;
 `;
 
@@ -344,7 +349,7 @@ const BtnGhost = styled.a`
 const Section = styled.section`
   padding: clamp(3rem, 10vw, 5.5rem) var(--page-pad-x);
   padding-right: var(--page-pad-r);
-  max-width: 1120px;
+  max-width: 1280px;
   margin: 0 auto;
 
   @media (min-width: 768px) {
@@ -369,6 +374,31 @@ const SectionLead = styled(motion.p)`
   font-size: 1.05rem;
   color: ${MUTED};
   line-height: 1.6;
+`;
+
+/** Saut de ligne volontaire entre l’intro et la phrase délais (évite un retour vilain au milieu). */
+const LeadLine = styled.span`
+  display: block;
+
+  & + & {
+    margin-top: 0.45rem;
+  }
+`;
+
+/** Met en avant le délai de réponse (48 h) par rapport au reste de la phrase. */
+const ResponseTimeMark = styled.span`
+  display: inline-block;
+  margin: 0 0.15em;
+  padding: 0.15em 0.5em;
+  border-radius: 8px;
+  background: var(--color-accent-muted);
+  color: var(--color-accent);
+  font-weight: 700;
+  font-size: 1.02em;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  vertical-align: baseline;
+  line-height: 1.35;
 `;
 
 const fadeUp = {
@@ -416,11 +446,13 @@ const ServiceIcon = styled.div`
 `;
 
 const ServiceTitle = styled.h3`
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 1.12rem;
+  font-weight: 500;
+  font-style: normal;
   margin-bottom: 0.65rem;
   color: var(--color-text);
+  letter-spacing: -0.01em;
 `;
 
 const ServiceText = styled.p`
@@ -511,7 +543,7 @@ const Badge = styled.span`
   letter-spacing: 0.04em;
   padding: 0.25rem 0.55rem;
   border-radius: 6px;
-  background: rgba(96, 165, 250, 0.12);
+  background: rgba(91, 122, 173, 0.14);
   color: ${ACCENT};
 `;
 
@@ -525,7 +557,7 @@ const ProjectLink = styled.a`
   margin-top: auto;
 
   &:hover {
-    color: #93c5fd;
+    color: #8eb0d4;
   }
 `;
 
@@ -539,7 +571,7 @@ const ProjectLinkRouter = styled(Link)`
   margin-top: auto;
 
   &:hover {
-    color: #93c5fd;
+    color: #8eb0d4;
   }
 `;
 
@@ -561,9 +593,16 @@ const WhyCard = styled(motion.div)`
 `;
 
 const WhyIcon = styled.div`
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
   margin-bottom: 0.85rem;
   color: ${ACCENT};
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
 `;
 
 const WhyTitle = styled.h3`
@@ -637,19 +676,20 @@ const ContactLinkRow = styled.a`
 `;
 
 const surfaceBand = {
-  background: 'linear-gradient(180deg, transparent 0%, rgba(96, 165, 250, 0.03) 50%, transparent 100%)'
+  background: 'linear-gradient(180deg, transparent 0%, rgba(91, 122, 173, 0.045) 50%, transparent 100%)'
 };
 
 const Home = () => {
+  const location = useLocation();
+
   useEffect(() => {
-    const { hash } = window.location;
-    if (!hash) return undefined;
-    const id = hash.slice(1);
-    const t = requestAnimationFrame(() => {
+    const id = location.hash?.replace(/^#/, '');
+    if (!id) return undefined;
+    const t = window.setTimeout(() => {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-    return () => cancelAnimationFrame(t);
-  }, []);
+    }, 100);
+    return () => clearTimeout(t);
+  }, [location.pathname, location.hash]);
 
   const services = [
     {
@@ -717,17 +757,17 @@ const Home = () => {
 
   const why = [
     {
-      icon: '✓',
+      icon: <FiCheckCircle aria-hidden size={24} strokeWidth={2} />,
       title: 'Code propre et maintenable',
       text: 'Architecture lisible, bonnes pratiques et documentation pour que votre produit reste évolutif.'
     },
     {
-      icon: '⏱',
+      icon: <FiClock aria-hidden size={24} strokeWidth={2} />,
       title: 'Livraison dans les délais',
       text: 'Roadmap claire, points réguliers et priorités alignées sur votre calendrier business.'
     },
     {
-      icon: '◇',
+      icon: <FiUser aria-hidden size={24} strokeWidth={2} />,
       title: 'Un seul interlocuteur',
       text: 'Du brief au déploiement : même personne pour le cadrage, le développement et la mise en ligne.'
     }
@@ -785,9 +825,9 @@ const Home = () => {
                     <svg viewBox="0 0 320 158" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
                       <defs>
                         <linearGradient id="journeyPathGrad" x1="44" y1="56" x2="276" y2="56" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#60a5fa" stopOpacity="0.95" />
-                          <stop offset="0.5" stopColor="#38bdf8" stopOpacity="0.9" />
-                          <stop offset="1" stopColor="#7dd3fc" stopOpacity="0.95" />
+                          <stop stopColor="#5b7aad" stopOpacity="0.95" />
+                          <stop offset="0.5" stopColor="#6f87b5" stopOpacity="0.92" />
+                          <stop offset="1" stopColor="#4d6588" stopOpacity="0.95" />
                         </linearGradient>
                       </defs>
 
@@ -802,7 +842,7 @@ const Home = () => {
                       />
 
                       <g>
-                        <circle cx="44" cy="62" r="17" fill="#0f0f0f" stroke="#60a5fa" strokeWidth="2.2" />
+                        <circle cx="44" cy="62" r="17" fill="#0f0f0f" stroke="#5b7aad" strokeWidth="2.2" />
                         <text x="44" y="67.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
                           1
                         </text>
@@ -815,7 +855,7 @@ const Home = () => {
                       </g>
 
                       <g>
-                        <circle cx="160" cy="44" r="17" fill="#0f0f0f" stroke="#38bdf8" strokeWidth="2.2" />
+                        <circle cx="160" cy="44" r="17" fill="#0f0f0f" stroke="#6f87b5" strokeWidth="2.2" />
                         <text x="160" y="49.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
                           2
                         </text>
@@ -828,7 +868,7 @@ const Home = () => {
                       </g>
 
                       <g>
-                        <circle cx="276" cy="58" r="17" fill="#0f0f0f" stroke="#7dd3fc" strokeWidth="2.2" />
+                        <circle cx="276" cy="58" r="17" fill="#0f0f0f" stroke="#8a9ebe" strokeWidth="2.2" />
                         <text x="276" y="63.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
                           3
                         </text>
@@ -927,7 +967,8 @@ const Home = () => {
           <SectionHeader>
             <SectionTitle {...fadeUp}>Pourquoi moi</SectionTitle>
             <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
-              Trois engagements concrets pour avancer sereinement.
+              À distance depuis la Bretagne, partout en France — avec des jalons définis ensemble. Trois engagements pour
+              avancer sereinement.
             </SectionLead>
           </SectionHeader>
           <WhyGrid>
@@ -941,11 +982,16 @@ const Home = () => {
           </WhyGrid>
         </Section>
 
+        <OffersSection />
+
         <ContactSection id="contact">
           <SectionHeader>
             <SectionTitle {...fadeUp}>Un projet en tête ?</SectionTitle>
             <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
-              Décrivez votre besoin en quelques lignes — je vous réponds sous 48 h ouvrées.
+              <LeadLine>Décrivez votre besoin en quelques lignes.</LeadLine>
+              <LeadLine>
+                Je vous réponds sous <ResponseTimeMark>48 h ouvrées</ResponseTimeMark>
+              </LeadLine>
             </SectionLead>
           </SectionHeader>
           <ContactGrid>

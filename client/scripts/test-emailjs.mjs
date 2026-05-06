@@ -117,11 +117,12 @@ const serviceId = e('VITE_EMAILJS_SERVICE_ID').trim();
 const publicKey = e('VITE_EMAILJS_PUBLIC_KEY').trim();
 const privateKey = e('EMAILJS_PRIVATE_KEY').trim();
 const templateContact = e('VITE_EMAILJS_TEMPLATE_CONTACT_ID').trim();
-const templateQuote = e('VITE_EMAILJS_TEMPLATE_ID').trim();
+const templateDevis = e('VITE_EMAILJS_TEMPLATE_DEVIS_ID').trim();
+const templateFallback = e('VITE_EMAILJS_TEMPLATE_ID').trim();
 
 const templateId = isQuote
-  ? templateQuote || templateContact
-  : templateContact || templateQuote;
+  ? templateDevis || templateFallback || templateContact
+  : templateContact || templateFallback || templateDevis;
 
 async function main() {
   if (!serviceId || !publicKey) {
@@ -132,7 +133,7 @@ async function main() {
   }
   if (!templateId) {
     console.error(
-      '❌ Template manquant : définissez VITE_EMAILJS_TEMPLATE_CONTACT_ID et/ou VITE_EMAILJS_TEMPLATE_ID.'
+      '❌ Template manquant : pour le contact VITE_EMAILJS_TEMPLATE_CONTACT_ID ; pour le devis VITE_EMAILJS_TEMPLATE_DEVIS_ID ou VITE_EMAILJS_TEMPLATE_ID.'
     );
     process.exit(1);
   }
@@ -148,7 +149,9 @@ async function main() {
         first_name: 'Test',
         last_name: 'Script',
         full_name: 'Test Script',
+        from_name: 'Test Script',
         email: 'test@example.com',
+        from_email: 'test@example.com',
         reply_to: 'test@example.com',
         phone: '06 00 00 00 00',
         company: '— test —',
@@ -159,9 +162,12 @@ async function main() {
         competitors: '—',
         message: "Message généré par npm run test:email:quote — si vous recevez ceci, l'envoi fonctionne.",
         package_id: 'starter',
-        package_title: 'Starter',
-        package_price: '700',
-        package_period: '1-2 semaines',
+        package_title: 'Starter (test)',
+        package_price: 'Sur devis personnalisé',
+        package_period: 'Selon périmètre (à préciser)',
+        package_features:
+          'Besoin indiqué : Starter (test). Estimation et planification après échange sur le périmètre fonctionnel et la stack.',
+        budget: 'Non communiqué sur le formulaire — devis sur mesure',
         timestamp: isoTimestamp(),
       }
     : {

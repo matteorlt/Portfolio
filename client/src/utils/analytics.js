@@ -15,7 +15,7 @@ export const trackPageView = (pageName) => {
   
   // Console log pour debug en développement
   if (process.env.NODE_ENV === 'development') {
-    console.log('📊 Page View:', pageName);
+    console.log('[analytics] Page View:', pageName);
   }
 };
 
@@ -32,7 +32,7 @@ export const trackClick = (elementName, category = 'user_action', value = null) 
   
   // Console log pour debug en développement
   if (process.env.NODE_ENV === 'development') {
-    console.log('🖱️ Click:', { elementName, category, value });
+    console.log('[analytics] Click:', { elementName, category, value });
   }
 };
 
@@ -47,7 +47,7 @@ export const trackDownload = (fileName, category = 'download') => {
   }
   
   if (process.env.NODE_ENV === 'development') {
-    console.log('📥 Download:', fileName);
+    console.log('[analytics] Download:', fileName);
   }
 };
 
@@ -62,7 +62,7 @@ export const trackExternalLink = (url, category = 'external_link') => {
   }
   
   if (process.env.NODE_ENV === 'development') {
-    console.log('🔗 External Link:', url);
+    console.log('[analytics] External Link:', url);
   }
 };
 
@@ -77,7 +77,7 @@ export const trackFormEvent = (formName, eventType, data = {}) => {
   }
   
   if (process.env.NODE_ENV === 'development') {
-    console.log('📝 Form Event:', { formName, eventType, data });
+    console.log('[analytics] Form Event:', { formName, eventType, data });
   }
 };
 
@@ -91,7 +91,7 @@ export const trackVideo = (videoName, action, category = 'video') => {
   }
   
   if (process.env.NODE_ENV === 'development') {
-    console.log('🎬 Video:', { videoName, action });
+    console.log('[analytics] Video:', { videoName, action });
   }
 };
 
@@ -105,7 +105,7 @@ export const trackScroll = (percentage) => {
   }
   
   if (process.env.NODE_ENV === 'development') {
-    console.log('📜 Scroll:', percentage + '%');
+    console.log('[analytics] Scroll:', percentage + '%');
   }
 };
 
@@ -120,7 +120,7 @@ export const trackTimeOnPage = (pageName, timeInSeconds) => {
   }
   
   if (process.env.NODE_ENV === 'development') {
-    console.log('⏱️ Time on Page:', { pageName, timeInSeconds: Math.round(timeInSeconds) });
+    console.log('[analytics] Time on Page:', { pageName, timeInSeconds: Math.round(timeInSeconds) });
   }
 };
 
@@ -136,7 +136,7 @@ export const trackConversion = (conversionType, value = null, currency = 'EUR') 
   }
   
   if (process.env.NODE_ENV === 'development') {
-    console.log('✅ Conversion:', { conversionType, value, currency });
+    console.log('[analytics] Conversion:', { conversionType, value, currency });
   }
 };
 

@@ -10,7 +10,7 @@ const DemoContainer = styled.div`
   min-height: 100dvh;
   padding: max(6.25rem, calc(var(--nav-h) + 2rem + env(safe-area-inset-top, 0px))) var(--page-pad-x) max(2rem, var(--page-pad-b));
   padding-right: var(--page-pad-r);
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -368,9 +368,9 @@ const ProjectDemo = () => {
     return (
       <DemoContainer>
         <Title>Projet non trouvé</Title>
-        <BackButton onClick={() => navigate('/projects')}>
+        <BackButton onClick={() => navigate('/#realisations')}>
           <FiArrowLeft />
-          Retour aux projets
+          Retour aux réalisations
         </BackButton>
       </DemoContainer>
     );
@@ -379,12 +379,12 @@ const ProjectDemo = () => {
   return (
     <DemoContainer>
       <BackButton
-        onClick={() => navigate('/projects')}
+        onClick={() => navigate('/#realisations')}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         <FiArrowLeft />
-        Retour aux projets
+        Retour aux réalisations
       </BackButton>
 
       <Title

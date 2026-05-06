@@ -18,7 +18,7 @@ const NavContainer = styled(motion.nav)`
 `;
 
 const NavContent = styled.div`
-  max-width: 1120px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 max(1.25rem, env(safe-area-inset-left, 0px)) 0 max(1.25rem, env(safe-area-inset-right, 0px));
   display: flex;
@@ -244,6 +244,7 @@ const Navbar = () => {
 
   const servicesHref = isHome ? '#services' : '/#services';
   const realHref = isHome ? '#realisations' : '/#realisations';
+  const offresHref = isHome ? '#offres' : '/#offres';
   const contactHref = isHome ? '#contact' : '/#contact';
 
   return (
@@ -277,6 +278,9 @@ const Navbar = () => {
               <NavLinkNative href="#realisations" onClick={(e) => handleAnchor(e, 'realisations')}>
                 Réalisations
               </NavLinkNative>
+              <NavLinkNative href="#offres" onClick={(e) => handleAnchor(e, 'offres')}>
+                Devis & offres
+              </NavLinkNative>
               <NavLinkNative href="#contact" onClick={(e) => handleAnchor(e, 'contact')}>
                 Contact
               </NavLinkNative>
@@ -285,6 +289,7 @@ const Navbar = () => {
             <>
               <NavLinkRouter to="/#services">Services</NavLinkRouter>
               <NavLinkRouter to="/#realisations">Réalisations</NavLinkRouter>
+              <NavLinkRouter to="/#offres">Devis & offres</NavLinkRouter>
               <NavLinkRouter to="/#contact">Contact</NavLinkRouter>
             </>
           )}
@@ -306,6 +311,9 @@ const Navbar = () => {
           </MobileNavLink>
           <MobileNavLink href={realHref} onClick={(e) => { handleAnchor(e, 'realisations'); setIsMobileMenuOpen(false); }}>
             Réalisations
+          </MobileNavLink>
+          <MobileNavLink href={offresHref} onClick={(e) => { handleAnchor(e, 'offres'); setIsMobileMenuOpen(false); }}>
+            Devis & offres
           </MobileNavLink>
           <MobileNavLink href={contactHref} onClick={(e) => { handleAnchor(e, 'contact'); setIsMobileMenuOpen(false); }}>
             Contact

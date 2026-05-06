@@ -17,11 +17,6 @@ export const usePageTracking = () => {
     const getPageName = (pathname) => {
       const pageMap = {
         '/': 'Home',
-        '/about': 'About',
-        '/projects': 'Projects',
-        '/skills': 'Skills',
-        '/contact': 'Contact',
-        '/offres': 'Offers',
         '/privacy-policy': 'Privacy Policy',
         '/legal-notices': 'Legal Notices'
       };

@@ -141,11 +141,10 @@ const NotFound = () => {
 
   const quickLinks = [
     { path: '/', label: 'Accueil' },
-    { path: '/projects', label: 'Projets' },
-    { path: '/about', label: 'À propos' },
-    { path: '/skills', label: 'Compétences' },
-    { path: '/contact', label: 'Contact' },
-    { path: '/offres', label: 'Offres' }
+    { path: '/#services', label: 'Services' },
+    { path: '/#realisations', label: 'Réalisations' },
+    { path: '/#offres', label: 'Devis & offres' },
+    { path: '/#contact', label: 'Contact' }
   ];
 
   return (

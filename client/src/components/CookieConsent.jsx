@@ -18,7 +18,7 @@ const Backdrop = styled.div`
 `;
 
 const Inner = styled.div`
-  max-width: 1120px;
+  max-width: 1280px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

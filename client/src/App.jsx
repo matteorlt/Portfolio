@@ -14,10 +14,7 @@ const ThemeIcons = React.lazy(() => import('./components/ThemeIcons.jsx'));
 
 // Lazy loading pour améliorer les performances
 const Home = lazy(() => import('./pages/Home.jsx'));
-const Projects = lazy(() => import('./pages/Projects.jsx'));
-const Contact = lazy(() => import('./pages/Contact.jsx'));
 const ProjectDemo = lazy(() => import('./pages/ProjectDemo.jsx'));
-const Quote = lazy(() => import('./pages/Quote.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
 const LegalNotices = lazy(() => import('./pages/LegalNotices.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
@@ -88,11 +85,11 @@ function AnimatedRoutes() {
           <Routes location={location}>
             <Route path="/" element={<Home />} />
             <Route path="/about" element={<Navigate to="/" replace />} />
-            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects" element={<Navigate to="/#realisations" replace />} />
             <Route path="/skills" element={<Navigate to="/" replace />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/contact" element={<Navigate to="/#contact" replace />} />
             <Route path="/demo/:projectId" element={<ProjectDemo />} />
-            <Route path="/offres" element={<Quote />} />
+            <Route path="/offres" element={<Navigate to="/#offres" replace />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/legal-notices" element={<LegalNotices />} />
             <Route path="*" element={<NotFound />} />

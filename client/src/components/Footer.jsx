@@ -11,7 +11,7 @@ const FooterContainer = styled.footer`
 `;
 
 const FooterContent = styled.div`
-  max-width: 1120px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.25rem;
   display: grid;
@@ -110,7 +110,7 @@ const Footer = () => {
           <FooterAnchor href="/#services">Services</FooterAnchor>
           <FooterAnchor href="/#realisations">Réalisations</FooterAnchor>
           <FooterAnchor href="/#contact">Contact</FooterAnchor>
-          <FooterLink to="/offres">Devis & offres</FooterLink>
+          <FooterAnchor href="/#offres">Devis & offres</FooterAnchor>
         </FooterSection>
 
         <FooterSection
