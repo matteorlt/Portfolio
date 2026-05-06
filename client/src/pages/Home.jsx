@@ -487,8 +487,8 @@ const ProjectCard = styled(motion.article)`
 `;
 
 const ProjectThumb = styled.div`
-  height: min(200px, 42vw);
-  min-height: 140px;
+  height: min(220px, 44vw);
+  min-height: 150px;
   background: linear-gradient(145deg, #1a1a1a 0%, #252525 100%);
   display: flex;
   align-items: center;
@@ -496,7 +496,7 @@ const ProjectThumb = styled.div`
   overflow: hidden;
 
   @media (min-width: 640px) {
-    height: 160px;
+    height: 176px;
     min-height: 0;
   }
 `;
@@ -719,7 +719,7 @@ const Home = () => {
       outcome:
         'Outil métier pour auto-écoles : planning, réservations et suivi des élèves centralisés pour gagner du temps au quotidien.',
       tech: ['Next.js', 'TypeScript', 'PostgreSQL'],
-      preview: '/preview/driva-preview.webp',
+      preview: '/preview/driva-preview-2026.webp',
       link: 'https://driva-auto.fr/',
       external: true
     },

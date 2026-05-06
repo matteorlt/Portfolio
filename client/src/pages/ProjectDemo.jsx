@@ -352,7 +352,7 @@ const projectsData = {
     description: 'SaaS moderne pour auto-écoles qui simplifie la gestion quotidienne : planning des moniteurs, réservations des élèves, suivi des heures, paiements et communication automatique. Projet professionnel bientôt disponible au grand public.',
     tech: ['Next.js 14', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Stripe', 'Tailwind CSS'],
     videoUrl: null,
-    posterUrl: '/preview/driva-preview.webp',
+    posterUrl: '/preview/driva-preview-2026.webp',
     codeUrl: null,
     projectType: 'pro',
     comingSoon: true
