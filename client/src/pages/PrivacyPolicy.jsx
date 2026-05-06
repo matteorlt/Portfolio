@@ -3,11 +3,16 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 const PrivacyContainer = styled.div`
-  min-height: 100vh;
-  padding: 100px 2rem 2rem;
+  min-height: 100dvh;
+  padding: max(6.25rem, calc(var(--nav-h) + 2rem + env(safe-area-inset-top, 0px))) var(--page-pad-x) max(2rem, var(--page-pad-b));
+  padding-right: var(--page-pad-r);
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.6;
+
+  @media (min-width: 768px) {
+    padding: 100px 2rem 2rem;
+  }
 `;
 
 const Title = styled(motion.h1)`

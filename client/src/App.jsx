@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlobalStyle from './styles/GlobalStyle.jsx';
@@ -14,30 +14,26 @@ const ThemeIcons = React.lazy(() => import('./components/ThemeIcons.jsx'));
 
 // Lazy loading pour améliorer les performances
 const Home = lazy(() => import('./pages/Home.jsx'));
-const About = lazy(() => import('./pages/About.jsx'));
 const Projects = lazy(() => import('./pages/Projects.jsx'));
-const Skills = lazy(() => import('./pages/Skills.jsx'));
 const Contact = lazy(() => import('./pages/Contact.jsx'));
 const ProjectDemo = lazy(() => import('./pages/ProjectDemo.jsx'));
 const Quote = lazy(() => import('./pages/Quote.jsx'));
-const Admin = lazy(() => import('./pages/Admin.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
 const LegalNotices = lazy(() => import('./pages/LegalNotices.jsx'));
 const NotFound = lazy(() => import('./pages/NotFound.jsx'));
 
 const AppContainer = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-  background-attachment: fixed;
-  color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
   position: relative;
   overflow-x: hidden;
 `;
 
 const PageWrapper = styled(motion.div)`
   width: 100%;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100dvh - var(--nav-h));
 `;
 
 const pageVariants = {
@@ -91,13 +87,12 @@ function AnimatedRoutes() {
         <Suspense fallback={null}>
           <Routes location={location}>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/about" element={<Navigate to="/" replace />} />
             <Route path="/projects" element={<Projects />} />
-            <Route path="/skills" element={<Skills />} />
+            <Route path="/skills" element={<Navigate to="/" replace />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/demo/:projectId" element={<ProjectDemo />} />
             <Route path="/offres" element={<Quote />} />
-            <Route path="/admin" element={<Admin />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/legal-notices" element={<LegalNotices />} />
             <Route path="*" element={<NotFound />} />
@@ -166,7 +161,7 @@ function AppContent() {
     <>
       <GlobalStyle />
       <Suspense fallback={null}>
-        <ThemeIcons theme="auto" />
+        <ThemeIcons />
       </Suspense>
       <AppContainer>
         <CookieConsent />

@@ -28,35 +28,17 @@ if %errorlevel% neq 0 (
 echo ✅ Node.js et npm sont installés
 echo.
 
-REM Vérification des dépendances
-if not exist "node_modules" (
-    echo ⚠️  Dépendances du serveur non installées
-    set /p install="Voulez-vous installer les dépendances maintenant? (y/n): "
-    if /i "%install%"=="y" (
-        echo 📦 Installation des dépendances du serveur...
-        npm install
-        if %errorlevel% neq 0 (
-            echo ❌ Erreur lors de l'installation des dépendances du serveur
-            pause
-            exit /b 1
-        )
-    ) else (
-        echo ❌ Installation des dépendances requise pour continuer
-        pause
-        exit /b 1
-    )
-)
-
+REM Vérification des dépendances (client Vite uniquement)
 if not exist "client\node_modules" (
     echo ⚠️  Dépendances du client non installées
     set /p install="Voulez-vous installer les dépendances maintenant? (y/n): "
     if /i "%install%"=="y" (
-        echo 📦 Installation des dépendances du client...
+        echo 📦 Installation...
         cd client
         npm install
         cd ..
         if %errorlevel% neq 0 (
-            echo ❌ Erreur lors de l'installation des dépendances du client
+            echo ❌ Erreur lors de l'installation
             pause
             exit /b 1
         )
@@ -71,9 +53,8 @@ echo ✅ Toutes les dépendances sont installées
 echo.
 
 REM Lancement du serveur
-echo 🚀 Lancement du serveur de développement...
-echo    Frontend: http://localhost:3000
-echo    Backend: http://localhost:5000
+echo 🚀 Lancement du serveur de développement (Vite)...
+echo    http://localhost:3000
 echo.
 echo Appuyez sur Ctrl+C pour arrêter le serveur
 echo =================================

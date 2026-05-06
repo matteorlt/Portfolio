@@ -281,7 +281,7 @@ const HomeSimple = () => {
           >
             En formation Bac+2 à L'ENI Rennes, passionné par le code, 
             les projets créatifs et l'apprentissage continu. 
-            Spécialisé dans React, Java, PHP et JavaScript.
+            Spécialisé dans le développement web : Java, PHP, JavaScript et plus.
           </Description>
           
           <ButtonsContainer

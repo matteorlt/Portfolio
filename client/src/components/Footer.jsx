@@ -4,68 +4,83 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const FooterContainer = styled.footer`
-  background: rgba(15, 15, 35, 0.95);
-  border-top: 1px solid rgba(74, 144, 226, 0.1);
-  padding: 2rem 0;
-  margin-top: 4rem;
+  background: var(--color-surface);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 2.5rem 0 max(2rem, env(safe-area-inset-bottom));
+  margin-top: 0;
 `;
 
 const FooterContent = styled.div`
-  max-width: 1200px;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.25rem;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
   align-items: start;
 
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
+
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
     text-align: center;
+    justify-items: center;
   }
 `;
 
 const FooterSection = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.65rem;
 `;
 
 const FooterTitle = styled.h3`
-  color: #4a90e2;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
 `;
 
 const FooterLink = styled(Link)`
-  color: #cccccc;
+  color: var(--color-muted);
   text-decoration: none;
   font-size: 0.9rem;
-  transition: all 0.3s ease;
+  transition: color 0.2s ease;
 
   &:hover {
-    color: #4a90e2;
-    transform: translateX(5px);
+    color: var(--color-accent);
+  }
+`;
+
+const FooterAnchor = styled.a`
+  color: var(--color-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--color-accent);
   }
 `;
 
 const FooterText = styled.p`
-  color: #aaaaaa;
+  color: var(--color-muted);
   font-size: 0.9rem;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.5;
 `;
 
 const FooterBottom = styled(motion.div)`
-  border-top: 1px solid rgba(74, 144, 226, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
   margin-top: 2rem;
-  padding-top: 1rem;
+  padding-top: 1.25rem;
   text-align: center;
 `;
 
 const Copyright = styled.p`
-  color: #666666;
+  color: #737373;
   font-size: 0.8rem;
   margin: 0;
 `;
@@ -75,64 +90,61 @@ const Footer = () => {
     <FooterContainer>
       <FooterContent>
         <FooterSection
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.45 }}
           viewport={{ once: true }}
         >
-          <FooterTitle>Mattéo RANNOU-LE TEXIER</FooterTitle>
-          <FooterText>Développeur Web & Web Mobile</FooterText>
-          <FooterText>Entrepreneur individuel</FooterText>
-          <FooterText>SIREN : 932 455 504</FooterText>
+          <FooterTitle>Mattéo Rannou Le Texier</FooterTitle>
+          <FooterText>Développeur web freelance — sites & applications</FooterText>
+          <FooterText>Entrepreneur individuel · SIREN 932 455 504</FooterText>
         </FooterSection>
 
         <FooterSection
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.45, delay: 0.05 }}
           viewport={{ once: true }}
         >
-          <FooterTitle>Services</FooterTitle>
-          <FooterLink to="/offres">Voir les offres</FooterLink>
-          <FooterLink to="/projects">Mes projets</FooterLink>
-          <FooterLink to="/skills">Compétences</FooterLink>
-          <FooterLink to="/contact">Contact</FooterLink>
+          <FooterTitle>Navigation</FooterTitle>
+          <FooterAnchor href="/#services">Services</FooterAnchor>
+          <FooterAnchor href="/#realisations">Réalisations</FooterAnchor>
+          <FooterAnchor href="/#contact">Contact</FooterAnchor>
+          <FooterLink to="/offres">Devis & offres</FooterLink>
         </FooterSection>
 
         <FooterSection
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.45, delay: 0.1 }}
           viewport={{ once: true }}
         >
-          <FooterTitle>Informations légales</FooterTitle>
+          <FooterTitle>Légal</FooterTitle>
           <FooterLink to="/privacy-policy">Politique de confidentialité</FooterLink>
           <FooterLink to="/legal-notices">Mentions légales</FooterLink>
-          <FooterText>Conformité RGPD</FooterText>
         </FooterSection>
 
         <FooterSection
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.45, delay: 0.12 }}
           viewport={{ once: true }}
         >
           <FooterTitle>Contact</FooterTitle>
-          <FooterText>📧 contact@matteo-rlt.fr</FooterText>
-          <FooterText>🌐 matteo-rlt.fr</FooterText>
-          <FooterText>📍 Rennes, France</FooterText>
+          <FooterText>
+            <FooterAnchor href="mailto:contact@matteo-rlt.fr">contact@matteo-rlt.fr</FooterAnchor>
+          </FooterText>
+          <FooterText>Vannes, France</FooterText>
         </FooterSection>
       </FooterContent>
 
       <FooterBottom
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
+        transition={{ duration: 0.45, delay: 0.15 }}
         viewport={{ once: true }}
       >
-        <Copyright>
-          © {new Date().getFullYear()} Mattéo RANNOU-LE TEXIER. Tous droits réservés.
-        </Copyright>
+        <Copyright>© {new Date().getFullYear()} Mattéo Rannou Le Texier. Tous droits réservés.</Copyright>
       </FooterBottom>
     </FooterContainer>
   );

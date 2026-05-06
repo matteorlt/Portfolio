@@ -1,1159 +1,978 @@
-import React from 'react';
-// Chargement dynamique pour éviter de charger @tsparticles sur mobile
-let ParticlesBackground = null;
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail, FiCode, FiServer, FiSmartphone, FiTrendingUp, FiUsers, FiAward, FiArrowRight, FiEye, FiZap, FiStar, FiCheckCircle, FiHelpCircle, FiChevronDown, FiChevronUp, FiLayers } from 'react-icons/fi';
-import { useNavigate, Link } from 'react-router-dom';
+import {
+  FiLayout,
+  FiLayers,
+  FiShoppingCart,
+  FiArrowRight,
+  FiExternalLink,
+  FiLinkedin,
+  FiMail,
+  FiGlobe,
+  FiClock
+} from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
-import CustomCursor from '../components/CustomCursor.jsx';
+import ContactForm from '../components/ContactForm.jsx';
 
-// Styles globaux
-const PageContainer = styled.div`
+const ACCENT = 'var(--color-accent)';
+const MUTED = 'var(--color-muted)';
+
+const Page = styled.div`
   position: relative;
   overflow-x: hidden;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  background: var(--color-bg);
 `;
 
-const BackgroundCanvas = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-`;
-
-const Section = styled.section`
+const Hero = styled.section`
   position: relative;
-  z-index: 2;
-  max-width: 1200px;
+  min-height: min(88dvh, 900px);
+  display: flex;
+  align-items: center;
+  padding: 6.5rem var(--page-pad-x) 2.5rem;
+  padding-right: var(--page-pad-r);
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding-top: max(6.5rem, calc(var(--nav-h) + 1.5rem + env(safe-area-inset-top, 0px)));
+
+  @media (min-width: 768px) {
+    min-height: min(92vh, 900px);
+    padding: 8rem 2rem 5rem;
+    padding-top: max(8rem, calc(var(--nav-h) + 2rem));
+  }
 `;
 
-// Hero Section
-const HeroSection = styled(Section)`
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  padding-top: 100px;
-  padding-bottom: 4rem;
-`;
-
-const HeroContent = styled.div`
+const HeroGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: clamp(1.75rem, 5vw, 2.75rem);
   align-items: center;
+  width: 100%;
+  padding-bottom: max(1.5rem, var(--page-pad-b));
 
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  @media (min-width: 960px) {
+    grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.95fr);
+    gap: 2.5rem 3rem;
+    padding-bottom: 0;
   }
 `;
 
-const TextContent = styled(motion.div)`
-  color: #ffffff;
-`;
+const HeroInner = styled.div`
+  min-width: 0;
+  max-width: 640px;
 
-const Badge = styled(motion.span)`
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  background: rgba(74, 144, 226, 0.1);
-  border: 1px solid rgba(74, 144, 226, 0.3);
-  border-radius: 20px;
-  color: #4a90e2;
-  font-size: 0.9rem;
-  font-weight: 500;
-  margin-bottom: 1.5rem;
-`;
-
-const Name = styled(motion.h1)`
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
+  @media (min-width: 960px) {
+    max-width: none;
   }
 `;
 
-const Title = styled(motion.h2)`
-  font-size: 1.8rem;
-  color: #cccccc;
-  margin-bottom: 1.5rem;
-  font-weight: 400;
+const HeroVisual = styled(motion.div)`
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
 
-  @media (max-width: 768px) {
-    font-size: 1.4rem;
+  @media (min-width: 960px) {
+    max-width: none;
+    margin: 0;
   }
 `;
 
-const Description = styled(motion.p)`
-  font-size: 1.1rem;
-  color: #aaaaaa;
-  line-height: 1.8;
-  margin-bottom: 2rem;
-  max-width: 550px;
+const ArtGlow = styled.div`
+  position: absolute;
+  inset: -22% -25% -15% -30%;
+  background: radial-gradient(
+    ellipse 60% 55% at 55% 45%,
+    rgba(96, 165, 250, 0.18),
+    transparent 68%
+  );
+  pointer-events: none;
+  z-index: 0;
 `;
 
-const ButtonsContainer = styled(motion.div)`
+const ArtBento = styled.div`
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.28fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 11px;
+  width: 100%;
+  min-height: 280px;
+  max-height: 340px;
+
+  @media (max-width: 639px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    min-height: auto;
+    max-height: none;
+  }
+`;
+
+const ArtCellMain = styled.div`
+  grid-row: 1 / span 2;
+  position: relative;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    radial-gradient(ellipse 90% 80% at 15% 85%, rgba(96, 165, 250, 0.14), transparent 52%),
+    linear-gradient(168deg, #151515 0%, #0a0a0a 100%);
+  overflow: hidden;
+  padding: 1.15rem 1.15rem 1rem;
   display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 2rem;
-`;
+  flex-direction: column;
+  justify-content: space-between;
 
-const Button = styled(motion.button)`
-  padding: 0.9rem 2rem;
-  border-radius: 8px;
-  font-weight: 500;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  border: none;
-  outline: none;
-  text-decoration: none;
-
-  &.primary {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-    color: white;
-    
-    &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
-    }
-  }
-
-  &.secondary {
-    background: transparent;
-    color: #4a90e2;
-    border: 2px solid #4a90e2;
-    
-    &:hover {
-      background: rgba(74, 144, 226, 0.1);
-      transform: translateY(-2px);
-    }
+  @media (max-width: 639px) {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: 1rem 0.85rem 0.9rem;
   }
 `;
 
-const SocialLinks = styled(motion.div)`
-  display: flex;
-  gap: 1rem;
-`;
-
-const SocialLink = styled(motion.a)`
+const ArtJourney = styled.div`
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: rgba(74, 144, 226, 0.1);
-  color: #4a90e2;
-  font-size: 1.2rem;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(74, 144, 226, 0.2);
+  min-height: 0;
+  padding: 0.2rem 0 0.25rem;
+  width: 100%;
+
+  svg {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    overflow: visible;
+  }
+
+  @media (max-width: 420px) {
+    transform: scale(0.92);
+    transform-origin: top center;
+  }
+
+  @media (max-width: 360px) {
+    transform: scale(0.86);
+  }
+`;
+
+const ArtCaption = styled.p`
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--color-muted);
+  margin: 0;
+  font-weight: 500;
+`;
+
+const ArtCellSmall = styled.div`
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.028);
+  padding: 0.95rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  min-height: 92px;
 
   &:hover {
-    background: #4a90e2;
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
+    border-color: rgba(96, 165, 250, 0.22);
+    background: rgba(96, 165, 250, 0.04);
+  }
+
+  @media (max-width: 639px) {
+    grid-row: 2;
+    padding: 0.75rem 0.65rem;
+    min-height: 0;
+  }
+
+  @media (max-width: 380px) {
+    padding: 0.65rem 0.5rem;
   }
 `;
 
-const StatsGrid = styled(motion.div)`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 3rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+const ArtCellIcon = styled.div`
+  color: var(--color-accent);
+  font-size: 1.3rem;
+  line-height: 1;
 `;
 
-const StatCard = styled(motion.div)`
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.1);
-  border-radius: 12px;
-  padding: 1.5rem;
-  text-align: center;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(74, 144, 226, 0.2);
-    border-color: rgba(74, 144, 226, 0.3);
-  }
-`;
-
-const StatNumber = styled.div`
-  font-size: 2rem;
+const ArtCellTitle = styled.span`
+  font-size: 0.88rem;
   font-weight: 700;
-  color: #4a90e2;
-  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  color: var(--color-text);
+  letter-spacing: -0.02em;
 `;
 
-const StatLabel = styled.div`
-  font-size: 0.9rem;
-  color: #cccccc;
+const ArtCellHint = styled.span`
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  line-height: 1.35;
 `;
 
-// Services Section
-const ServicesSection = styled(Section)`
-  padding: 6rem 2rem;
+const Eyebrow = styled.p`
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: ${ACCENT};
+  margin-bottom: 1.25rem;
+`;
+
+const Headline = styled(motion.h1)`
+  font-family: var(--font-hero);
+  font-size: clamp(1.65rem, 5.5vw, 3.2rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.038em;
+  color: var(--color-text);
+  margin-bottom: 1.35rem;
+  text-wrap: balance;
+`;
+
+const HeadlineLead = styled.span`
+  display: block;
+  font-weight: 600;
+  color: #e8e8e4;
+`;
+
+const HeadlineAccent = styled.span`
+  display: block;
+  margin-top: 0.12em;
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
+  background: linear-gradient(
+    115deg,
+    #f0f9ff 0%,
+    #7dd3fc 28%,
+    #60a5fa 52%,
+    #38bdf8 85%,
+    #bae6fd 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 28px rgba(96, 165, 250, 0.22));
+
+  @media (max-width: 480px) {
+    margin-top: 0.18em;
+  }
+`;
+
+const Subhead = styled(motion.p)`
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.65;
+  color: ${MUTED};
+  margin-bottom: 2rem;
+  max-width: 560px;
+`;
+
+const CtaRow = styled(motion.div)`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+
+  @media (max-width: 520px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+`;
+
+const BtnPrimary = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.5rem;
+  min-height: 48px;
+  border-radius: 10px;
+  background: ${ACCENT};
+  color: #0a0a0a;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: filter 0.2s ease, transform 0.2s ease;
+  text-align: center;
+  box-sizing: border-box;
+
+  &:hover {
+    color: #0a0a0a;
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 520px) {
+    width: 100%;
+  }
+`;
+
+const BtnGhost = styled.a`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.95rem 1.5rem;
+  min-height: 48px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text);
+  font-weight: 500;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  text-align: center;
+  box-sizing: border-box;
+
+  &:hover {
+    border-color: rgba(96, 165, 250, 0.45);
+    background: rgba(96, 165, 250, 0.06);
+    color: var(--color-text);
+  }
+
+  @media (max-width: 520px) {
+    width: 100%;
+  }
+`;
+
+const Section = styled.section`
+  padding: clamp(3rem, 10vw, 5.5rem) var(--page-pad-x);
+  padding-right: var(--page-pad-r);
+  max-width: 1120px;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 5.5rem 2rem;
+  }
+`;
+
+const SectionHeader = styled.div`
+  max-width: 640px;
+  margin-bottom: 2.5rem;
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-size: 2.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
   font-weight: 700;
-  color: #4a90e2;
-  margin-bottom: 1rem;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
+  color: var(--color-text);
+  margin-bottom: 0.65rem;
 `;
 
-const SectionSubtitle = styled(motion.p)`
-  font-size: 1.2rem;
-  color: #cccccc;
-  text-align: center;
-  margin-bottom: 3rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
+const SectionLead = styled(motion.p)`
+  font-size: 1.05rem;
+  color: ${MUTED};
+  line-height: 1.6;
 `;
+
+const fadeUp = {
+  initial: { opacity: 0, y: 22 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
+};
 
 const ServicesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
 `;
 
-const ServiceCard = styled(motion.div)`
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.1);
-  border-radius: 16px;
-  padding: 2rem;
-  transition: all 0.3s ease;
+const ServiceCard = styled(motion.article)`
+  padding: 1.75rem;
+  border-radius: 14px;
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(74, 144, 226, 0.2);
-    border-color: rgba(74, 144, 226, 0.3);
+    border-color: rgba(96, 165, 250, 0.25);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
   }
 `;
 
 const ServiceIcon = styled.div`
-  font-size: 2.5rem;
-  color: #4a90e2;
-  margin-bottom: 1rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-muted);
+  color: ${ACCENT};
+  font-size: 1.35rem;
+  margin-bottom: 1.25rem;
 `;
 
 const ServiceTitle = styled.h3`
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 1rem;
-`;
-
-const ServiceDescription = styled.p`
-  color: #aaaaaa;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-`;
-
-const ServicePrice = styled.div`
-  font-size: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
   font-weight: 700;
-  color: #4a90e2;
-  margin-bottom: 1rem;
+  margin-bottom: 0.65rem;
+  color: var(--color-text);
 `;
 
-const ServiceLink = styled(Link)`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #4a90e2;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-
-  &:hover {
-    gap: 0.75rem;
-    color: #357abd;
-  }
-`;
-
-// Projects Section
-const ProjectsSection = styled(Section)`
-  padding: 6rem 2rem;
-  background: rgba(74, 144, 226, 0.02);
+const ServiceText = styled.p`
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: ${MUTED};
 `;
 
 const ProjectsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 2rem;
-`;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
 
-const ProjectCard = styled(motion.div)`
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.1);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(74, 144, 226, 0.2);
-    border-color: rgba(74, 144, 226, 0.3);
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
   }
 `;
 
-const ProjectImage = styled.div`
-  height: 200px;
-  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+const ProjectCard = styled(motion.article)`
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    border-color: rgba(96, 165, 250, 0.22);
+    transform: translateY(-3px);
+  }
+`;
+
+const ProjectThumb = styled.div`
+  height: min(200px, 42vw);
+  min-height: 140px;
+  background: linear-gradient(145deg, #1a1a1a 0%, #252525 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
-  color: white;
-  position: relative;
   overflow: hidden;
+
+  @media (min-width: 640px) {
+    height: 160px;
+    min-height: 0;
+  }
 `;
 
-const ProjectImgTag = styled.img`
+const ProjectImg = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
 `;
 
-const ProjectContent = styled.div`
-  padding: 1.5rem;
+const ProjectBody = styled.div`
+  padding: 1.35rem 1.35rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 `;
 
-const ProjectTitle = styled.h3`
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #ffffff;
+const ProjectName = styled.h3`
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
   margin-bottom: 0.5rem;
 `;
 
-const ProjectDescription = styled.p`
-  color: #aaaaaa;
-  line-height: 1.6;
-  margin-bottom: 1rem;
+const ProjectOutcome = styled.p`
   font-size: 0.9rem;
+  line-height: 1.6;
+  color: ${MUTED};
+  margin-bottom: 1rem;
+  flex: 1;
 `;
 
-const ProjectTech = styled.div`
+const Badges = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
   margin-bottom: 1rem;
 `;
 
-const TechTag = styled.span`
-  background: rgba(74, 144, 226, 0.1);
-  color: #4a90e2;
-  padding: 0.2rem 0.6rem;
-  border-radius: 15px;
-  font-size: 0.75rem;
-  font-weight: 500;
+const Badge = styled.span`
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.55rem;
+  border-radius: 6px;
+  background: rgba(96, 165, 250, 0.12);
+  color: ${ACCENT};
 `;
 
-const ProjectLinkStyled = styled.a`
+const ProjectLink = styled.a`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #4a90e2;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: ${ACCENT};
+  margin-top: auto;
 
   &:hover {
-    gap: 0.75rem;
-    color: #357abd;
+    color: #93c5fd;
   }
 `;
 
 const ProjectLinkRouter = styled(Link)`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #4a90e2;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.3s ease;
-
-  &:hover {
-    gap: 0.75rem;
-    color: #357abd;
-  }
-`;
-
-// Skills Section
-const SkillsSection = styled(Section)`
-  padding: 6rem 2rem;
-`;
-
-const SkillsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-`;
-
-const SkillCategory = styled(motion.div)`
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.1);
-  border-radius: 16px;
-  padding: 2rem;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(74, 144, 226, 0.2);
-    border-color: rgba(74, 144, 226, 0.3);
-  }
-`;
-
-const CategoryHeader = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-`;
-
-const CategoryIcon = styled.div`
-  font-size: 2rem;
-  color: #4a90e2;
-`;
-
-const CategoryTitle = styled.h3`
-  font-size: 1.3rem;
+  gap: 0.4rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #ffffff;
+  color: ${ACCENT};
+  margin-top: auto;
+
+  &:hover {
+    color: #93c5fd;
+  }
 `;
 
-const SkillList = styled.div`
+const WhyGrid = styled.div`
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+`;
+
+const WhyCard = styled(motion.div)`
+  padding: 1.5rem;
+  border-radius: 14px;
+  background: var(--color-surface-elevated);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+`;
+
+const WhyIcon = styled.div`
+  font-size: 1.5rem;
+  margin-bottom: 0.85rem;
+  color: ${ACCENT};
+`;
+
+const WhyTitle = styled.h3`
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+`;
+
+const WhyText = styled.p`
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: ${MUTED};
+`;
+
+const ContactSection = styled(Section)`
+  padding-bottom: max(3.5rem, calc(2.5rem + var(--page-pad-b)));
+
+  @media (min-width: 768px) {
+    padding-bottom: 5rem;
+  }
+`;
+
+const ContactGrid = styled.div`
+  display: grid;
+  gap: 2.5rem;
+  align-items: start;
+
+  @media (min-width: 900px) {
+    grid-template-columns: 1fr 1.1fr;
+    gap: 3rem;
+  }
+`;
+
+const ContactCard = styled.div`
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+`;
+
+const ContactAside = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+
+const ContactLinks = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding-top: 0.5rem;
 `;
 
-const SkillItem = styled.div`
-  display: flex;
-  justify-content: space-between;
+const ContactLinkRow = styled.a`
+  display: inline-flex;
   align-items: center;
-  padding: 0.75rem;
-  background: rgba(74, 144, 226, 0.05);
-  border-radius: 8px;
-`;
-
-const SkillName = styled.span`
-  color: #ffffff;
-  font-weight: 500;
-`;
-
-const SkillLevel = styled.span`
-  color: #4a90e2;
-  font-size: 0.9rem;
-  font-weight: 600;
-`;
-
-// About Section
-const AboutSection = styled(Section)`
-  padding: 6rem 2rem;
-  background: rgba(74, 144, 226, 0.02);
-`;
-
-const AboutContent = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-`;
-
-const AboutText = styled(motion.div)`
-  color: #ffffff;
-`;
-
-const Paragraph = styled.p`
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #aaaaaa;
-  margin-bottom: 1.5rem;
-`;
-
-// CTA Section
-const CTASection = styled(Section)`
-  padding: 6rem 2rem;
-  text-align: center;
-`;
-
-const CTACard = styled(motion.div)`
-  background: linear-gradient(135deg, rgba(74, 144, 226, 0.1) 0%, rgba(53, 122, 189, 0.1) 100%);
-  border: 2px solid rgba(74, 144, 226, 0.3);
-  border-radius: 20px;
-  padding: 4rem 2rem;
-  max-width: 800px;
-  margin: 0 auto;
-`;
-
-const CTATitle = styled.h2`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #4a90e2;
-  margin-bottom: 1rem;
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
-`;
-
-const CTADescription = styled.p`
-  font-size: 1.2rem;
-  color: #cccccc;
-  margin-bottom: 2rem;
-  line-height: 1.6;
-`;
-
-// FAQ Section
-const FAQSection = styled(Section)`
-  padding: 6rem 2rem;
-  background: rgba(74, 144, 226, 0.02);
-`;
-
-const FAQItem = styled(motion.div)`
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.1);
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
-
-  &:hover {
-    border-color: rgba(74, 144, 226, 0.3);
-  }
-`;
-
-const FAQQuestion = styled.button`
-  width: 100%;
-  padding: 1.5rem;
-  background: transparent;
-  border: none;
-  text-align: left;
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: color 0.3s ease;
-
-  &:hover {
-    color: #4a90e2;
-  }
-`;
-
-const FAQAnswer = styled(motion.div)`
-  padding: 0 1.5rem 1.5rem 1.5rem;
-  color: #aaaaaa;
-  line-height: 1.6;
+  gap: 0.65rem;
   font-size: 1rem;
+  color: var(--color-text);
+  transition: color 0.2s ease;
+
+  svg {
+    color: ${ACCENT};
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    color: ${ACCENT};
+  }
 `;
+
+const surfaceBand = {
+  background: 'linear-gradient(180deg, transparent 0%, rgba(96, 165, 250, 0.03) 50%, transparent 100%)'
+};
 
 const Home = () => {
-  const navigate = useNavigate();
-  const [showParticles, setShowParticles] = React.useState(false);
-  const [openFAQ, setOpenFAQ] = React.useState(null);
-
-  React.useEffect(() => {
-    const isDesktop = window.matchMedia('(min-width: 769px)').matches;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (isDesktop && !prefersReduced) {
-      import('../components/ParticlesBackground.jsx').then(mod => {
-        ParticlesBackground = mod.default;
-        setShowParticles(true);
-      }).catch(() => setShowParticles(false));
-    }
+  useEffect(() => {
+    const { hash } = window.location;
+    if (!hash) return undefined;
+    const id = hash.slice(1);
+    const t = requestAnimationFrame(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    return () => cancelAnimationFrame(t);
   }, []);
 
   const services = [
     {
-      icon: <FiCode />,
-      title: 'Site Vitrine',
-      description: 'Site web professionnel sur-mesure avec design moderne et responsive. Parfait pour présenter votre activité.',
-      price: 'À partir de 700€',
-      link: '/offres'
+      icon: <FiLayout aria-hidden />,
+      title: 'Sites vitrine & landing pages',
+      text:
+        'Pages rapides, SEO-friendly et pensées pour guider le visiteur vers l’action : contact, inscription ou achat.'
     },
     {
-      icon: <FiLayers />,
-      title: 'Site sur-mesure',
-      description: 'Site web professionnel avec design personnalisé, interface d\'administration et fonctionnalités avancées.',
-      price: 'À partir de 1500€',
-      link: '/offres'
+      icon: <FiLayers aria-hidden />,
+      title: 'Applications web & SaaS',
+      text:
+        'Produits sur-mesure : tableaux de bord, comptes utilisateurs, automatisations — stack moderne et évolutive.'
     },
     {
-      icon: <FiServer />,
-      title: 'Application Web',
-      description: 'Développement d\'applications web sur-mesure avec React, Node.js et technologies modernes.',
-      price: 'À partir de 2600€',
-      link: '/offres'
+      icon: <FiShoppingCart aria-hidden />,
+      title: 'E-commerce',
+      text:
+        'Boutiques claires, tunnel d’achat fluide et intégrations paiement pour vendre en ligne sans friction.'
     }
   ];
 
-  const featuredProjects = [
+  const projects = [
     {
-      id: 1,
-      title: 'Task-Manager',
-      description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne.',
-      preview: '/preview/task-manager-preview.webp',
-      tech: ['TypeScript', 'React', 'Docker'],
-      link: '/demo/task-manager'
-    },
-    {
-      id: 7,
-      title: 'Gym Phys',
-      description: 'Site vitrine pour une association sportive de gym, développé en WordPress.',
-      preview: '/preview/gym-phys-preview.webp',
-      tech: ['WordPress', 'PHP'],
-      link: 'https://www.gym-phys-ploermel.fr/'
-    },
-    {
-      id: 8,
+      id: 'driva',
       title: 'Driva',
-      description: 'SaaS moderne pour auto-écoles qui simplifie la gestion quotidienne : planning, réservations, suivi des heures et paiements.',
+      outcome:
+        'Outil métier pour auto-écoles : planning, réservations et suivi des élèves centralisés pour gagner du temps au quotidien.',
+      tech: ['Next.js', 'TypeScript', 'PostgreSQL'],
       preview: '/preview/driva-preview.webp',
-      tech: ['Next.js 14', 'TypeScript', 'PostgreSQL'],
-      link: '/projects'
+      link: 'https://driva-auto.fr/',
+      external: true
+    },
+    {
+      id: 'task',
+      title: 'Task Manager',
+      outcome:
+        'Application de gestion de tâches avec authentification : équipes qui voient clairement priorités et avancement.',
+      tech: ['TypeScript', 'Node.js', 'Docker'],
+      preview: '/preview/task-manager-preview.webp',
+      link: '/demo/task-manager',
+      external: false
+    },
+    {
+      id: 'gym',
+      title: 'Gym Phys',
+      outcome:
+        'Site vitrine pour une association sportive : informations, actualités et prise de contact accessibles sur mobile.',
+      tech: ['WordPress', 'PHP'],
+      preview: '/preview/gym-phys-preview.webp',
+      link: 'https://www.gym-phys-ploermel.fr/',
+      external: true
+    },
+    {
+      id: 'chat',
+      title: 'Live Chat',
+      outcome:
+        'Messagerie temps réel pour démontrer des interactions fluides côté utilisateur et robustesse côté serveur.',
+      tech: ['JavaScript', 'Socket.IO', 'Node.js'],
+      preview: '/preview/live-chat-preview.webp',
+      link: '/demo/live-chat',
+      external: false
     }
   ];
 
-  const skillCategories = [
+  const why = [
     {
-      title: 'Frontend',
-      icon: <FiCode />,
-      skills: [
-        { name: 'React', level: '75%' },
-        { name: 'JavaScript', level: '75%' },
-        { name: 'TypeScript', level: '55%' },
-        { name: 'HTML/CSS', level: '80%' }
-      ]
+      icon: '✓',
+      title: 'Code propre et maintenable',
+      text: 'Architecture lisible, bonnes pratiques et documentation pour que votre produit reste évolutif.'
     },
     {
-      title: 'Backend',
-      icon: <FiServer />,
-      skills: [
-        { name: 'Java', level: '70%' },
-        { name: 'PHP', level: '75%' },
-        { name: 'Node.js', level: '75%' },
-        { name: 'Express', level: '70%' }
-      ]
+      icon: '⏱',
+      title: 'Livraison dans les délais',
+      text: 'Roadmap claire, points réguliers et priorités alignées sur votre calendrier business.'
     },
     {
-      title: 'Outils & DevOps',
-      icon: <FiSmartphone />,
-      skills: [
-        { name: 'Git', level: '85%' },
-        { name: 'Docker', level: '70%' },
-        { name: 'VS Code', level: '85%' },
-        { name: 'Linux', level: '75%' }
-      ]
+      icon: '◇',
+      title: 'Un seul interlocuteur',
+      text: 'Du brief au déploiement : même personne pour le cadrage, le développement et la mise en ligne.'
     }
   ];
 
   return (
     <>
-      <SEO 
-        title="Mattéo Rannou Le Texier - Développeur Web Freelance | Services & Portfolio"
-        description="Développeur web freelance spécialisé en React, TypeScript, Node.js. Création de sites web, applications sur-mesure et solutions e-commerce. Basé à Rennes."
-        keywords="développeur web freelance, React, TypeScript, Node.js, création site web, application web, e-commerce, Rennes"
+      <SEO
+        title="Mattéo Rannou Le Texier — Développeur web freelance | Sites & applications"
+        description="Je construis des sites et applications web orientés conversion : vitrine, e-commerce, SaaS. Disponible pour vos projets — contactez-moi."
+        keywords="développeur web freelance, création site internet, site vitrine, e-commerce, SaaS, applications web, France"
         url="https://matteo-rlt.fr"
       />
       <StructuredData />
-      <PageContainer>
-        <CustomCursor />
-        <BackgroundCanvas>
-          {showParticles && ParticlesBackground && <ParticlesBackground />}
-        </BackgroundCanvas>
+      <Page>
+        <Hero id="top">
+          <HeroGrid>
+            <HeroInner>
+              <Eyebrow>Freelance — sites & applications web</Eyebrow>
+              <Headline initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
+                <HeadlineLead>Je construis des sites et apps web</HeadlineLead>
+                <HeadlineAccent>qui convertissent.</HeadlineAccent>
+              </Headline>
+              <Subhead
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                Développeur web freelance — disponible pour vos projets vitrine, e-commerce et SaaS. Basé en
+                Bretagne, j’interviens à distance partout en France.
+              </Subhead>
+              <CtaRow
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.16, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <BtnPrimary href="#contact">
+                  Me contacter
+                  <FiArrowRight aria-hidden />
+                </BtnPrimary>
+                <BtnGhost href="#realisations">Voir mes réalisations</BtnGhost>
+              </CtaRow>
+            </HeroInner>
 
-        {/* Hero Section */}
-        <HeroSection>
-          <HeroContent>
-            <TextContent>
-              <Badge
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-              >
-                <FiZap style={{ marginRight: '0.5rem', fontSize: '1rem', display: 'inline-flex' }} />
-                Développeur Freelance Indépendant
-              </Badge>
-              
-              <Name
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-              >
-                Mattéo Rannou Le Texier
-              </Name>
-              
-              <Title
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
-                Développeur Web & Web Mobile
-              </Title>
-              
-              <Description
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.8 }}
-              >
-                Je crée des solutions web modernes et performantes pour votre entreprise. 
-                Spécialisé en React, TypeScript et Node.js, je transforme vos idées en 
-                applications web professionnelles.
-              </Description>
-              
-              <ButtonsContainer
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1 }}
-              >
-                <Button className="primary" onClick={() => navigate('/offres')}>
-                  Demander un devis
-                  <FiArrowRight />
-                </Button>
-                <Button className="secondary" onClick={() => navigate('/projects')}>
-                  <FiEye />
-                  Voir mes projets
-                </Button>
-              </ButtonsContainer>
-              
-              <SocialLinks
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 1.2 }}
-              >
-                <SocialLink href="https://github.com/matteorlt" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                  <FiGithub />
-                </SocialLink>
-                <SocialLink href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <FiLinkedin />
-                </SocialLink>
-                <SocialLink href="mailto:contact@matteo-rlt.fr" aria-label="Email">
-                  <FiMail />
-                </SocialLink>
-              </SocialLinks>
-            </TextContent>
-
-            <StatsGrid
-              initial={{ opacity: 0, y: 20 }}
+            <HeroVisual
+              initial={{ opacity: 0, y: 26 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.4 }}
+              transition={{ duration: 0.55, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              aria-hidden
             >
-              <StatCard whileHover={{ scale: 1.05 }}>
-                <FiAward style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#4a90e2' }} />
-                <StatNumber>7+</StatNumber>
-                <StatLabel>Projets réalisés</StatLabel>
-              </StatCard>
-              <StatCard whileHover={{ scale: 1.05 }}>
-                <FiStar style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#4a90e2' }} />
-                <StatNumber>100%</StatNumber>
-                <StatLabel>Clients satisfaits</StatLabel>
-              </StatCard>
-              <StatCard whileHover={{ scale: 1.05 }}>
-                <FiTrendingUp style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#4a90e2' }} />
-                <StatNumber>2+</StatNumber>
-                <StatLabel>Années d'expérience</StatLabel>
-              </StatCard>
-            </StatsGrid>
-          </HeroContent>
-        </HeroSection>
+              <ArtGlow />
+              <ArtBento>
+                <ArtCellMain>
+                  <ArtJourney>
+                    <svg viewBox="0 0 320 158" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+                      <defs>
+                        <linearGradient id="journeyPathGrad" x1="44" y1="56" x2="276" y2="56" gradientUnits="userSpaceOnUse">
+                          <stop stopColor="#60a5fa" stopOpacity="0.95" />
+                          <stop offset="0.5" stopColor="#38bdf8" stopOpacity="0.9" />
+                          <stop offset="1" stopColor="#7dd3fc" stopOpacity="0.95" />
+                        </linearGradient>
+                      </defs>
 
-        {/* Services Section */}
-        <ServicesSection>
-          <SectionTitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <FiCode style={{ marginRight: '0.75rem', fontSize: '2rem', display: 'inline-flex', verticalAlign: 'middle', color: '#4a90e2' }} />
-            Mes Services
-          </SectionTitle>
-          <SectionSubtitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Des solutions web adaptées à vos besoins
-          </SectionSubtitle>
+                      <path
+                        d="M 44 62 C 98 28 118 32 160 44 C 208 58 238 54 276 58"
+                        stroke="url(#journeyPathGrad)"
+                        strokeWidth="2.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        fill="none"
+                        opacity="0.92"
+                      />
+
+                      <g>
+                        <circle cx="44" cy="62" r="17" fill="#0f0f0f" stroke="#60a5fa" strokeWidth="2.2" />
+                        <text x="44" y="67.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
+                          1
+                        </text>
+                        <text x="44" y="106" textAnchor="middle" fill="#f4f4f0" fontSize="11.5" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
+                          Attention
+                        </text>
+                        <text x="44" y="122" textAnchor="middle" fill="#a3a3a3" fontSize="9" fontWeight="500" fontFamily="Inter, system-ui, sans-serif">
+                          Message accrocheur
+                        </text>
+                      </g>
+
+                      <g>
+                        <circle cx="160" cy="44" r="17" fill="#0f0f0f" stroke="#38bdf8" strokeWidth="2.2" />
+                        <text x="160" y="49.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
+                          2
+                        </text>
+                        <text x="160" y="106" textAnchor="middle" fill="#f4f4f0" fontSize="11.5" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
+                          Intention
+                        </text>
+                        <text x="160" y="122" textAnchor="middle" fill="#a3a3a3" fontSize="9" fontWeight="500" fontFamily="Inter, system-ui, sans-serif">
+                          Preuves &amp; bénéfices
+                        </text>
+                      </g>
+
+                      <g>
+                        <circle cx="276" cy="58" r="17" fill="#0f0f0f" stroke="#7dd3fc" strokeWidth="2.2" />
+                        <text x="276" y="63.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
+                          3
+                        </text>
+                        <text x="276" y="106" textAnchor="middle" fill="#f4f4f0" fontSize="11.5" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
+                          Action
+                        </text>
+                        <text x="276" y="122" textAnchor="middle" fill="#a3a3a3" fontSize="9" fontWeight="500" fontFamily="Inter, system-ui, sans-serif">
+                          Contact ou achat
+                        </text>
+                      </g>
+                    </svg>
+                  </ArtJourney>
+                  <ArtCaption>Trois jalons pour transformer un visiteur en prospect ou client.</ArtCaption>
+                </ArtCellMain>
+                <ArtCellSmall>
+                  <ArtCellIcon>
+                    <FiGlobe aria-hidden strokeWidth={2} />
+                  </ArtCellIcon>
+                  <ArtCellTitle>À distance</ArtCellTitle>
+                  <ArtCellHint>Bretagne · missions France entière</ArtCellHint>
+                </ArtCellSmall>
+                <ArtCellSmall>
+                  <ArtCellIcon>
+                    <FiClock aria-hidden strokeWidth={2} />
+                  </ArtCellIcon>
+                  <ArtCellTitle>Délais maîtrisés</ArtCellTitle>
+                  <ArtCellHint>Jalons définis avec vous</ArtCellHint>
+                </ArtCellSmall>
+              </ArtBento>
+            </HeroVisual>
+          </HeroGrid>
+        </Hero>
+
+        <Section id="services" style={surfaceBand}>
+          <SectionHeader>
+            <SectionTitle {...fadeUp}>Ce que je fais</SectionTitle>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
+              Des livrables orientés business : clarté du message, performance, et un parcours utilisateur qui mène à
+              l’action.
+            </SectionLead>
+          </SectionHeader>
           <ServicesGrid>
-            {services.map((service, index) => (
+            {services.map((s, i) => (
               <ServiceCard
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 + index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
+                key={s.title}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: 0.05 * i }}
               >
-                <ServiceIcon>
-                  {service.icon}
-                </ServiceIcon>
-                <ServiceTitle>{service.title}</ServiceTitle>
-                <ServiceDescription>{service.description}</ServiceDescription>
-                <ServicePrice>{service.price}</ServicePrice>
-                <ServiceLink to={service.link}>
-                  En savoir plus <FiArrowRight />
-                </ServiceLink>
+                <ServiceIcon>{s.icon}</ServiceIcon>
+                <ServiceTitle>{s.title}</ServiceTitle>
+                <ServiceText>{s.text}</ServiceText>
               </ServiceCard>
             ))}
           </ServicesGrid>
-        </ServicesSection>
+        </Section>
 
-        {/* Projects Section */}
-        <ProjectsSection>
-          <SectionTitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <FiStar style={{ marginRight: '0.75rem', fontSize: '2rem', display: 'inline-flex', verticalAlign: 'middle', color: '#4a90e2' }} />
-            Projets Réalisés
-          </SectionTitle>
-          <SectionSubtitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Découvrez quelques-unes de mes réalisations
-          </SectionSubtitle>
+        <Section id="realisations">
+          <SectionHeader>
+            <SectionTitle {...fadeUp}>Ce que j’ai livré</SectionTitle>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
+              Quelques exemples concrets — résultat client avant tout.
+            </SectionLead>
+          </SectionHeader>
           <ProjectsGrid>
-            {featuredProjects.map((project, index) => (
-              <ProjectCard
-                key={project.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 + index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <ProjectImage>
-                  {project.preview ? (
-                    <ProjectImgTag src={project.preview} alt={project.title} loading="lazy" />
-                  ) : (
-                    '📋'
-                  )}
-                </ProjectImage>
-                <ProjectContent>
-                  <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectDescription>{project.description}</ProjectDescription>
-                  <ProjectTech>
-                    {project.tech.map((tech) => (
-                      <TechTag key={tech}>{tech}</TechTag>
+            {projects.map((p, i) => (
+              <ProjectCard key={p.id} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 * i }}>
+                <ProjectThumb>
+                  {p.preview ? (
+                    <ProjectImg src={p.preview} alt={`Aperçu ${p.title}`} loading="lazy" decoding="async" />
+                  ) : null}
+                </ProjectThumb>
+                <ProjectBody>
+                  <ProjectName>{p.title}</ProjectName>
+                  <Badges>
+                    {p.tech.map((t) => (
+                      <Badge key={t}>{t}</Badge>
                     ))}
-                  </ProjectTech>
-                  {project.link.startsWith('http') ? (
-                    <ProjectLinkStyled href={project.link} target="_blank" rel="noopener noreferrer">
-                      Voir le projet <FiArrowRight />
-                    </ProjectLinkStyled>
+                  </Badges>
+                  <ProjectOutcome>{p.outcome}</ProjectOutcome>
+                  {p.external ? (
+                    <ProjectLink href={p.link} target="_blank" rel="noopener noreferrer">
+                      Voir le projet <FiExternalLink aria-hidden size={16} />
+                    </ProjectLink>
                   ) : (
-                    <ProjectLinkRouter to={project.link}>
-                      Voir le projet <FiArrowRight />
+                    <ProjectLinkRouter to={p.link}>
+                      Voir la démo <FiArrowRight aria-hidden size={16} />
                     </ProjectLinkRouter>
                   )}
-                </ProjectContent>
+                </ProjectBody>
               </ProjectCard>
             ))}
           </ProjectsGrid>
-          <motion.div
-            style={{ textAlign: 'center', marginTop: '3rem' }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <Button className="secondary" onClick={() => navigate('/projects')}>
-              Voir tous mes projets <FiArrowRight />
-            </Button>
-          </motion.div>
-        </ProjectsSection>
+        </Section>
 
-        {/* Skills Section */}
-        <SkillsSection>
-          <SectionTitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <FiZap style={{ marginRight: '0.75rem', fontSize: '2rem', display: 'inline-flex', verticalAlign: 'middle', color: '#4a90e2' }} />
-            Compétences Techniques
-          </SectionTitle>
-          <SectionSubtitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Technologies et outils que je maîtrise
-          </SectionSubtitle>
-          <SkillsGrid>
-            {skillCategories.map((category, index) => (
-              <SkillCategory
-                key={category.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.4 + index * 0.1 }}
-                whileHover={{ scale: 1.02 }}
-              >
-                <CategoryHeader>
-                  <CategoryIcon>{category.icon}</CategoryIcon>
-                  <CategoryTitle>{category.title}</CategoryTitle>
-                </CategoryHeader>
-                <SkillList>
-                  {category.skills.map((skill) => (
-                    <SkillItem key={skill.name}>
-                      <SkillName>{skill.name}</SkillName>
-                      <SkillLevel>{skill.level}</SkillLevel>
-                    </SkillItem>
-                  ))}
-                </SkillList>
-              </SkillCategory>
+        <Section id="pourquoi-moi" style={{ ...surfaceBand, paddingTop: '3rem' }}>
+          <SectionHeader>
+            <SectionTitle {...fadeUp}>Pourquoi moi</SectionTitle>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
+              Trois engagements concrets pour avancer sereinement.
+            </SectionLead>
+          </SectionHeader>
+          <WhyGrid>
+            {why.map((w, i) => (
+              <WhyCard key={w.title} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.07 * i }}>
+                <WhyIcon aria-hidden>{w.icon}</WhyIcon>
+                <WhyTitle>{w.title}</WhyTitle>
+                <WhyText>{w.text}</WhyText>
+              </WhyCard>
             ))}
-          </SkillsGrid>
-          <motion.div
-            style={{ textAlign: 'center', marginTop: '3rem' }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <Button className="secondary" onClick={() => navigate('/skills')}>
-              Voir toutes mes compétences <FiArrowRight />
-            </Button>
-          </motion.div>
-        </SkillsSection>
+          </WhyGrid>
+        </Section>
 
-        {/* About Section */}
-        <AboutSection>
-          <SectionTitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <FiUsers style={{ marginRight: '0.75rem', fontSize: '2rem', display: 'inline-flex', verticalAlign: 'middle', color: '#4a90e2' }} />
-            À Propos
-          </SectionTitle>
-          <AboutContent>
-            <AboutText
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <Paragraph>
-                Je m'appelle Mattéo Rannou Le Texier, développeur web freelance indépendant basé à Ploërmel. 
-                Passionné par le code et les technologies modernes, je transforme vos idées en solutions web performantes.
-              </Paragraph>
-              <Paragraph>
-                J'ai déjà eu l'occasion de travailler sur plusieurs projets concrets : Task-Manager, 
-                Gym-Phys, un système d'authentification, un système de ticket support et d'autres projets créatifs. 
-                J'accorde une grande importance à la qualité du code et à l'expérience utilisateur.
-              </Paragraph>
-              <Paragraph>
-                Autonome, mais aussi à l'aise en collaboration, je suis toujours à la recherche de nouveaux défis et 
-                d'opportunités pour progresser et construire des projets utiles, clairs, bien structurés.
-              </Paragraph>
-            </AboutText>
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <StatsGrid>
-                <StatCard whileHover={{ scale: 1.05 }}>
-                  <FiAward style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#4a90e2' }} />
-                  <StatNumber>7</StatNumber>
-                  <StatLabel>Projets réalisés</StatLabel>
-                </StatCard>
-                <StatCard whileHover={{ scale: 1.05 }}>
-                  <FiStar style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#4a90e2' }} />
-                  <StatNumber>100%</StatNumber>
-                  <StatLabel>Clients satisfaits</StatLabel>
-                </StatCard>
-                <StatCard whileHover={{ scale: 1.05 }}>
-                  <FiTrendingUp style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#4a90e2' }} />
-                  <StatNumber>2+</StatNumber>
-                  <StatLabel>Années d'expérience</StatLabel>
-                </StatCard>
-                <StatCard whileHover={{ scale: 1.05 }}>
-                  <FiZap style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#4a90e2' }} />
-                  <StatNumber>10+</StatNumber>
-                  <StatLabel>Technologies maîtrisées</StatLabel>
-                </StatCard>
-              </StatsGrid>
-            </motion.div>
-          </AboutContent>
-          <motion.div
-            style={{ textAlign: 'center', marginTop: '3rem' }}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <Button className="secondary" onClick={() => navigate('/about')}>
-              En savoir plus sur moi <FiArrowRight />
-            </Button>
-          </motion.div>
-        </AboutSection>
-
-        {/* CTA Section */}
-        <CTASection>
-          <CTACard
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <CTATitle>
-              <FiZap style={{ marginRight: '0.75rem', fontSize: '2.5rem', display: 'inline-flex', verticalAlign: 'middle', color: '#4a90e2' }} />
-              Prêt à démarrer votre projet ?
-            </CTATitle>
-            <CTADescription>
-              <FiCheckCircle style={{ marginRight: '0.5rem', fontSize: '1.2rem', display: 'inline-flex', verticalAlign: 'middle', color: '#4a90e2' }} />
-              Discutons de vos besoins et créons ensemble une solution web qui correspond à vos objectifs.
-              Je réponds à toutes vos questions et vous propose un devis personnalisé gratuit.
-            </CTADescription>
-            <ButtonsContainer style={{ justifyContent: 'center' }}>
-              <Button className="primary" onClick={() => navigate('/offres')}>
-                Demander un devis gratuit
-                <FiArrowRight />
-              </Button>
-              <Button className="secondary" onClick={() => navigate('/contact')}>
-                <FiMail />
-                Me contacter
-              </Button>
-            </ButtonsContainer>
-          </CTACard>
-        </CTASection>
-
-        {/* FAQ Section */}
-        <FAQSection>
-          <SectionTitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <FiHelpCircle style={{ marginRight: '0.75rem', fontSize: '2rem', display: 'inline-flex', verticalAlign: 'middle', color: '#4a90e2' }} />
-            Questions Fréquentes
-          </SectionTitle>
-          <SectionSubtitle
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Tout ce que vous devez savoir avant de démarrer votre projet
-          </SectionSubtitle>
-          
-          {[
-            {
-              question: "Pourquoi avoir un site web est-il important pour mon entreprise ?",
-              answer: "Un site web est votre vitrine digitale 24/7. Il permet d'établir votre crédibilité, d'atteindre un public plus large, de présenter vos services et produits, et d'augmenter votre visibilité en ligne. Aujourd'hui, plus de 80% des clients recherchent une entreprise en ligne avant de prendre contact. Sans site web, vous perdez des opportunités commerciales importantes."
-            },
-            {
-              question: "Pourquoi choisir un freelance plutôt qu'une agence ?",
-              answer: "En tant que freelance, je vous offre plusieurs avantages : des tarifs plus compétitifs (pas de frais de structure), une communication directe et réactive, une approche personnalisée de votre projet, et une flexibilité accrue. Vous travaillez directement avec le développeur, ce qui garantit une meilleure compréhension de vos besoins et une réactivité optimale."
-            },
-            {
-              question: "Pourquoi me choisir moi ?",
-              answer: "Je combine expertise technique et approche personnalisée. Avec plus de 2 ans d'expérience et 7+ projets réalisés, je maîtrise les technologies modernes (React, Node.js, TypeScript) tout en restant accessible et à l'écoute. Je m'engage à livrer des projets de qualité, dans les délais convenus, avec un suivi personnalisé et un code propre et maintenable."
-            },
-            {
-              question: "Combien de temps prend la création d'un site web ?",
-              answer: "Le délai dépend de la complexité de votre projet. Un site vitrine simple peut être livré en 2-3 semaines, tandis qu'un site sur-mesure avec fonctionnalités avancées peut prendre 4-8 semaines. Pour une application web complète, comptez 8-12 semaines. Je vous fournis un planning détaillé dès la validation du projet."
-            },
-            {
-              question: "Quels sont les tarifs et comment fonctionne le paiement ?",
-              answer: "Mes tarifs démarrent à partir de 700€ pour un site vitrine, 1500€ pour un site sur-mesure, et 2600€ pour une application web. Le paiement se fait généralement en plusieurs étapes : un acompte à la commande (30-50%), puis des versements selon l'avancement du projet. Je propose toujours un devis détaillé et gratuit avant tout engagement."
-            },
-            {
-              question: "Proposez-vous un accompagnement après la livraison ?",
-              answer: "Oui, je propose un accompagnement complet après la livraison : formation à l'utilisation de votre site, documentation technique, support technique pour les corrections mineures, et possibilité de maintenance et d'évolutions futures. Je reste disponible pour répondre à vos questions et vous aider à faire évoluer votre projet."
-            },
-            {
-              question: "Mon site sera-t-il responsive (adapté mobile) ?",
-              answer: "Absolument ! Tous mes sites sont développés avec une approche 'mobile-first', garantissant une expérience optimale sur tous les appareils (smartphone, tablette, ordinateur). C'est essentiel aujourd'hui car plus de 60% du trafic web provient des mobiles."
-            },
-            {
-              question: "Quelle est la différence entre un site vitrine et un site sur-mesure ?",
-              answer: "Un site vitrine présente votre activité avec des pages statiques (accueil, services, contact). Un site sur-mesure inclut des fonctionnalités dynamiques comme une interface d'administration, un système de gestion de contenu, des formulaires avancés, ou des fonctionnalités spécifiques à votre métier. L'application web est encore plus complexe avec des fonctionnalités interactives et une base de données."
-            }
-          ].map((faq, index) => (
-            <FAQItem
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <FAQQuestion onClick={() => setOpenFAQ(openFAQ === index ? null : index)}>
-                {faq.question}
-                {openFAQ === index ? <FiChevronUp style={{ color: '#4a90e2' }} /> : <FiChevronDown style={{ color: '#4a90e2' }} />}
-              </FAQQuestion>
-              {openFAQ === index && (
-                <FAQAnswer
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {faq.answer}
-                </FAQAnswer>
-              )}
-            </FAQItem>
-          ))}
-        </FAQSection>
-      </PageContainer>
+        <ContactSection id="contact">
+          <SectionHeader>
+            <SectionTitle {...fadeUp}>Un projet en tête ?</SectionTitle>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
+              Décrivez votre besoin en quelques lignes — je vous réponds sous 48 h ouvrées.
+            </SectionLead>
+          </SectionHeader>
+          <ContactGrid>
+            <ContactAside>
+              <p style={{ color: MUTED, lineHeight: 1.65, fontSize: '1rem' }}>
+                Idée de produit, refonte ou nouveau site : parlez-moi de votre contexte et de votre échéance. Pas de
+                jargon inutile — on valide l’essentiel puis on enchaîne.
+              </p>
+              <ContactLinks>
+                <ContactLinkRow href="mailto:contact@matteo-rlt.fr">
+                  <FiMail aria-hidden size={20} />
+                  contact@matteo-rlt.fr
+                </ContactLinkRow>
+                <ContactLinkRow href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer">
+                  <FiLinkedin aria-hidden size={20} />
+                  LinkedIn — Mattéo Rannou Le Texier
+                </ContactLinkRow>
+              </ContactLinks>
+            </ContactAside>
+            <ContactCard>
+              <ContactForm idPrefix="home" />
+            </ContactCard>
+          </ContactGrid>
+        </ContactSection>
+      </Page>
     </>
   );
 };
 
-export default Home; 
+export default Home;

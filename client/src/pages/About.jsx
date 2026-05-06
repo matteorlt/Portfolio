@@ -143,7 +143,7 @@ const SkillName = styled.span`
 
 const About = () => {
   const skills = [
-    { name: 'React', icon: '⚛️' },
+    { name: 'Node.js', icon: '🟢' },
     { name: 'Java', icon: '☕' },
     { name: 'PHP', icon: '🐘' },
     { name: 'JavaScript', icon: '📜' },
@@ -164,7 +164,7 @@ const About = () => {
     <AboutContainer>
       <SEO
         title="À propos | Portfolio Mattéo Rannou Le Texier"
-        description="Développeur web freelance indépendant, diplômé d'un Bac+2 en développement web. Spécialisé dans React, Next.js, TypeScript et la création d'applications web modernes."
+        description="Développeur web freelance indépendant, diplômé d'un Bac+2 en développement web. Spécialisé dans des applications web modernes (TypeScript, Node.js, et plus)."
         url="https://matteo-rlt.fr/about"
         image="/logos/og-image.jpg"
       />

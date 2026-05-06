@@ -6,10 +6,15 @@ import { Link } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 
 const ProjectsContainer = styled.div`
-  min-height: 100vh;
-  padding: 100px 2rem 2rem;
+  min-height: 100dvh;
+  padding: max(6.25rem, calc(var(--nav-h) + 2rem + env(safe-area-inset-top, 0px))) var(--page-pad-x) max(2rem, var(--page-pad-b));
+  padding-right: var(--page-pad-r);
   max-width: 1200px;
   margin: 0 auto;
+
+  @media (min-width: 768px) {
+    padding: 100px 2rem 2rem;
+  }
 `;
 
 const Title = styled(motion.h1)`
@@ -277,7 +282,7 @@ const Projects = () => {
       description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
       image: '📋',
       preview: '/preview/task-manager-preview.webp',
-      tech: ['TypeScript', 'React', 'Docker', 'CI/CD'],
+      tech: ['TypeScript', 'Node.js', 'Docker', 'CI/CD'],
       category: ['typescript'],
       projectType: 'perso',
       demo: '/demo/task-manager',
@@ -299,10 +304,10 @@ const Projects = () => {
     {
       id: 2,
       title: 'Live Chat',
-      description: 'Application de chat en temps réel (React + Socket.IO) avec interface moderne et mode hors ligne.',
+      description: 'Application de chat en temps réel (stack JavaScript) avec interface moderne et mode hors ligne.',
       image: '💬',
       preview: '/preview/live-chat-preview.webp',
-      tech: ['JavaScript', 'React', 'Socket.IO', 'Node.js'],
+      tech: ['JavaScript', 'Socket.IO', 'Node.js'],
       category: ['javascript'],
       projectType: 'perso',
       demo: '/demo/live-chat',
@@ -325,7 +330,7 @@ const Projects = () => {
       title: 'Ticket Support App',
       description: 'Application de support client avec système de tickets. Interface intuitive pour la gestion des demandes.',
       image: '🎫',
-      tech: ['JavaScript', 'React', 'Node.js'],
+      tech: ['JavaScript', 'Node.js'],
       category: ['javascript'],
       projectType: 'perso',
       demo: '/demo/ticket-support-app',
@@ -347,7 +352,7 @@ const Projects = () => {
     <ProjectsContainer>
       <SEO
         title="Mes Projets | Portfolio Mattéo Rannou Le Texier"
-        description="Découvrez mes réalisations: applications web modernes, TypeScript/React, WordPress et plus."
+        description="Découvrez mes réalisations : applications web modernes, WordPress, stacks sur mesure et plus."
         url="https://matteo-rlt.fr/projects"
         image="/logos/og-image.jpg"
       />

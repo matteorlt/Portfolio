@@ -1,52 +1,19 @@
 {
   "name": "portfolio",
   "version": "1.0.0",
-  "description": "Portfolio original avec React, Node.js et Three.js",
-  "main": "server/index.js",
+  "private": true,
+  "description": "Portfolio — frontend Vite / React (formulaires via EmailJS)",
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon server/index.js",
+    "dev": "npm run client",
     "client": "cd client && npm start",
     "build": "cd client && npm run build",
     "build:prod": "cd client && npm run build:prod",
-    "install-all": "npm install && cd client && npm install",
-    "start": "node server/index.js",
-    "start:pm2": "pm2 start ecosystem.config.js --env production",
-    "stop:pm2": "pm2 stop portfolio",
-    "restart:pm2": "pm2 restart portfolio",
-    "logs:pm2": "pm2 logs portfolio",
-    "deploy": "npm run build:prod && npm run start:pm2",
-    "prisma:generate": "prisma generate",
-    "prisma:push": "prisma db push",
-    "db:init": "node scripts/init-db.js"
-  },
-  "keywords": [
-    "portfolio",
-    "react",
-    "node.js",
-    "three.js"
-  ],
-  "author": "Votre Nom",
-  "license": "MIT",
-  "dependencies": {
-    "@neondatabase/serverless": "^1.0.2",
-    "@prisma/client": "^6.18.0",
-    "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
-    "dotenv": "^16.3.1",
-    "express": "^4.18.2",
-    "iron-session": "^8.0.4",
-    "nodemailer": "^7.0.10"
-  },
-  "devDependencies": {
-    "bcryptjs": "^3.0.2",
-    "concurrently": "^8.2.0",
-    "nodemon": "^3.0.1",
-    "pm2": "^5.3.0",
-    "prisma": "^6.18.0"
+    "install-all": "cd client && npm install",
+    "preview": "cd client && npm run preview"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
-  }
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "license": "MIT"
 }

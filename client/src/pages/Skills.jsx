@@ -203,8 +203,7 @@ const Skills = () => {
       title: 'Frontend',
       icon: <FiCode />,
       skills: [
-        { name: 'React', level: 75 },
-        { name: 'JavaScript', level: 75 },
+        { name: 'JavaScript', level: 80 },
         { name: 'TypeScript', level: 55 },
         { name: 'HTML/CSS', level: 80 },
         { name: 'Responsive Design', level: 70 }
@@ -261,7 +260,7 @@ const Skills = () => {
     <SkillsContainer>
       <SEO
         title="Compétences | Portfolio Mattéo Rannou Le Texier"
-        description="Compétences frontend, backend et DevOps: React, TypeScript, Node.js, Java, PHP, Docker, Git."
+        description="Compétences frontend, backend et DevOps : JavaScript, TypeScript, Node.js, Java, PHP, Docker, Git."
         url="https://matteo-rlt.fr/skills"
         image="/logos/og-image.jpg"
       />

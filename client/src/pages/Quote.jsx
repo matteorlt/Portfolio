@@ -3,14 +3,19 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { trackClick, trackFormEvent, trackConversion } from '../utils/analytics';
 import SEO from '../components/SEO.jsx';
-// Envoi via backend SMTP (Zoho)
+import { sendViaEmailJs } from '../utils/emailjsSend.js';
 
 const QuoteContainer = styled.div`
-  min-height: 100vh;
-  padding: 100px 2rem 2rem;
+  min-height: 100dvh;
+  padding: max(6.25rem, calc(var(--nav-h) + 2rem + env(safe-area-inset-top, 0px))) var(--page-pad-x) max(2rem, var(--page-pad-b));
+  padding-right: var(--page-pad-r);
   max-width: 100%;
   margin: 0 auto;
   width: 100%;
+
+  @media (min-width: 768px) {
+    padding: 100px 2rem 2rem;
+  }
 `;
 
 const Title = styled(motion.h1)`
@@ -484,58 +489,55 @@ const Quote = () => {
 
     try {
       const packageDetails = packages.find(p => p.id === selectedPackage);
-      // Envoi via API backend
-      const res = await fetch('/api/quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          message: formData.message,
-          selectedPackage,
-          packageDetails
-        })
-      });
 
-      if (res.ok) {
-        // Afficher la notification de succès
-        setShowNotification(true);
-        
-        // Tracker la conversion avec notre système
-        trackConversion('Offer Request', packageDetails?.price || 0, 'EUR');
-        
-        // Déclencher la conversion Google Ads
-        if (typeof window !== 'undefined' && window.gtag) {
-          window.gtag('event', 'conversion', {
-            'send_to': 'AW-17634174804/6HasCOPNoqkbENTO0NhB',
-            'value': 1.0,
-            'currency': 'EUR'
-          });
-        }
-        
-        // Réinitialiser le formulaire
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          phone: '',
-          company: '',
-          website: '',
-          timeline: '',
-          projectType: '',
-          targetAudience: '',
-          competitors: '',
-          message: ''
+      await sendViaEmailJs(
+        {
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          full_name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          reply_to: formData.email,
+          phone: formData.phone || '-',
+          company: formData.company || '-',
+          website: formData.website || '-',
+          timeline: formData.timeline || '-',
+          project_type: formData.projectType || '-',
+          target_audience: formData.targetAudience || '-',
+          competitors: formData.competitors || '-',
+          message: formData.message || '-',
+          package_id: selectedPackage || '',
+          package_title: packageDetails?.title || '',
+          package_price: packageDetails?.price || '',
+          package_period: packageDetails?.period || ''
+        },
+        'quote'
+      );
+
+      setShowNotification(true);
+      trackConversion('Offer Request', packageDetails?.price || 0, 'EUR');
+
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'conversion', {
+          send_to: 'AW-17634174804/6HasCOPNoqkbENTO0NhB',
+          value: 1.0,
+          currency: 'EUR'
         });
-        setSelectedPackage(null);
-      } else {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || 'Erreur lors de l\'envoi');
       }
 
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        company: '',
+        website: '',
+        timeline: '',
+        projectType: '',
+        targetAudience: '',
+        competitors: '',
+        message: ''
+      });
+      setSelectedPackage(null);
     } catch (error) {
       console.error('Erreur détaillée:', error);
       // Tracker l'erreur de soumission

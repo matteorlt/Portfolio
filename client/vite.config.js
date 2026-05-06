@@ -25,22 +25,24 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          three: ['three', '@react-three/fiber', '@react-three/drei'],
-          animations: ['framer-motion'],
-          icons: ['react-icons'],
+        manualChunks(id) {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'vendor';
+          }
+          if (
+            id.includes('node_modules/three') ||
+            id.includes('node_modules/@react-three/fiber') ||
+            id.includes('node_modules/@react-three/drei')
+          ) {
+            return 'three';
+          }
+          if (id.includes('node_modules/framer-motion')) return 'animations';
+          if (id.includes('node_modules/react-icons')) return 'icons';
         },
       },
     },
   },
   server: {
     port: 3000,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-    },
   },
 }) 

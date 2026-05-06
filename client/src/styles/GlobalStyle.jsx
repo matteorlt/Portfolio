@@ -1,6 +1,30 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
+  :root {
+    --color-bg: #0a0a0a;
+    --color-surface: #111111;
+    --color-surface-elevated: #161616;
+    --color-accent: #60a5fa;
+    --color-accent-muted: rgba(96, 165, 250, 0.14);
+    --color-text: #f4f4f0;
+    --color-muted: #a3a3a3;
+    --font-display: 'Syne', system-ui, sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-hero: 'Outfit', system-ui, sans-serif;
+    --page-pad-x: max(1rem, env(safe-area-inset-left, 0px));
+    --page-pad-r: max(1rem, env(safe-area-inset-right, 0px));
+    --page-pad-b: max(0.5rem, env(safe-area-inset-bottom, 0px));
+    --nav-h: 72px;
+    --scroll-margin: calc(var(--nav-h) + 20px + env(safe-area-inset-top, 0px));
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --scroll-margin: calc(var(--nav-h) + 24px + env(safe-area-inset-top, 0px));
+    }
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -9,140 +33,95 @@ const GlobalStyle = createGlobalStyle`
 
   html {
     scroll-behavior: smooth;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-    background-attachment: fixed;
+    background: var(--color-bg);
     min-height: 100%;
   }
 
   body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
+    font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-    background-attachment: fixed;
-    color: #ffffff;
+    background: var(--color-bg);
+    color: var(--color-text);
     overflow-x: hidden;
     min-height: 100vh;
+    min-height: 100dvh;
     margin: 0;
     padding: 0;
+    -webkit-tap-highlight-color: transparent;
   }
 
   #root {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-    background-attachment: fixed;
+    background: var(--color-bg);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
   }
 
   code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }
 
-  /* Scrollbar personnalisée */
   ::-webkit-scrollbar {
     width: 8px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #1a1a2e;
+    background: #111;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #4a90e2;
+    background: #333;
     border-radius: 4px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #357abd;
+    background: #444;
   }
 
-  /* Animations globales */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes slideInLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
   }
 
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
-
-  /* Classes d'animation */
-  .fade-in {
-    animation: fadeIn 0.8s ease-out;
-  }
-
-  .slide-in-left {
-    animation: slideInLeft 0.8s ease-out;
-  }
-
-  .slide-in-right {
-    animation: slideInRight 0.8s ease-out;
-  }
-
-  .float {
-    animation: float 3s ease-in-out infinite;
-  }
-
-  /* Styles pour les liens */
   a {
     text-decoration: none;
     color: inherit;
-    transition: all 0.3s ease;
+    transition: color 0.2s ease;
   }
 
   a:hover {
-    color: #4a90e2;
+    color: var(--color-accent);
   }
 
-  /* Styles pour les boutons */
-  button {
+  button,
+  a[role='button'] {
     cursor: pointer;
     border: none;
     outline: none;
-    transition: all 0.3s ease;
+    font-family: inherit;
+    touch-action: manipulation;
   }
 
-  /* Responsive */
   @media (max-width: 768px) {
     body {
-      font-size: 14px;
+      font-size: 15px;
     }
+  }
+
+  section[id] {
+    scroll-margin-top: var(--scroll-margin);
   }
 `;
 
-export default GlobalStyle; 
+export default GlobalStyle;

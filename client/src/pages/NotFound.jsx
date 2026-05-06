@@ -5,21 +5,27 @@ import { useNavigate } from 'react-router-dom';
 import { FiHome, FiArrowLeft, FiSearch } from 'react-icons/fi';
 
 const NotFoundContainer = styled.div`
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 2rem 2rem;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+  padding: max(6rem, calc(var(--nav-h) + 1.5rem + env(safe-area-inset-top, 0px))) var(--page-pad-x) max(2rem, var(--page-pad-b));
+  padding-right: var(--page-pad-r);
+  background: var(--color-bg);
+
+  @media (min-width: 768px) {
+    padding: 100px 2rem 2rem;
+  }
 `;
 
 const NotFoundContent = styled(motion.div)`
   max-width: 600px;
+  width: 100%;
   text-align: center;
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.2);
+  background: var(--color-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
-  padding: 3rem 2rem;
+  padding: clamp(1.75rem, 6vw, 3rem) clamp(1.25rem, 4vw, 2rem);
 `;
 
 const NotFoundIcon = styled.div`

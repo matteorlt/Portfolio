@@ -33,47 +33,25 @@ function Test-NPM {
 
 # Fonction pour verifier si les dependances sont installees
 function Test-Dependencies {
-    $rootNodeModules = Test-Path "node_modules"
     $clientNodeModules = Test-Path "client\node_modules"
-    
-    if (-not $rootNodeModules) {
-        Write-Host "Dependances du serveur non installees" -ForegroundColor Yellow
-        return $false
-    }
-    
     if (-not $clientNodeModules) {
-        Write-Host "Dependances du client non installees" -ForegroundColor Yellow
+        Write-Host "Dependances du client (Vite) non installees" -ForegroundColor Yellow
         return $false
     }
-    
-    Write-Host "Toutes les dependances sont installees" -ForegroundColor Green
+    Write-Host "Dependances client installees" -ForegroundColor Green
     return $true
 }
 
 # Fonction pour installer les dependances
 function Install-Dependencies {
-    Write-Host "Installation des dependances..." -ForegroundColor Yellow
-    
-    # Installation des dependances du serveur
-    Write-Host "Installing server dependencies..." -ForegroundColor Cyan
-    npm install
-    
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "Erreur lors de l'installation des dependances du serveur" -ForegroundColor Red
-        return $false
-    }
-    
-    # Installation des dependances du client
-    Write-Host "Installing client dependencies..." -ForegroundColor Cyan
+    Write-Host "Installation des dependances (client)..." -ForegroundColor Yellow
     Set-Location "client"
     npm install
     Set-Location ".."
-    
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "Erreur lors de l'installation des dependances du client" -ForegroundColor Red
+        Write-Host "Erreur lors de l'installation" -ForegroundColor Red
         return $false
     }
-    
     Write-Host "Installation terminee avec succes!" -ForegroundColor Green
     return $true
 }
@@ -81,28 +59,18 @@ function Install-Dependencies {
 # Fonction pour verifier si les ports sont disponibles
 function Test-Ports {
     $port3000 = Get-NetTCPConnection -LocalPort 3000 -ErrorAction SilentlyContinue
-    $port5000 = Get-NetTCPConnection -LocalPort 5000 -ErrorAction SilentlyContinue
-    
     if ($port3000) {
         Write-Host "Le port 3000 est deja utilise" -ForegroundColor Yellow
         Write-Host "   Vous pouvez arreter le processus ou utiliser un autre port" -ForegroundColor Yellow
-    }
-    
-    if ($port5000) {
-        Write-Host "Le port 5000 est deja utilise" -ForegroundColor Yellow
-        Write-Host "   Vous pouvez arreter le processus ou utiliser un autre port" -ForegroundColor Yellow
-    }
-    
-    if (-not $port3000 -and -not $port5000) {
-        Write-Host "Les ports 3000 et 5000 sont disponibles" -ForegroundColor Green
+    } else {
+        Write-Host "Le port 3000 est disponible (Vite)" -ForegroundColor Green
     }
 }
 
 # Fonction pour lancer le serveur de developpement
 function Start-DevServer {
-    Write-Host "Lancement du serveur de developpement..." -ForegroundColor Cyan
-    Write-Host "   Frontend: http://localhost:3000" -ForegroundColor Green
-    Write-Host "   Backend: http://localhost:5000" -ForegroundColor Green
+    Write-Host "Lancement du serveur de developpement (Vite)..." -ForegroundColor Cyan
+    Write-Host "   http://localhost:3000" -ForegroundColor Green
     Write-Host ""
     Write-Host "Appuyez sur Ctrl+C pour arreter le serveur" -ForegroundColor Yellow
     Write-Host "=================================" -ForegroundColor Cyan

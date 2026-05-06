@@ -7,13 +7,18 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FiArrowLeft, FiPlay, FiPause, FiVolume2, FiMaximize } from 'react-icons/fi';
 
 const DemoContainer = styled.div`
-  min-height: 100vh;
-  padding: 100px 2rem 2rem;
+  min-height: 100dvh;
+  padding: max(6.25rem, calc(var(--nav-h) + 2rem + env(safe-area-inset-top, 0px))) var(--page-pad-x) max(2rem, var(--page-pad-b));
+  padding-right: var(--page-pad-r);
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (min-width: 768px) {
+    padding: 100px 2rem 2rem;
+  }
 `;
 
 const BackButton = styled(motion.button)`
@@ -287,15 +292,15 @@ const projectsData = {
   'task-manager': {
     title: 'Task-Manager',
     description: 'Application de gestion de tâches développée en TypeScript avec authentification et interface moderne. Gestion complète des tâches avec Docker.',
-    tech: ['TypeScript', 'React', 'Docker'],
+    tech: ['TypeScript', 'Node.js', 'Docker'],
     videoUrl: '/videos/Task Manager.mp4',
     posterUrl: '/preview/task-manager-preview.webp',
     codeUrl: 'https://github.com/matteorlt/Task-Manager'
   },
   'live-chat': {
     title: 'Live Chat',
-    description: 'Application de chat en temps réel (React + Socket.IO) avec interface moderne et mode hors ligne.',
-    tech: ['JavaScript', 'React', 'Socket.IO', 'Node.js'],
+    description: 'Application de chat en temps réel (stack JavaScript) avec interface moderne et mode hors ligne.',
+    tech: ['JavaScript', 'Socket.IO', 'Node.js'],
     videoUrl: null,
     codeUrl: 'https://github.com/matteorlt/live-chat'
   },
@@ -324,14 +329,14 @@ const projectsData = {
   'ticket-support-app': {
     title: 'Ticket Support App',
     description: 'Application de support client avec système de tickets. Interface intuitive pour la gestion des demandes.',
-    tech: ['JavaScript', 'React', 'Node.js'],
+    tech: ['JavaScript', 'Node.js'],
     videoUrl: null,
     codeUrl: 'https://github.com/matteorlt/ticket-support-app'
   },
   'site-react-openclassroom': {
-    title: 'Site React (OpenClassroom)',
-    description: 'Projet Fils Rouge OpenClassroom - Site web moderne développé avec React et animations fluides.',
-    tech: ['React', 'JavaScript', 'CSS'],
+    title: 'Site web (OpenClassrooms)',
+    description: 'Projet fil rouge OpenClassrooms — site moderne avec interface fluide et animations.',
+    tech: ['JavaScript', 'CSS'],
     videoUrl: null,
     codeUrl: 'https://github.com/matteorlt'
   },

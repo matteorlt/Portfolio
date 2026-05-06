@@ -2,38 +2,27 @@ import { Helmet } from 'react-helmet';
 
 const StructuredData = () => {
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Mattéo Rannou Le Texier",
-    "jobTitle": "Développeur Web & Web Mobile",
-    "description": "Développeur Web & Web Mobile spécialisé en React, Java, PHP et JavaScript",
-    "url": "https://matteo-rlt.fr",
-    "sameAs": [
-      "https://github.com/matteorlt",
-      "https://linkedin.com/in/matteo-rlt"
-    ],
-    "knowsAbout": [
-      "React",
-      "JavaScript",
-      "Java",
-      "PHP",
-      "Développement Web",
-      "Développement Mobile"
-    ],
-    "worksFor": {
-      "@type": "Organization",
-      "name": "Freelance"
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Mattéo Rannou Le Texier',
+    jobTitle: 'Développeur web freelance',
+    description:
+      'Développeur web freelance : sites vitrine, e-commerce et applications orientées conversion.',
+    url: 'https://matteo-rlt.fr',
+    sameAs: ['https://github.com/matteorlt', 'https://linkedin.com/in/matteo-rlt'],
+    knowsAbout: ['Développement web', 'TypeScript', 'JavaScript', 'E-commerce', 'Applications web'],
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Freelance'
     },
-    "email": "rannouletexiermatteo@gmail.com"
+    email: 'contact@matteo-rlt.fr'
   };
 
   return (
     <Helmet>
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
     </Helmet>
   );
 };
 
-export default StructuredData; 
+export default StructuredData;
