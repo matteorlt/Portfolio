@@ -725,6 +725,17 @@ const Home = () => {
       external: true
     },
     {
+      id: 'birdie-golf-club',
+      title: 'Le Birdie Golf Club',
+      outcome:
+        'Vitrine pour un golf fictif : ambiance club-house verts et or, photos réelles du parcours, lecture claire du site et des adhésions, navigation agréable sur mobile comme sur grand écran, et contact en quelques clics.',
+      tech: ['Vue 3', 'Vite', 'HTML', 'CSS'],
+      preview: '/preview/birdie-golf-club-preview-md.webp',
+      previewMobile: '/preview/birdie-golf-club-preview-sm.webp',
+      link: 'https://golf-club-zeta.vercel.app',
+      external: true
+    },
+    {
       id: 'task',
       title: 'Task Manager',
       outcome:
@@ -745,17 +756,6 @@ const Home = () => {
       previewMobile: '/preview/gym-phys-preview-sm.webp',
       link: 'https://www.gym-phys-ploermel.fr/',
       external: true
-    },
-    {
-      id: 'chat',
-      title: 'Live Chat',
-      outcome:
-        'Messagerie temps réel pour démontrer des interactions fluides côté utilisateur et robustesse côté serveur.',
-      tech: ['JavaScript', 'Socket.IO', 'Node.js'],
-      preview: '/preview/live-chat-preview-md.webp',
-      previewMobile: '/preview/live-chat-preview-sm.webp',
-      link: '/demo/live-chat',
-      external: false
     }
   ];
 

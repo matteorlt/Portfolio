@@ -297,13 +297,6 @@ const projectsData = {
     posterUrl: '/preview/task-manager-preview-md.webp',
     codeUrl: 'https://github.com/matteorlt/Task-Manager'
   },
-  'live-chat': {
-    title: 'Live Chat',
-    description: 'Application de chat en temps réel (stack JavaScript) avec interface moderne et mode hors ligne.',
-    tech: ['JavaScript', 'Socket.IO', 'Node.js'],
-    videoUrl: null,
-    codeUrl: 'https://github.com/matteorlt/live-chat'
-  },
   'gym-phys': {
     title: 'Gym Phys',
     description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
