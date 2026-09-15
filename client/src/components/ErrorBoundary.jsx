@@ -10,14 +10,14 @@ const ErrorContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a3a 100%);
+  background: var(--color-bg);
 `;
 
 const ErrorContent = styled(motion.div)`
   max-width: 600px;
   text-align: center;
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
   border-radius: 16px;
   padding: 3rem 2rem;
 `;
@@ -49,13 +49,13 @@ const ErrorDetails = styled.details`
   text-align: left;
   
   summary {
-    color: #4a90e2;
+    color: var(--color-accent);
     cursor: pointer;
     margin-bottom: 1rem;
     font-weight: 500;
     
     &:hover {
-      color: #357abd;
+      color: var(--color-text);
     }
   }
   
@@ -90,21 +90,21 @@ const ActionButton = styled(motion.button)`
   border: none;
 
   &.primary {
-    background: #4a90e2;
-    color: white;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
 
     &:hover {
-      background: #357abd;
+      filter: brightness(1.06);
     }
   }
 
   &.secondary {
     background: transparent;
-    color: #4a90e2;
-    border: 1px solid #4a90e2;
+    color: var(--color-text);
+    border: 1px solid var(--color-line);
 
     &:hover {
-      background: rgba(74, 144, 226, 0.1);
+      background: var(--color-accent-muted);
     }
   }
 `;

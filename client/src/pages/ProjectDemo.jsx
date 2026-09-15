@@ -26,9 +26,9 @@ const BackButton = styled(motion.button)`
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(74, 144, 226, 0.1);
-  color: #4a90e2;
-  border: 1px solid #4a90e2;
+  background: rgba(200, 242, 74, 0.1);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
@@ -38,7 +38,7 @@ const BackButton = styled(motion.button)`
   align-self: flex-start;
 
   &:hover {
-    background: #4a90e2;
+    background: var(--color-accent);
     color: white;
     transform: translateY(-2px);
   }
@@ -47,7 +47,7 @@ const BackButton = styled(motion.button)`
 const Title = styled(motion.h1)`
   font-size: 2.5rem;
   font-weight: 700;
-  color: #4a90e2;
+  color: var(--color-accent);
   margin-bottom: 1rem;
   text-align: center;
 
@@ -83,8 +83,8 @@ const Subtitle = styled(motion.p)`
 const VideoContainer = styled(motion.div)`
   width: 100%;
   max-width: 800px;
-  background: rgba(74, 144, 226, 0.05);
-  border: 1px solid rgba(74, 144, 226, 0.1);
+  background: rgba(200, 242, 74, 0.05);
+  border: 1px solid rgba(200, 242, 74, 0.1);
   border-radius: 16px;
   overflow: hidden;
   position: relative;
@@ -97,7 +97,7 @@ const VideoContainer = styled(motion.div)`
 const VideoPlaceholder = styled.div`
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, #9bc22e 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -206,7 +206,7 @@ const ProgressBar = styled.div`
     top: 0;
     height: 100%;
     width: ${props => props.progress || 0}%;
-    background: #4a90e2;
+    background: var(--color-accent);
     border-radius: 2px;
     transition: width 0.1s ease;
   }
@@ -240,8 +240,8 @@ const TechStack = styled.div`
 `;
 
 const TechTag = styled.span`
-  background: rgba(74, 144, 226, 0.1);
-  color: #4a90e2;
+  background: rgba(200, 242, 74, 0.1);
+  color: var(--color-accent);
   padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
@@ -266,22 +266,22 @@ const ActionButton = styled(motion.a)`
   transition: all 0.3s ease;
 
   &.primary {
-    background: #4a90e2;
+    background: var(--color-accent);
     color: white;
 
     &:hover {
-      background: #357abd;
+      background: #9bc22e;
       transform: translateY(-2px);
     }
   }
 
   &.secondary {
     background: transparent;
-    color: #4a90e2;
-    border: 1px solid #4a90e2;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
 
     &:hover {
-      background: rgba(74, 144, 226, 0.1);
+      background: rgba(200, 242, 74, 0.1);
       transform: translateY(-2px);
     }
   }
@@ -345,7 +345,7 @@ const projectsData = {
     description: 'SaaS moderne pour auto-écoles qui simplifie la gestion quotidienne : planning des moniteurs, réservations des élèves, suivi des heures, paiements et communication automatique. Projet professionnel bientôt disponible au grand public.',
     tech: ['Next.js 14', 'TypeScript', 'PostgreSQL', 'Prisma', 'NextAuth.js', 'Stripe', 'Tailwind CSS'],
     videoUrl: null,
-    posterUrl: '/preview/driva-preview-2026-md.webp',
+    posterUrl: '/preview/driva-preview-2026.webp',
     codeUrl: null,
     projectType: 'pro',
     comingSoon: true
@@ -475,7 +475,7 @@ const ProjectDemo = () => {
             {project.posterUrl ? (
               <img 
                 src={project.posterUrl} 
-                srcSet={`${project.posterUrl.replace('-md.webp', '-sm.webp')} 594w, ${project.posterUrl} 960w`}
+                srcSet="/preview/driva-preview-2026-sm.webp 800w, /preview/driva-preview-2026.webp 1007w"
                 sizes="(max-width: 768px) 100vw, 800px"
                 alt={project.title}
                 style={{

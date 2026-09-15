@@ -1,281 +1,140 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import {
+  FiArrowUpRight,
+  FiArrowDown,
   FiLayout,
   FiLayers,
   FiShoppingCart,
-  FiArrowRight,
   FiExternalLink,
   FiLinkedin,
   FiMail,
-  FiGlobe,
   FiClock,
   FiCheckCircle,
   FiUser
 } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
 import SEO from '../components/SEO.jsx';
 import StructuredData from '../components/StructuredData.jsx';
 import ContactForm from '../components/ContactForm.jsx';
 import OffersSection from '../components/OffersSection.jsx';
-
-const ACCENT = 'var(--color-accent)';
-const MUTED = 'var(--color-muted)';
+import Magnetic from '../components/Magnetic.jsx';
 
 const Page = styled.div`
   position: relative;
   overflow-x: hidden;
   min-height: 100vh;
-  background: var(--color-bg);
+  z-index: 1;
 `;
 
 const Hero = styled.section`
   position: relative;
-  min-height: 0;
   display: flex;
-  align-items: center;
-  padding: max(5.5rem, calc(var(--nav-h) + 1rem)) var(--page-pad-x) 1.75rem;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + 1.25rem) var(--page-pad-x) 0;
   padding-right: var(--page-pad-r);
-  max-width: 1280px;
+  max-width: var(--max);
   margin: 0 auto;
-  padding-top: max(5.5rem, calc(var(--nav-h) + 1rem + env(safe-area-inset-top, 0px)));
 
-  @media (min-width: 768px) {
-    padding: max(6rem, calc(var(--nav-h) + 1.5rem)) 2rem 2.25rem;
-    padding-top: max(6rem, calc(var(--nav-h) + 1.5rem + env(safe-area-inset-top, 0px)));
+  @media (min-width: 880px) {
+    min-height: 100dvh;
+    justify-content: center;
+    padding-bottom: 0;
   }
 `;
 
 const HeroGrid = styled.div`
   display: grid;
-  gap: clamp(1.75rem, 5vw, 2.75rem);
-  align-items: center;
+  gap: clamp(2rem, 6vw, 4rem);
+  align-items: end;
   width: 100%;
-  padding-bottom: max(1.5rem, var(--page-pad-b));
+  padding-bottom: 1.25rem;
 
-  @media (min-width: 960px) {
-    grid-template-columns: minmax(0, 1.05fr) minmax(260px, 0.95fr);
-    gap: 2.5rem 3rem;
+  @media (min-width: 880px) {
+    grid-template-columns: minmax(0, 1fr) minmax(340px, 1fr);
+    align-items: center;
+    min-height: calc(100dvh - var(--nav-h) - 5.5rem);
     padding-bottom: 0;
   }
 `;
 
-const HeroInner = styled.div`
-  min-width: 0;
-  max-width: 640px;
-
-  @media (min-width: 960px) {
-    max-width: none;
-  }
-`;
-
-const HeroVisual = styled(motion.div)`
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-
-  @media (min-width: 960px) {
-    max-width: none;
-    margin: 0;
-  }
-`;
-
-const ArtGlow = styled.div`
-  position: absolute;
-  inset: -22% -25% -15% -30%;
-  background: radial-gradient(
-    ellipse 60% 55% at 55% 45%,
-    rgba(91, 122, 173, 0.18),
-    transparent 68%
-  );
-  pointer-events: none;
-  z-index: 0;
-`;
-
-const ArtBento = styled.div`
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1.28fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 11px;
-  width: 100%;
-  min-height: 260px;
-  max-height: 320px;
-
-  @media (max-width: 639px) {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    min-height: auto;
-    max-height: none;
-  }
-`;
-
-const ArtCellMain = styled.div`
-  grid-row: 1 / span 2;
-  position: relative;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background:
-    radial-gradient(ellipse 90% 80% at 15% 85%, rgba(91, 122, 173, 0.14), transparent 52%),
-    linear-gradient(168deg, #151515 0%, #0a0a0a 100%);
-  overflow: hidden;
-  padding: 1.15rem 1.15rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-
-  @media (max-width: 639px) {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    padding: 1rem 0.85rem 0.9rem;
-  }
-`;
-
-const ArtJourney = styled.div`
-  flex: 1;
-  display: flex;
+const Status = styled(motion.p)`
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  min-height: 0;
-  padding: 0.2rem 0 0.25rem;
-  width: 100%;
-
-  svg {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    overflow: visible;
-  }
-
-  @media (max-width: 420px) {
-    transform: scale(0.92);
-    transform-origin: top center;
-  }
-
-  @media (max-width: 360px) {
-    transform: scale(0.86);
-  }
-`;
-
-const ArtCaption = styled.p`
-  font-size: 0.78rem;
-  line-height: 1.45;
-  color: var(--color-muted);
-  margin: 0;
-  font-weight: 500;
-`;
-
-const ArtCellSmall = styled.div`
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 1.1rem 1.15rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.4rem;
-  transition: border-color 0.2s ease, background 0.2s ease;
-  min-height: 112px;
-
-  &:hover {
-    border-color: rgba(91, 122, 173, 0.35);
-    background: rgba(91, 122, 173, 0.07);
-  }
-
-  @media (max-width: 639px) {
-    grid-row: 2;
-    padding: 0.9rem 0.8rem;
-    min-height: 100px;
-  }
-
-  @media (max-width: 380px) {
-    padding: 0.75rem 0.6rem;
-  }
-`;
-
-const ArtCellIcon = styled.div`
-  color: var(--color-accent);
-  font-size: 1.5rem;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-`;
-
-const ArtCellTitle = styled.span`
-  font-size: 0.98rem;
-  font-weight: 600;
-  font-family: var(--font-display);
-  color: var(--color-text);
-  letter-spacing: -0.02em;
-`;
-
-const ArtCellHint = styled.span`
-  font-size: 0.8rem;
-  color: var(--color-muted);
-  line-height: 1.4;
-`;
-
-const Eyebrow = styled.p`
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: ${ACCENT};
-  margin-bottom: 1.25rem;
+  color: var(--color-muted);
+  margin-bottom: 1.5rem;
 `;
 
-const Headline = styled(motion.h1)`
-  font-family: var(--font-hero);
-  font-size: clamp(1.65rem, 5.5vw, 3.2rem);
-  font-weight: 600;
-  line-height: 1.12;
-  letter-spacing: -0.038em;
-  color: var(--color-text);
-  margin-bottom: 1.35rem;
-  text-wrap: balance;
+const pulse = keyframes`
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.45; }
 `;
 
-const HeadlineLead = styled.span`
-  display: block;
-  font-weight: 600;
-  color: #e8e8e4;
-`;
+const Dot = styled.span`
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  flex-shrink: 0;
 
-const HeadlineAccent = styled.span`
-  display: block;
-  margin-top: 0.12em;
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 1.05;
-  background: linear-gradient(
-    115deg,
-    #e8edf5 0%,
-    #8e9eb8 22%,
-    #5b7aad 48%,
-    #6a7fa3 72%,
-    #c4ccd8 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 24px rgba(91, 122, 173, 0.22));
-
-  @media (max-width: 480px) {
-    margin-top: 0.18em;
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0.35;
+    animation: ${pulse} 2.2s ease-in-out infinite;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+    }
+  }
+`;
+
+const Headline = styled.h1`
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 6.2vw, 4.85rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  color: var(--color-text);
+  margin-bottom: 1.4rem;
+`;
+
+const Clip = styled.span`
+  display: block;
+  overflow: hidden;
+`;
+
+const Line = styled(motion.span)`
+  display: block;
+`;
+
+const Accent = styled.em`
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  color: var(--color-accent);
 `;
 
 const Subhead = styled(motion.p)`
-  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  font-size: clamp(1.02rem, 2vw, 1.2rem);
   line-height: 1.65;
-  color: ${MUTED};
-  margin-bottom: 1.35rem;
-  max-width: 560px;
+  color: var(--color-muted);
+  max-width: 34rem;
+  margin-bottom: 1.75rem;
 `;
 
 const CtaRow = styled(motion.div)`
@@ -287,7 +146,6 @@ const CtaRow = styled(motion.div)`
   @media (max-width: 520px) {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.65rem;
   }
 `;
 
@@ -296,21 +154,18 @@ const BtnPrimary = styled.a`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.95rem 1.5rem;
-  min-height: 48px;
-  border-radius: 10px;
-  background: ${ACCENT};
-  color: #0a0a0a;
-  font-weight: 600;
-  font-size: 1rem;
-  transition: filter 0.2s ease, transform 0.2s ease;
-  text-align: center;
-  box-sizing: border-box;
+  padding: 0.95rem 1.45rem;
+  min-height: 52px;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-weight: 700;
+  font-size: 0.98rem;
+  transition: filter 0.2s ease, transform 0.25s var(--ease-out);
 
   &:hover {
-    color: #0a0a0a;
+    color: var(--color-accent-ink);
     filter: brightness(1.06);
-    transform: translateY(-1px);
   }
 
   @media (max-width: 520px) {
@@ -323,21 +178,19 @@ const BtnGhost = styled.a`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.95rem 1.5rem;
-  min-height: 48px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 0.95rem 1.45rem;
+  min-height: 52px;
+  border-radius: 999px;
+  border: 1px solid var(--color-line);
   background: rgba(255, 255, 255, 0.03);
   color: var(--color-text);
-  font-weight: 500;
-  font-size: 1rem;
-  transition: border-color 0.2s ease, background 0.2s ease;
-  text-align: center;
-  box-sizing: border-box;
+  font-weight: 600;
+  font-size: 0.98rem;
+  transition: border-color 0.25s ease, background 0.25s ease;
 
   &:hover {
-    border-color: rgba(96, 165, 250, 0.45);
-    background: rgba(96, 165, 250, 0.06);
+    border-color: rgba(200, 242, 74, 0.45);
+    background: var(--color-accent-muted);
     color: var(--color-text);
   }
 
@@ -346,37 +199,224 @@ const BtnGhost = styled.a`
   }
 `;
 
-const Section = styled.section`
-  padding: clamp(3rem, 10vw, 5.5rem) var(--page-pad-x);
-  padding-right: var(--page-pad-r);
-  max-width: 1280px;
-  margin: 0 auto;
+const floatA = keyframes`
+  0%, 100% { transform: rotate(-7deg) translateY(0); }
+  50% { transform: rotate(-7deg) translateY(-8px); }
+`;
 
-  @media (min-width: 768px) {
-    padding: 5.5rem 2rem;
+const floatB = keyframes`
+  0%, 100% { transform: rotate(5deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(7px); }
+`;
+
+const HeroVisual = styled(motion.div)`
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  margin: 1.25rem auto 0;
+  min-height: 280px;
+  aspect-ratio: 5 / 4;
+
+  @media (min-width: 880px) {
+    max-width: 540px;
+    min-height: 380px;
+    margin: 0 0 0 auto;
+    aspect-ratio: 4 / 3.2;
   }
 `;
 
-const SectionHeader = styled.div`
-  max-width: 640px;
-  margin-bottom: 2.5rem;
+const Shot = styled(motion.div)`
+  position: absolute;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid var(--color-line);
+  background: #141414;
+  box-shadow:
+    0 22px 50px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.04);
+
+  img {
+    width: 100%;
+    height: auto;
+    display: block;
+    vertical-align: top;
+  }
+`;
+
+const HeroChrome = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.45rem 0.65rem;
+  background: #1c1c1c;
+  border-bottom: 1px solid var(--color-line);
+
+  i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    display: block;
+    background: #3a3a3a;
+
+    &:first-child { background: #ff5f57; }
+    &:nth-child(2) { background: #febc2e; }
+    &:nth-child(3) { background: #28c840; }
+  }
+`;
+
+const ShotBack = styled(Shot)`
+  inset: 4% 18% 28% 0;
+  z-index: 1;
+  animation: ${floatA} 7s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transform: rotate(-7deg);
+  }
+`;
+
+const ShotFront = styled(Shot)`
+  inset: 22% 0 0 14%;
+  z-index: 2;
+  animation: ${floatB} 8s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transform: rotate(5deg);
+  }
+`;
+
+const HeroMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 0 1.35rem;
+  border-top: 1px solid var(--color-line);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-top: auto;
+
+  @media (max-width: 520px) {
+    flex-wrap: wrap;
+    row-gap: 0.65rem;
+  }
+`;
+
+const bob = keyframes`
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+`;
+
+const ScrollHint = styled.a`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-muted);
+
+  &:hover {
+    color: var(--color-accent);
+  }
+
+  svg {
+    animation: ${bob} 1.6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    svg {
+      animation: none;
+    }
+  }
+`;
+
+const marquee = keyframes`
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+`;
+
+const MarqueeWrap = styled.div`
+  border-top: 1px solid var(--color-line);
+  border-bottom: 1px solid var(--color-line);
+  overflow: hidden;
+  padding: 1.05rem 0;
+  margin-top: 0.25rem;
+`;
+
+const MarqueeTrack = styled.div`
+  display: flex;
+  width: max-content;
+  animation: ${marquee} 32s linear infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+`;
+
+const MarqueeItem = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2.4vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  white-space: nowrap;
+
+  i {
+    font-style: normal;
+    color: var(--color-accent);
+    font-size: 0.7em;
+  }
+`;
+
+const Section = styled.section`
+  padding: clamp(4rem, 11vw, 7.5rem) var(--page-pad-x);
+  padding-right: var(--page-pad-r);
+  max-width: var(--max);
+  margin: 0 auto;
+`;
+
+const SectionHead = styled.div`
+  display: grid;
+  gap: 1rem 3rem;
+  margin-bottom: clamp(2rem, 5vw, 3.25rem);
+
+  @media (min-width: 800px) {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: end;
+  }
+`;
+
+const Index = styled.span`
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.7rem;
 `;
 
 const SectionTitle = styled(motion.h2)`
-  font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw, 2.25rem);
-  font-weight: 700;
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
   color: var(--color-text);
-  margin-bottom: 0.65rem;
 `;
 
 const SectionLead = styled(motion.p)`
   font-size: 1.05rem;
-  color: ${MUTED};
-  line-height: 1.6;
+  color: var(--color-muted);
+  line-height: 1.7;
+  max-width: 38rem;
 `;
 
-/** Saut de ligne volontaire entre l’intro et la phrase délais (évite un retour vilain au milieu). */
 const LeadLine = styled.span`
   display: block;
 
@@ -385,299 +425,440 @@ const LeadLine = styled.span`
   }
 `;
 
-/** Met en avant le délai de réponse (48 h) par rapport au reste de la phrase. */
 const ResponseTimeMark = styled.span`
   display: inline-block;
   margin: 0 0.15em;
-  padding: 0.15em 0.5em;
-  border-radius: 8px;
-  background: var(--color-accent-muted);
-  color: var(--color-accent);
+  padding: 0.12em 0.5em;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
   font-weight: 700;
-  font-size: 1.02em;
+  font-size: 0.92em;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  vertical-align: baseline;
-  line-height: 1.35;
 `;
 
 const fadeUp = {
-  initial: { opacity: 0, y: 22 },
+  initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
+  viewport: { once: true, margin: '-80px' },
+  transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
 };
 
-const ServicesGrid = styled.div`
-  display: grid;
-  gap: 1.25rem;
-  grid-template-columns: 1fr;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
+const ServicesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--color-line);
 `;
 
-const ServiceCard = styled(motion.article)`
-  padding: 1.75rem;
-  border-radius: 14px;
-  background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+const ServiceRow = styled(motion.article)`
+  display: grid;
+  gap: 0.85rem 2rem;
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--color-line);
+  cursor: default;
+  transition: background 0.35s var(--ease-out);
+
+  @media (min-width: 760px) {
+    grid-template-columns: 4.5rem minmax(0, 0.9fr) minmax(0, 1.2fr) auto;
+    align-items: center;
+    padding: 1.85rem 0.4rem;
+  }
 
   &:hover {
-    border-color: rgba(96, 165, 250, 0.25);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+    background: linear-gradient(90deg, rgba(200, 242, 74, 0.05), transparent 70%);
   }
 `;
 
-const ServiceIcon = styled.div`
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-accent-muted);
-  color: ${ACCENT};
-  font-size: 1.35rem;
-  margin-bottom: 1.25rem;
+const ServiceNum = styled.span`
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  letter-spacing: 0.08em;
 `;
 
 const ServiceTitle = styled.h3`
-  font-family: var(--font-body);
-  font-size: 1.12rem;
-  font-weight: 500;
-  font-style: normal;
-  margin-bottom: 0.65rem;
-  color: var(--color-text);
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+`;
+
+const ServiceIcon = styled.span`
+  display: inline-flex;
+  color: var(--color-accent);
+  font-size: 1.15rem;
 `;
 
 const ServiceText = styled.p`
   font-size: 0.95rem;
   line-height: 1.65;
-  color: ${MUTED};
+  color: var(--color-muted);
 `;
 
-const ProjectsGrid = styled.div`
-  display: grid;
-  gap: 1.5rem;
-  grid-template-columns: 1fr;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-`;
-
-const ProjectCard = styled(motion.article)`
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+const ProjectsList = styled.div`
   display: flex;
   flex-direction: column;
-  transition: border-color 0.2s ease, transform 0.2s ease;
+  gap: clamp(2rem, 5vw, 3.25rem);
+`;
 
-  &:hover {
-    border-color: rgba(96, 165, 250, 0.22);
-    transform: translateY(-3px);
+const ProjectRow = styled(motion.article)`
+  display: grid;
+  gap: 1.35rem 2.25rem;
+  align-items: center;
+  padding-bottom: clamp(1.5rem, 4vw, 2.25rem);
+  border-bottom: 1px solid var(--color-line);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  @media (min-width: 840px) {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 2rem 3rem;
+
+    &:nth-child(even) {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+
+      .project-frame {
+        order: 2;
+      }
+    }
   }
 `;
 
-const ProjectThumb = styled.div`
-  height: min(220px, 44vw);
-  min-height: 150px;
-  background: linear-gradient(145deg, #1a1a1a 0%, #252525 100%);
+const Browser = styled.div`
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid var(--color-line);
+  background: #101010;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+`;
+
+const BrowserBar = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
+  gap: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  background: #171717;
+  border-bottom: 1px solid var(--color-line);
+`;
 
-  @media (min-width: 640px) {
-    height: 176px;
-    min-height: 0;
+const Dots = styled.span`
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+
+  i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: block;
+    background: #3a3a3a;
+
+    &:first-child {
+      background: #ff5f57;
+    }
+    &:nth-child(2) {
+      background: #febc2e;
+    }
+    &:nth-child(3) {
+      background: #28c840;
+    }
   }
+`;
+
+const BrowserUrl = styled.span`
+  min-width: 0;
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  color: var(--color-muted);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  padding: 0.28rem 0.55rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const BrowserScreen = styled.div`
+  background: #fff;
+  line-height: 0;
 `;
 
 const ProjectImg = styled.img`
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
+  image-rendering: auto;
 `;
 
 const ProjectBody = styled.div`
-  padding: 1.35rem 1.35rem 1.5rem;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  gap: 0.4rem;
+  min-width: 0;
+`;
+
+const ProjectKicker = styled.span`
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
 `;
 
 const ProjectName = styled.h3`
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+  font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
 `;
 
 const ProjectOutcome = styled.p`
   font-size: 0.9rem;
-  line-height: 1.6;
-  color: ${MUTED};
-  margin-bottom: 1rem;
-  flex: 1;
+  line-height: 1.55;
+  color: var(--color-muted);
+  margin: 0.25rem 0 0.35rem;
 `;
 
 const Badges = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 1rem;
+  gap: 0.35rem;
+  margin-bottom: 0.9rem;
 `;
 
 const Badge = styled.span`
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 0.25rem 0.55rem;
-  border-radius: 6px;
-  background: rgba(91, 122, 173, 0.14);
-  color: ${ACCENT};
+  padding: 0.28rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 242, 74, 0.28);
+  color: var(--color-accent);
 `;
 
 const ProjectLink = styled.a`
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
+  gap: 0.35rem;
+  font-size: 0.88rem;
   font-weight: 600;
-  color: ${ACCENT};
-  margin-top: auto;
+  color: var(--color-text);
+  margin-top: 0.45rem;
+  width: fit-content;
 
   &:hover {
-    color: #8eb0d4;
+    color: var(--color-accent);
   }
 `;
 
 const ProjectLinkRouter = styled(Link)`
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  font-size: 0.9rem;
+  gap: 0.35rem;
+  font-size: 0.88rem;
   font-weight: 600;
-  color: ${ACCENT};
-  margin-top: auto;
+  color: var(--color-text);
+  margin-top: 0.45rem;
+  width: fit-content;
 
   &:hover {
-    color: #8eb0d4;
+    color: var(--color-accent);
   }
+`;
+
+const MethodGrid = styled.div`
+  display: grid;
+  gap: 1rem;
+
+  @media (min-width: 800px) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+`;
+
+const MethodCard = styled(motion.article)`
+  padding: 1.75rem 1.5rem;
+  border: 1px solid var(--color-line);
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+
+  @media (min-width: 800px) {
+    padding: 2.25rem 1.75rem;
+    border-right: none;
+
+    &:last-child {
+      border-right: 1px solid var(--color-line);
+    }
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-accent);
+    transition: width 0.5s var(--ease-out);
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+`;
+
+const MethodNum = styled.span`
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 2.4rem;
+  color: var(--color-accent);
+  line-height: 1;
+  display: block;
+  margin-bottom: 1.1rem;
+`;
+
+const MethodTitle = styled.h3`
+  font-size: 1.25rem;
+  margin-bottom: 0.55rem;
+`;
+
+const MethodText = styled.p`
+  color: var(--color-muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
 `;
 
 const WhyGrid = styled.div`
   display: grid;
-  gap: 1.25rem;
-  grid-template-columns: 1fr;
+  gap: 1rem;
 
   @media (min-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
   }
 `;
 
-const WhyCard = styled(motion.div)`
-  padding: 1.5rem;
-  border-radius: 14px;
-  background: var(--color-surface-elevated);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-`;
+const WhyCard = styled(motion.article)`
+  padding: 1.75rem 1.5rem;
+  border-radius: 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  transition: border-color 0.3s ease, transform 0.35s var(--ease-out);
 
-const WhyIcon = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.85rem;
-  color: ${ACCENT};
-
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    flex-shrink: 0;
+  &:hover {
+    border-color: rgba(200, 242, 74, 0.35);
+    transform: translateY(-4px);
   }
 `;
 
+const WhyIcon = styled.div`
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-muted);
+  color: var(--color-accent);
+  margin-bottom: 1.1rem;
+`;
+
 const WhyTitle = styled.h3`
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 1.12rem;
   margin-bottom: 0.5rem;
 `;
 
 const WhyText = styled.p`
   font-size: 0.92rem;
   line-height: 1.6;
-  color: ${MUTED};
+  color: var(--color-muted);
 `;
 
 const ContactSection = styled(Section)`
-  padding-bottom: max(3.5rem, calc(2.5rem + var(--page-pad-b)));
-
-  @media (min-width: 768px) {
-    padding-bottom: 5rem;
-  }
+  padding-bottom: max(4rem, calc(3rem + var(--page-pad-b)));
 `;
 
 const ContactGrid = styled.div`
   display: grid;
-  gap: 2.5rem;
-  align-items: start;
+  gap: 2.25rem;
 
   @media (min-width: 900px) {
-    grid-template-columns: 1fr 1.1fr;
-    gap: 3rem;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 3.5rem;
+    align-items: start;
   }
 `;
 
 const ContactCard = styled.div`
   padding: clamp(1.25rem, 4vw, 2rem);
-  border-radius: 16px;
+  border-radius: 20px;
   background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--color-line);
 `;
 
 const ContactAside = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.35rem;
 `;
 
 const ContactLinks = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  padding-top: 0.5rem;
+  gap: 0.7rem;
 `;
 
 const ContactLinkRow = styled.a`
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.7rem;
   font-size: 1rem;
   color: var(--color-text);
-  transition: color 0.2s ease;
+  width: fit-content;
 
   svg {
-    color: ${ACCENT};
-    flex-shrink: 0;
+    color: var(--color-accent);
   }
 
   &:hover {
-    color: ${ACCENT};
+    color: var(--color-accent);
   }
 `;
 
-const surfaceBand = {
-  background: 'linear-gradient(180deg, transparent 0%, rgba(91, 122, 173, 0.045) 50%, transparent 100%)'
-};
+const TECH = [
+  'Next.js',
+  'React',
+  'TypeScript',
+  'Vue',
+  'Node.js',
+  'PostgreSQL',
+  'WordPress',
+  'Docker',
+  'Vite',
+  'Framer Motion'
+];
+
+function projectHost(project) {
+  if (project.host) return project.host;
+  if (!project.external) return 'matteo-rlt.fr';
+  try {
+    return new URL(project.link).hostname.replace(/^www\./, '');
+  } catch {
+    return 'preview';
+  }
+}
 
 const Home = () => {
   const location = useLocation();
@@ -716,66 +897,91 @@ const Home = () => {
     {
       id: 'driva',
       title: 'Driva',
+      kicker: '01 — Produit métier',
       outcome:
         'Outil métier pour auto-écoles : planning, réservations et suivi des élèves centralisés pour gagner du temps au quotidien.',
       tech: ['Next.js', 'TypeScript', 'PostgreSQL'],
-      preview: '/preview/driva-preview-2026-md.webp',
+      preview: '/preview/driva-preview-2026.webp',
       previewMobile: '/preview/driva-preview-2026-sm.webp',
+      previewWidth: 1007,
+      previewMobileWidth: 800,
       link: 'https://driva-auto.fr/',
       external: true
     },
     {
       id: 'birdie-golf-club',
       title: 'Le Birdie Golf Club',
+      kicker: '02 — Vitrine',
       outcome:
-        'Vitrine pour un golf fictif : ambiance club-house verts et or, photos réelles du parcours, lecture claire du site et des adhésions, navigation agréable sur mobile comme sur grand écran, et contact en quelques clics.',
+        'Vitrine pour un golf fictif : ambiance club-house, lecture claire du site et des adhésions, navigation fluide sur mobile comme sur grand écran.',
       tech: ['Vue 3', 'Vite', 'HTML', 'CSS'],
-      preview: '/preview/birdie-golf-club-preview-md.webp',
+      preview: '/preview/birdie-golf-club-preview.webp',
       previewMobile: '/preview/birdie-golf-club-preview-sm.webp',
+      previewWidth: 1007,
+      previewMobileWidth: 800,
       link: 'https://golf-club-zeta.vercel.app',
       external: true
     },
     {
       id: 'task',
       title: 'Task Manager',
+      kicker: '03 — Application',
       outcome:
         'Application de gestion de tâches avec authentification : équipes qui voient clairement priorités et avancement.',
       tech: ['TypeScript', 'Node.js', 'Docker'],
-      preview: '/preview/task-manager-preview-md.webp',
+      preview: '/preview/task-manager-preview.webp',
       previewMobile: '/preview/task-manager-preview-sm.webp',
+      previewWidth: 713,
+      previewMobileWidth: 594,
+      host: 'task-manager.fr',
       link: '/demo/task-manager',
       external: false
     },
     {
       id: 'gym',
       title: 'Gym Phys',
+      kicker: '04 — Association',
       outcome:
         'Site vitrine pour une association sportive : informations, actualités et prise de contact accessibles sur mobile.',
       tech: ['WordPress', 'PHP'],
-      preview: '/preview/gym-phys-preview-md.webp',
+      preview: '/preview/gym-phys-preview.webp',
       previewMobile: '/preview/gym-phys-preview-sm.webp',
+      previewWidth: 1007,
+      previewMobileWidth: 800,
       link: 'https://www.gym-phys-ploermel.fr/',
       external: true
     }
   ];
 
+  const method = [
+    { n: '01', title: 'Attention', text: 'Un message accrocheur, une promesse claire. Le visiteur comprend en trois secondes pourquoi il est là.' },
+    { n: '02', title: 'Intention', text: 'Preuves, bénéfices, parcours. On construit la confiance avant de demander quoi que ce soit.' },
+    { n: '03', title: 'Action', text: 'Contact, devis ou achat — un CTA évident, un formulaire simple, zéro friction.' }
+  ];
+
   const why = [
     {
-      icon: <FiCheckCircle aria-hidden size={24} strokeWidth={2} />,
+      icon: <FiCheckCircle aria-hidden size={20} strokeWidth={2} />,
       title: 'Code propre et maintenable',
       text: 'Architecture lisible, bonnes pratiques et documentation pour que votre produit reste évolutif.'
     },
     {
-      icon: <FiClock aria-hidden size={24} strokeWidth={2} />,
+      icon: <FiClock aria-hidden size={20} strokeWidth={2} />,
       title: 'Livraison dans les délais',
       text: 'Roadmap claire, points réguliers et priorités alignées sur votre calendrier business.'
     },
     {
-      icon: <FiUser aria-hidden size={24} strokeWidth={2} />,
+      icon: <FiUser aria-hidden size={20} strokeWidth={2} />,
       title: 'Un seul interlocuteur',
       text: 'Du brief au déploiement : même personne pour le cadrage, le développement et la mise en ligne.'
     }
   ];
+
+  const lineAnim = (delay) => ({
+    initial: { y: '110%' },
+    animate: { y: 0 },
+    transition: { duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }
+  });
 
   return (
     <>
@@ -789,169 +995,174 @@ const Home = () => {
       <Page>
         <Hero id="top">
           <HeroGrid>
-            <HeroInner>
-              <Eyebrow>Freelance — sites & applications web</Eyebrow>
-              <Headline initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
-                <HeadlineLead>Je construis des sites et apps web</HeadlineLead>
-                <HeadlineAccent>qui convertissent.</HeadlineAccent>
+            <div>
+              <Status initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+                <Dot aria-hidden />
+                Disponible — Bretagne, missions France entière
+              </Status>
+              <Headline>
+                <Clip>
+                  <Line {...lineAnim(0.08)}>Je construis</Line>
+                </Clip>
+                <Clip>
+                  <Line {...lineAnim(0.16)}>des sites & apps</Line>
+                </Clip>
+                <Clip>
+                  <Line {...lineAnim(0.24)}>
+                    <Accent>qui convertissent.</Accent>
+                  </Line>
+                </Clip>
               </Headline>
               <Subhead
-                initial={{ opacity: 0, y: 22 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.08, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-              >
-                Développeur web freelance — disponible pour vos projets vitrine, e-commerce et SaaS. Basé en
-                Bretagne, j’interviens à distance partout en France.
-              </Subhead>
-              <CtaRow
                 initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.16, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ delay: 0.42, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               >
-                <BtnPrimary href="#contact">
-                  Me contacter
-                  <FiArrowRight aria-hidden />
-                </BtnPrimary>
+                Développeur web freelance — vitrine, e-commerce et SaaS. Basé en Bretagne, j’interviens à distance
+                partout en France.
+              </Subhead>
+              <CtaRow
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.52, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <Magnetic>
+                  <BtnPrimary href="#contact">
+                    Me contacter
+                    <FiArrowUpRight aria-hidden />
+                  </BtnPrimary>
+                </Magnetic>
                 <BtnGhost href="#realisations">Voir mes réalisations</BtnGhost>
               </CtaRow>
-            </HeroInner>
+            </div>
 
             <HeroVisual
-              initial={{ opacity: 0, y: 26 }}
+              initial={{ opacity: 0, y: 32 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.85, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
               aria-hidden
             >
-              <ArtGlow />
-              <ArtBento>
-                <ArtCellMain>
-                  <ArtJourney>
-                    <svg viewBox="0 0 320 158" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-                      <defs>
-                        <linearGradient id="journeyPathGrad" x1="44" y1="56" x2="276" y2="56" gradientUnits="userSpaceOnUse">
-                          <stop stopColor="#5b7aad" stopOpacity="0.95" />
-                          <stop offset="0.5" stopColor="#6f87b5" stopOpacity="0.92" />
-                          <stop offset="1" stopColor="#4d6588" stopOpacity="0.95" />
-                        </linearGradient>
-                      </defs>
-
-                      <path
-                        d="M 44 62 C 98 28 118 32 160 44 C 208 58 238 54 276 58"
-                        stroke="url(#journeyPathGrad)"
-                        strokeWidth="2.75"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        fill="none"
-                        opacity="0.92"
-                      />
-
-                      <g>
-                        <circle cx="44" cy="62" r="17" fill="#0f0f0f" stroke="#5b7aad" strokeWidth="2.2" />
-                        <text x="44" y="67.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
-                          1
-                        </text>
-                        <text x="44" y="106" textAnchor="middle" fill="#f4f4f0" fontSize="11.5" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
-                          Attention
-                        </text>
-                        <text x="44" y="122" textAnchor="middle" fill="#a3a3a3" fontSize="9" fontWeight="500" fontFamily="Inter, system-ui, sans-serif">
-                          Message accrocheur
-                        </text>
-                      </g>
-
-                      <g>
-                        <circle cx="160" cy="44" r="17" fill="#0f0f0f" stroke="#6f87b5" strokeWidth="2.2" />
-                        <text x="160" y="49.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
-                          2
-                        </text>
-                        <text x="160" y="106" textAnchor="middle" fill="#f4f4f0" fontSize="11.5" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
-                          Intention
-                        </text>
-                        <text x="160" y="122" textAnchor="middle" fill="#a3a3a3" fontSize="9" fontWeight="500" fontFamily="Inter, system-ui, sans-serif">
-                          Preuves &amp; bénéfices
-                        </text>
-                      </g>
-
-                      <g>
-                        <circle cx="276" cy="58" r="17" fill="#0f0f0f" stroke="#8a9ebe" strokeWidth="2.2" />
-                        <text x="276" y="63.5" textAnchor="middle" fill="#f4f4f0" fontSize="12" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
-                          3
-                        </text>
-                        <text x="276" y="106" textAnchor="middle" fill="#f4f4f0" fontSize="11.5" fontWeight="700" fontFamily="Syne, Outfit, system-ui, sans-serif">
-                          Action
-                        </text>
-                        <text x="276" y="122" textAnchor="middle" fill="#a3a3a3" fontSize="9" fontWeight="500" fontFamily="Inter, system-ui, sans-serif">
-                          Contact ou achat
-                        </text>
-                      </g>
-                    </svg>
-                  </ArtJourney>
-                  <ArtCaption>Trois jalons pour transformer un visiteur en prospect ou client.</ArtCaption>
-                </ArtCellMain>
-                <ArtCellSmall>
-                  <ArtCellIcon>
-                    <FiGlobe aria-hidden strokeWidth={2} />
-                  </ArtCellIcon>
-                  <ArtCellTitle>À distance</ArtCellTitle>
-                  <ArtCellHint>Bretagne · missions France entière</ArtCellHint>
-                </ArtCellSmall>
-                <ArtCellSmall>
-                  <ArtCellIcon>
-                    <FiClock aria-hidden strokeWidth={2} />
-                  </ArtCellIcon>
-                  <ArtCellTitle>Délais maîtrisés</ArtCellTitle>
-                  <ArtCellHint>Jalons définis avec vous</ArtCellHint>
-                </ArtCellSmall>
-              </ArtBento>
+              <ShotBack>
+                <HeroChrome>
+                  <i />
+                  <i />
+                  <i />
+                </HeroChrome>
+                <img
+                  src="/preview/birdie-golf-club-preview.webp"
+                  srcSet="/preview/birdie-golf-club-preview-sm.webp 800w, /preview/birdie-golf-club-preview.webp 1007w"
+                  sizes="(min-width: 880px) 36vw, 70vw"
+                  alt=""
+                  decoding="async"
+                />
+              </ShotBack>
+              <ShotFront>
+                <HeroChrome>
+                  <i />
+                  <i />
+                  <i />
+                </HeroChrome>
+                <img
+                  src="/preview/driva-preview-2026.webp"
+                  srcSet="/preview/driva-preview-2026-sm.webp 800w, /preview/driva-preview-2026.webp 1007w"
+                  sizes="(min-width: 880px) 40vw, 75vw"
+                  alt=""
+                  decoding="async"
+                />
+              </ShotFront>
             </HeroVisual>
           </HeroGrid>
+
+          <HeroMeta>
+            <ScrollHint href="#services">
+              Scroll
+              <FiArrowDown aria-hidden size={14} />
+            </ScrollHint>
+            <span>Vannes · France</span>
+            <span>Freelance · 2026</span>
+          </HeroMeta>
         </Hero>
 
-        <Section id="services" style={surfaceBand}>
-          <SectionHeader>
-            <SectionTitle {...fadeUp}>Ce que je fais</SectionTitle>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
+        <MarqueeWrap aria-hidden>
+          <MarqueeTrack>
+            {[...TECH, ...TECH].map((t, i) => (
+              <MarqueeItem key={`${t}-${i}`}>
+                {t} <i>✦</i>
+              </MarqueeItem>
+            ))}
+          </MarqueeTrack>
+        </MarqueeWrap>
+
+        <Section id="services">
+          <SectionHead>
+            <div>
+              <Index>01 — Expertise</Index>
+              <SectionTitle {...fadeUp}>Ce que je fais</SectionTitle>
+            </div>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               Des livrables orientés business : clarté du message, performance, et un parcours utilisateur qui mène à
               l’action.
             </SectionLead>
-          </SectionHeader>
-          <ServicesGrid>
+          </SectionHead>
+          <ServicesList>
             {services.map((s, i) => (
-              <ServiceCard
-                key={s.title}
-                {...fadeUp}
-                transition={{ ...fadeUp.transition, delay: 0.05 * i }}
-              >
-                <ServiceIcon>{s.icon}</ServiceIcon>
-                <ServiceTitle>{s.title}</ServiceTitle>
+              <ServiceRow key={s.title} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 * i }}>
+                <ServiceNum>0{i + 1}</ServiceNum>
+                <ServiceTitle>
+                  <ServiceIcon>{s.icon}</ServiceIcon>
+                  {s.title}
+                </ServiceTitle>
                 <ServiceText>{s.text}</ServiceText>
-              </ServiceCard>
+              </ServiceRow>
             ))}
-          </ServicesGrid>
+          </ServicesList>
         </Section>
 
         <Section id="realisations">
-          <SectionHeader>
-            <SectionTitle {...fadeUp}>Ce que j’ai livré</SectionTitle>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
+          <SectionHead>
+            <div>
+              <Index>02 — Sélection</Index>
+              <SectionTitle {...fadeUp}>Ce que j’ai livré</SectionTitle>
+            </div>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               Quelques exemples concrets — résultat client avant tout.
             </SectionLead>
-          </SectionHeader>
-          <ProjectsGrid>
+          </SectionHead>
+          <ProjectsList>
             {projects.map((p, i) => (
-              <ProjectCard key={p.id} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 * i }}>
-                <ProjectThumb>
-                  {p.preview ? (
-                    <ProjectImg
-                      src={p.preview}
-                      srcSet={`${p.previewMobile} 594w, ${p.preview} 960w`}
-                      sizes="(max-width: 639px) 100vw, 594px"
-                      alt={`Aperçu ${p.title}`}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  ) : null}
-                </ProjectThumb>
+              <ProjectRow key={p.id} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.05 * i }}>
+                <Browser className="project-frame">
+                  <BrowserBar>
+                    <Dots aria-hidden>
+                      <i />
+                      <i />
+                      <i />
+                    </Dots>
+                    <BrowserUrl>{projectHost(p)}</BrowserUrl>
+                  </BrowserBar>
+                  <BrowserScreen>
+                    {p.preview ? (
+                      <ProjectImg
+                        src={p.preview}
+                        srcSet={[
+                          `${p.previewMobile} ${p.previewMobileWidth}w`,
+                          p.previewMd ? `${p.previewMd} ${p.previewMdWidth}w` : null,
+                          `${p.preview} ${p.previewWidth}w`
+                        ]
+                          .filter(Boolean)
+                          .join(', ')}
+                        sizes="(max-width: 839px) min(100vw, 520px), min(42vw, 520px)"
+                        alt={`Aperçu ${p.title}`}
+                        width={p.previewWidth}
+                        height={Math.round(p.previewWidth * 0.62)}
+                        loading={i === 0 ? 'eager' : 'lazy'}
+                        decoding="async"
+                      />
+                    ) : null}
+                  </BrowserScreen>
+                </Browser>
                 <ProjectBody>
+                  <ProjectKicker>{p.kicker}</ProjectKicker>
                   <ProjectName>{p.title}</ProjectName>
                   <Badges>
                     {p.tech.map((t) => (
@@ -961,27 +1172,52 @@ const Home = () => {
                   <ProjectOutcome>{p.outcome}</ProjectOutcome>
                   {p.external ? (
                     <ProjectLink href={p.link} target="_blank" rel="noopener noreferrer">
-                      Voir le projet <FiExternalLink aria-hidden size={16} />
+                      Voir le projet <FiExternalLink aria-hidden size={15} />
                     </ProjectLink>
                   ) : (
                     <ProjectLinkRouter to={p.link}>
-                      Voir la démo <FiArrowRight aria-hidden size={16} />
+                      Voir la démo <FiArrowUpRight aria-hidden size={15} />
                     </ProjectLinkRouter>
                   )}
                 </ProjectBody>
-              </ProjectCard>
+              </ProjectRow>
             ))}
-          </ProjectsGrid>
+          </ProjectsList>
         </Section>
 
-        <Section id="pourquoi-moi" style={{ ...surfaceBand, paddingTop: '3rem' }}>
-          <SectionHeader>
-            <SectionTitle {...fadeUp}>Pourquoi moi</SectionTitle>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
-              À distance depuis la Bretagne, partout en France — avec des jalons définis ensemble. Trois engagements pour
-              avancer sereinement.
+        <Section id="methode">
+          <SectionHead>
+            <div>
+              <Index>03 — Méthode</Index>
+              <SectionTitle {...fadeUp}>
+                Trois jalons pour <Accent>convertir</Accent>
+              </SectionTitle>
+            </div>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+              Transformer un visiteur en prospect ou client n’est pas un hasard — c’est un parcours dessiné.
             </SectionLead>
-          </SectionHeader>
+          </SectionHead>
+          <MethodGrid>
+            {method.map((m, i) => (
+              <MethodCard key={m.n} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 * i }}>
+                <MethodNum>{m.n}</MethodNum>
+                <MethodTitle>{m.title}</MethodTitle>
+                <MethodText>{m.text}</MethodText>
+              </MethodCard>
+            ))}
+          </MethodGrid>
+        </Section>
+
+        <Section id="pourquoi-moi">
+          <SectionHead>
+            <div>
+              <Index>04 — Engagements</Index>
+              <SectionTitle {...fadeUp}>Pourquoi moi</SectionTitle>
+            </div>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+              À distance depuis la Bretagne, partout en France — avec des jalons définis ensemble.
+            </SectionLead>
+          </SectionHead>
           <WhyGrid>
             {why.map((w, i) => (
               <WhyCard key={w.title} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.07 * i }}>
@@ -996,28 +1232,31 @@ const Home = () => {
         <OffersSection />
 
         <ContactSection id="contact">
-          <SectionHeader>
-            <SectionTitle {...fadeUp}>Un projet en tête ?</SectionTitle>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 }}>
+          <SectionHead>
+            <div>
+              <Index>06 — Contact</Index>
+              <SectionTitle {...fadeUp}>Un projet en tête ?</SectionTitle>
+            </div>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <LeadLine>Décrivez votre besoin en quelques lignes.</LeadLine>
               <LeadLine>
                 Je vous réponds sous <ResponseTimeMark>48 h ouvrées</ResponseTimeMark>
               </LeadLine>
             </SectionLead>
-          </SectionHeader>
+          </SectionHead>
           <ContactGrid>
             <ContactAside>
-              <p style={{ color: MUTED, lineHeight: 1.65, fontSize: '1rem' }}>
+              <p style={{ color: 'var(--color-muted)', lineHeight: 1.7, fontSize: '1.02rem' }}>
                 Idée de produit, refonte ou nouveau site : parlez-moi de votre contexte et de votre échéance. Pas de
                 jargon inutile — on valide l’essentiel puis on enchaîne.
               </p>
               <ContactLinks>
                 <ContactLinkRow href="mailto:contact@matteo-rlt.fr">
-                  <FiMail aria-hidden size={20} />
+                  <FiMail aria-hidden size={18} />
                   contact@matteo-rlt.fr
                 </ContactLinkRow>
                 <ContactLinkRow href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer">
-                  <FiLinkedin aria-hidden size={20} />
+                  <FiLinkedin aria-hidden size={18} />
                   LinkedIn — Mattéo Rannou Le Texier
                 </ContactLinkRow>
               </ContactLinks>

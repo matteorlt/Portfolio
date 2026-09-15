@@ -2,138 +2,89 @@ import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FiHome, FiArrowLeft, FiSearch } from 'react-icons/fi';
+import { FiHome, FiArrowLeft } from 'react-icons/fi';
 
 const NotFoundContainer = styled.div`
   min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: max(6rem, calc(var(--nav-h) + 1.5rem + env(safe-area-inset-top, 0px))) var(--page-pad-x) max(2rem, var(--page-pad-b));
+  padding: max(6rem, calc(var(--nav-h) + 1.5rem + env(safe-area-inset-top, 0px))) var(--page-pad-x)
+    max(2rem, var(--page-pad-b));
   padding-right: var(--page-pad-r);
-  background: var(--color-bg);
-
-  @media (min-width: 768px) {
-    padding: 100px 2rem 2rem;
-  }
 `;
 
 const NotFoundContent = styled(motion.div)`
-  max-width: 600px;
+  max-width: 640px;
   width: 100%;
-  text-align: center;
-  background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: clamp(1.75rem, 6vw, 3rem) clamp(1.25rem, 4vw, 2rem);
 `;
 
-const NotFoundIcon = styled.div`
-  font-size: 6rem;
-  color: #4a90e2;
-  margin-bottom: 1.5rem;
-  display: flex;
-  justify-content: center;
-  opacity: 0.8;
+const Code = styled(motion.p)`
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(5rem, 18vw, 9rem);
+  line-height: 0.85;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
 `;
 
 const NotFoundTitle = styled(motion.h1)`
-  font-size: 3rem;
-  font-weight: 700;
-  color: #4a90e2;
-  margin-bottom: 1rem;
-
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
-`;
-
-const NotFoundSubtitle = styled(motion.p)`
-  font-size: 1.3rem;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 0.75rem;
 `;
 
 const NotFoundMessage = styled(motion.p)`
-  font-size: 1.1rem;
-  color: #aaaaaa;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  color: var(--color-muted);
+  line-height: 1.65;
   margin-bottom: 2rem;
+  max-width: 28rem;
 `;
 
 const ButtonGroup = styled.div`
   display: flex;
-  gap: 1rem;
-  justify-content: center;
+  gap: 0.75rem;
   flex-wrap: wrap;
-  margin-bottom: 2rem;
+  margin-bottom: 2.25rem;
 `;
 
 const ActionButton = styled(motion.button)`
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 0.85rem 1.25rem;
+  min-height: 48px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: none;
 
   &.primary {
-    background: #4a90e2;
-    color: white;
-
-    &:hover {
-      background: #357abd;
-    }
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
   }
 
   &.secondary {
     background: transparent;
-    color: #4a90e2;
-    border: 1px solid #4a90e2;
-
-    &:hover {
-      background: rgba(74, 144, 226, 0.1);
-    }
+    color: var(--color-text);
+    border: 1px solid var(--color-line);
   }
-`;
-
-const LinksSection = styled(motion.div)`
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(74, 144, 226, 0.1);
-`;
-
-const LinksTitle = styled.h3`
-  font-size: 1.2rem;
-  color: #4a90e2;
-  margin-bottom: 1rem;
 `;
 
 const LinksList = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.25rem;
 `;
 
-const LinkItem = styled(motion.a)`
-  color: #cccccc;
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  &:hover {
-    color: #4a90e2;
-    transform: translateX(5px);
-  }
+const LinkItem = styled.a`
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
 `;
 
 const NotFound = () => {
@@ -143,96 +94,48 @@ const NotFound = () => {
     { path: '/', label: 'Accueil' },
     { path: '/#services', label: 'Services' },
     { path: '/#realisations', label: 'Réalisations' },
-    { path: '/#offres', label: 'Devis & offres' },
+    { path: '/#offres', label: 'Offres' },
     { path: '/#contact', label: 'Contact' }
   ];
 
   return (
     <NotFoundContainer>
-      <NotFoundContent
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8 }}
-      >
-        <NotFoundIcon>
-          <FiSearch />
-        </NotFoundIcon>
-
-        <NotFoundTitle
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          404
-        </NotFoundTitle>
-
-        <NotFoundSubtitle
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          Page non trouvée
-        </NotFoundSubtitle>
-
-        <NotFoundMessage
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          Désolé, la page que vous recherchez n'existe pas ou a été déplacée.
-          Vous pouvez retourner à l'accueil ou explorer nos autres pages.
+      <NotFoundContent initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
+        <Code>404</Code>
+        <NotFoundTitle>Page introuvable</NotFoundTitle>
+        <NotFoundMessage>
+          Cette page n’existe pas — ou elle a changé d’adresse. Revenez à l’accueil, ou sautez directement à une
+          section.
         </NotFoundMessage>
 
         <ButtonGroup>
-          <ActionButton
-            className="primary"
-            onClick={() => navigate('/')}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FiHome />
-            Retour à l'accueil
+          <ActionButton className="primary" onClick={() => navigate('/')} whileTap={{ scale: 0.98 }}>
+            <FiHome aria-hidden />
+            Accueil
           </ActionButton>
-
-          <ActionButton
-            className="secondary"
-            onClick={() => navigate(-1)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <FiArrowLeft />
-            Page précédente
+          <ActionButton className="secondary" onClick={() => navigate(-1)} whileTap={{ scale: 0.98 }}>
+            <FiArrowLeft aria-hidden />
+            Retour
           </ActionButton>
         </ButtonGroup>
 
-        <LinksSection
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-        >
-          <LinksTitle>Pages disponibles</LinksTitle>
-          <LinksList>
-            {quickLinks.map((link, index) => (
-              <LinkItem
-                key={link.path}
-                href={link.path}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(link.path);
-                }}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-              >
-                {link.label}
-              </LinkItem>
-            ))}
-          </LinksList>
-        </LinksSection>
+        <LinksList>
+          {quickLinks.map((link) => (
+            <LinkItem
+              key={link.path}
+              href={link.path}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate(link.path);
+              }}
+            >
+              {link.label}
+            </LinkItem>
+          ))}
+        </LinksList>
       </NotFoundContent>
     </NotFoundContainer>
   );
 };
 
 export default NotFound;
-

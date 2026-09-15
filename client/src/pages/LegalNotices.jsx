@@ -18,7 +18,7 @@ const LegalContainer = styled.div`
 const Title = styled(motion.h1)`
   font-size: 2.5rem;
   font-weight: 700;
-  color: #4a90e2;
+  color: var(--color-text);
   text-align: center;
   margin-bottom: 2rem;
 
@@ -30,18 +30,18 @@ const Title = styled(motion.h1)`
 const Subtitle = styled(motion.h2)`
   font-size: 1.5rem;
   font-weight: 600;
-  color: #4a90e2;
+  color: var(--color-text);
   margin: 2rem 0 1rem 0;
 `;
 
 const Paragraph = styled(motion.p)`
-  color: #cccccc;
+  color: var(--color-muted);
   margin-bottom: 1rem;
   text-align: justify;
 `;
 
 const List = styled(motion.ul)`
-  color: #cccccc;
+  color: var(--color-muted);
   margin-bottom: 1rem;
   padding-left: 2rem;
 `;
@@ -51,21 +51,21 @@ const ListItem = styled.li`
 `;
 
 const CompanyInfo = styled(motion.div)`
-  background: rgba(74, 144, 226, 0.1);
-  border: 1px solid rgba(74, 144, 226, 0.2);
+  background: var(--color-accent-muted);
+  border: 1px solid rgba(200, 242, 74, 0.22);
   border-radius: 8px;
   padding: 1.5rem;
   margin: 2rem 0;
 `;
 
 const InfoTitle = styled.h3`
-  color: #4a90e2;
+  color: var(--color-text);
   font-size: 1.2rem;
   margin-bottom: 1rem;
 `;
 
 const InfoText = styled.p`
-  color: #cccccc;
+  color: var(--color-muted);
   margin-bottom: 0.5rem;
 `;
 

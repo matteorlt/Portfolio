@@ -37,42 +37,51 @@ import {
 
 const OffersRoot = styled.section`
   scroll-margin-top: calc(var(--nav-h) + 0.75rem);
-  padding: clamp(2.5rem, 6vw, 4rem) var(--page-pad-x) 2rem;
+  padding: clamp(4rem, 11vw, 7.5rem) var(--page-pad-x) clamp(2.5rem, 6vw, 4rem);
   padding-right: var(--page-pad-r);
-  max-width: 1280px;
+  max-width: var(--max);
   margin: 0 auto;
   width: 100%;
 `;
 
-const Title = styled(motion.h2)`
-  font-size: clamp(1.85rem, 4.5vw, 2.65rem);
-  font-weight: 700;
+const Index = styled.span`
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   color: var(--color-accent);
-  text-align: center;
+  margin-bottom: 0.7rem;
+  text-align: left;
+`;
+
+const Title = styled(motion.h2)`
+  font-size: clamp(2rem, 4.6vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  color: var(--color-text);
+  text-align: left;
   margin-bottom: 0.75rem;
 `;
 
 const Subtitle = styled(motion.p)`
   font-size: 1.05rem;
-  line-height: 1.55;
+  line-height: 1.7;
   color: var(--color-muted);
-  text-align: center;
-  margin-bottom: 1.5rem;
-  max-width: 640px;
-  margin-left: auto;
-  margin-right: auto;
+  text-align: left;
+  margin-bottom: 1.75rem;
+  max-width: 38rem;
 `;
 
 const FreeBanner = styled(motion.div)`
   text-align: center;
   padding: 1rem 1.25rem;
   margin-bottom: 2.25rem;
-  border-radius: 12px;
+  border-radius: 16px;
   background: var(--color-accent-muted);
-  border: 1px solid rgba(91, 122, 173, 0.35);
-  max-width: 720px;
-  margin-left: auto;
-  margin-right: auto;
+  border: 1px solid rgba(200, 242, 74, 0.28);
+  max-width: none;
 `;
 
 const FreeBannerLead = styled.p`
@@ -92,8 +101,8 @@ const FreeBannerText = styled.p`
 const OffersSingleBlock = styled(motion.div)`
   margin-bottom: 2.75rem;
   background: var(--color-surface);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
   padding: clamp(1.35rem, 3.5vw, 2rem);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
 `;
@@ -183,15 +192,15 @@ const DevisOpenButton = styled(motion.button)`
   justify-content: center;
   gap: 0.5rem;
   padding: 0.95rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 700;
   font-family: var(--font-body);
-  color: #0a0a0a;
+  color: var(--color-accent-ink);
   background: var(--color-accent);
-  box-shadow: 0 12px 36px rgba(91, 122, 173, 0.28);
+  box-shadow: 0 12px 36px rgba(200, 242, 74, 0.18);
 
   &:hover {
     filter: brightness(1.07);
@@ -354,19 +363,19 @@ const NeedTypeTrigger = styled.button`
   font-family: inherit;
   color: var(--color-text);
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(91, 122, 173, 0.35);
+  border: 1px solid rgba(200, 242, 74), 0.35);
   border-radius: 10px;
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
   &:hover {
-    border-color: rgba(91, 122, 173, 0.55);
+    border-color: rgba(200, 242, 74), 0.55);
     background: rgba(255, 255, 255, 0.08);
   }
 
   &[aria-expanded='true'] {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(91, 122, 173, 0.28);
+    box-shadow: 0 0 0 2px rgba(200, 242, 74), 0.28);
   }
 
   &:focus-visible {
@@ -417,7 +426,7 @@ const NeedTypeOptionBtn = styled.button`
   font-family: inherit;
 
   &:hover {
-    background: rgba(91, 122, 173, 0.2);
+    background: rgba(200, 242, 74), 0.2);
     color: var(--color-text);
   }
 
@@ -427,7 +436,7 @@ const NeedTypeOptionBtn = styled.button`
   }
 
   &[data-selected='true'] {
-    background: rgba(91, 122, 173, 0.28);
+    background: rgba(200, 242, 74), 0.28);
     color: #f0f4ff;
     font-weight: 600;
   }
@@ -437,7 +446,7 @@ const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(91, 122, 173, 0.25);
+  border: 1px solid rgba(200, 242, 74), 0.25);
   border-radius: 8px;
   color: var(--color-text);
   font-size: 1rem;
@@ -445,7 +454,7 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(91, 122, 173, 0.2);
+    box-shadow: 0 0 0 2px rgba(200, 242, 74), 0.2);
   }
 
   &::placeholder {
@@ -457,7 +466,7 @@ const TextArea = styled.textarea`
   width: 100%;
   padding: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(91, 122, 173, 0.25);
+  border: 1px solid rgba(200, 242, 74), 0.25);
   border-radius: 8px;
   color: var(--color-text);
   font-size: 1rem;
@@ -467,7 +476,7 @@ const TextArea = styled.textarea`
   &:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(91, 122, 173, 0.2);
+    box-shadow: 0 0 0 2px rgba(200, 242, 74), 0.2);
   }
 
   &::placeholder {
@@ -490,9 +499,9 @@ const SubmitButton = styled(motion.button)`
   width: 100%;
   padding: 1rem;
   background: var(--color-accent);
-  color: #0a0a0a;
+  color: var(--color-accent-ink);
   border: none;
-  border-radius: 8px;
+  border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
@@ -517,18 +526,18 @@ const OptionalToggle = styled(motion.button)`
   border-radius: 8px;
   background: var(--color-accent-muted);
   color: var(--color-accent);
-  border: 1px solid rgba(91, 122, 173, 0.35);
+  border: 1px solid rgba(200, 242, 74), 0.35);
   cursor: pointer;
   font-weight: 600;
   margin: 0.5rem 0 1rem;
   &:hover {
-    background: rgba(91, 122, 173, 0.22);
+    background: rgba(200, 242, 74), 0.22);
   }
 `;
 
 const OptionalSection = styled(motion.div)`
   overflow: hidden;
-  border: 1px dashed rgba(91, 122, 173, 0.25);
+  border: 1px dashed rgba(200, 242, 74), 0.25);
   border-radius: 12px;
   padding: 0 1rem;
   margin-bottom: 1rem;
@@ -927,6 +936,7 @@ const OffersSection = () => {
         </motion.div>
       )}
 
+      <Index>05 — Offres</Index>
       <Title
         id="offres-title"
         initial={{ opacity: 0, y: 24 }}

@@ -36,8 +36,8 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-color: rgba(91, 122, 173, 0.55);
-    box-shadow: 0 0 0 3px rgba(91, 122, 173, 0.12);
+    border-color: rgba(200, 242, 74, 0.55);
+    box-shadow: 0 0 0 3px rgba(200, 242, 74, 0.16);
   }
 
   &::placeholder {
@@ -64,8 +64,8 @@ const Select = styled.select`
 
   &:focus {
     outline: none;
-    border-color: rgba(91, 122, 173, 0.55);
-    box-shadow: 0 0 0 3px rgba(91, 122, 173, 0.12);
+    border-color: rgba(200, 242, 74, 0.55);
+    box-shadow: 0 0 0 3px rgba(200, 242, 74, 0.16);
   }
 
   option {
@@ -89,8 +89,8 @@ const TextArea = styled.textarea`
 
   &:focus {
     outline: none;
-    border-color: rgba(91, 122, 173, 0.55);
-    box-shadow: 0 0 0 3px rgba(91, 122, 173, 0.12);
+    border-color: rgba(200, 242, 74, 0.55);
+    box-shadow: 0 0 0 3px rgba(200, 242, 74, 0.16);
   }
 
   &::placeholder {
@@ -110,18 +110,17 @@ const SubmitButton = styled(motion.button)`
   @media (min-width: 480px) {
     width: auto;
   }
-  background: linear-gradient(180deg, #5f6f8f 0%, #4a5c78 100%);
-  color: #f0f2f6;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   font-family: inherit;
+  border-radius: 999px;
   cursor: pointer;
   transition: filter 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 
   &:hover:not(:disabled) {
-    filter: brightness(1.08);
+    filter: brightness(1.06);
   }
 
   &:disabled {

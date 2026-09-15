@@ -2,150 +2,182 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { FiArrowUpRight } from 'react-icons/fi';
 
 const FooterContainer = styled.footer`
-  background: var(--color-surface);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 2.5rem 0 max(2rem, env(safe-area-inset-bottom));
-  margin-top: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--color-bg-2);
+  border-top: 1px solid var(--color-line);
+  padding: clamp(3.5rem, 8vw, 5.5rem) 0 max(2rem, env(safe-area-inset-bottom));
 `;
 
-const FooterContent = styled.div`
-  max-width: 1280px;
+const Inner = styled.div`
+  max-width: var(--max);
   margin: 0 auto;
-  padding: 0 1.25rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
-  align-items: start;
+  padding: 0 var(--page-pad-x) 0 var(--page-pad-r);
+`;
 
-  @media (min-width: 768px) {
-    padding: 0 2rem;
+const Giant = styled(motion.a)`
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 8vw, 5.5rem);
+  font-weight: 800;
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+  color: var(--color-text);
+  margin-bottom: 0.35rem;
+
+  span {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-accent);
   }
 
-  @media (max-width: 768px) {
-    text-align: center;
-    justify-items: center;
+  &:hover {
+    color: var(--color-text);
   }
 `;
 
-const FooterSection = styled(motion.div)`
+const Mail = styled(motion.a)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+  color: var(--color-muted);
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+
+  &:hover {
+    color: var(--color-accent);
+  }
+`;
+
+const Grid = styled.div`
+  display: grid;
+  gap: 2rem 1.5rem;
+  grid-template-columns: 1fr 1fr;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--color-line);
+
+  @media (min-width: 800px) {
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  }
+`;
+
+const Col = styled(motion.div)`
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.55rem;
 `;
 
-const FooterTitle = styled.h3`
-  color: var(--color-text);
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-bottom: 0.35rem;
+const Label = styled.p`
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 0.4rem;
 `;
 
 const FooterLink = styled(Link)`
   color: var(--color-muted);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: var(--color-accent);
-  }
+  font-size: 0.92rem;
 `;
 
 const FooterAnchor = styled.a`
   color: var(--color-muted);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: var(--color-accent);
-  }
+  font-size: 0.92rem;
 `;
 
-const FooterText = styled.p`
+const Text = styled.p`
   color: var(--color-muted);
-  font-size: 0.9rem;
-  margin: 0;
-  line-height: 1.5;
+  font-size: 0.92rem;
+  line-height: 1.55;
 `;
 
-const FooterBottom = styled(motion.div)`
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  margin-top: 2rem;
-  padding-top: 1.25rem;
-  text-align: center;
+const Bottom = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 1.35rem;
+  color: #6e6b64;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
 `;
 
-const Copyright = styled.p`
-  color: #737373;
-  font-size: 0.8rem;
-  margin: 0;
+const Watermark = styled.p`
+  pointer-events: none;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(4.5rem, 18vw, 14rem);
+  letter-spacing: -0.07em;
+  line-height: 0.8;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(242, 238, 230, 0.06);
+  position: absolute;
+  bottom: -0.22em;
+  left: var(--page-pad-x);
+  white-space: nowrap;
+  user-select: none;
 `;
+
+const fade = {
+  initial: { opacity: 0, y: 18 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-40px' },
+  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
+};
 
 const Footer = () => {
   return (
     <FooterContainer>
-      <FooterContent>
-        <FooterSection
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-          viewport={{ once: true }}
-        >
-          <FooterTitle>Mattéo Rannou Le Texier</FooterTitle>
-          <FooterText>Développeur web freelance — sites & applications</FooterText>
-          <FooterText>Entrepreneur individuel · SIREN 932 455 504</FooterText>
-        </FooterSection>
+      <Inner>
+        <Giant href="/#contact" {...fade}>
+          Un projet <span>en tête ?</span>
+        </Giant>
+        <Mail href="mailto:contact@matteo-rlt.fr" {...fade}>
+          contact@matteo-rlt.fr
+          <FiArrowUpRight aria-hidden />
+        </Mail>
 
-        <FooterSection
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.05 }}
-          viewport={{ once: true }}
-        >
-          <FooterTitle>Navigation</FooterTitle>
-          <FooterAnchor href="/#services">Services</FooterAnchor>
-          <FooterAnchor href="/#realisations">Réalisations</FooterAnchor>
-          <FooterAnchor href="/#contact">Contact</FooterAnchor>
-          <FooterAnchor href="/#offres">Devis & offres</FooterAnchor>
-        </FooterSection>
-
-        <FooterSection
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.1 }}
-          viewport={{ once: true }}
-        >
-          <FooterTitle>Légal</FooterTitle>
-          <FooterLink to="/privacy-policy">Politique de confidentialité</FooterLink>
-          <FooterLink to="/legal-notices">Mentions légales</FooterLink>
-        </FooterSection>
-
-        <FooterSection
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.12 }}
-          viewport={{ once: true }}
-        >
-          <FooterTitle>Contact</FooterTitle>
-          <FooterText>
+        <Grid>
+          <Col {...fade}>
+            <Label>Studio</Label>
+            <Text>Mattéo Rannou Le Texier</Text>
+            <Text>Développeur web freelance — sites & applications</Text>
+            <Text>Entrepreneur individuel · SIREN 932 455 504</Text>
+          </Col>
+          <Col {...fade} transition={{ ...fade.transition, delay: 0.06 }}>
+            <Label>Navigation</Label>
+            <FooterAnchor href="/#services">Services</FooterAnchor>
+            <FooterAnchor href="/#realisations">Réalisations</FooterAnchor>
+            <FooterAnchor href="/#offres">Devis & offres</FooterAnchor>
+            <FooterAnchor href="/#contact">Contact</FooterAnchor>
+          </Col>
+          <Col {...fade} transition={{ ...fade.transition, delay: 0.1 }}>
+            <Label>Légal</Label>
+            <FooterLink to="/privacy-policy">Confidentialité</FooterLink>
+            <FooterLink to="/legal-notices">Mentions légales</FooterLink>
+          </Col>
+          <Col {...fade} transition={{ ...fade.transition, delay: 0.14 }}>
+            <Label>Contact</Label>
             <FooterAnchor href="mailto:contact@matteo-rlt.fr">contact@matteo-rlt.fr</FooterAnchor>
-          </FooterText>
-          <FooterText>Vannes, France</FooterText>
-        </FooterSection>
-      </FooterContent>
+            <FooterAnchor href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer">
+              LinkedIn
+            </FooterAnchor>
+            <Text>Vannes, France</Text>
+          </Col>
+        </Grid>
 
-      <FooterBottom
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={{ duration: 0.45, delay: 0.15 }}
-        viewport={{ once: true }}
-      >
-        <Copyright>© {new Date().getFullYear()} Mattéo Rannou Le Texier. Tous droits réservés.</Copyright>
-      </FooterBottom>
+        <Bottom>
+          <span>© {new Date().getFullYear()} Mattéo Rannou Le Texier</span>
+          <span>Tous droits réservés</span>
+        </Bottom>
+      </Inner>
+      <Watermark aria-hidden>MATTÉO</Watermark>
     </FooterContainer>
   );
 };

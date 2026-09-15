@@ -6,6 +6,8 @@ import GlobalStyle from './styles/GlobalStyle.jsx';
 import usePageTracking from './hooks/usePageTracking.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
 import CookieConsent from './components/CookieConsent.jsx';
+import SiteAtmosphere from './components/SiteAtmosphere.jsx';
+import CustomCursor from './components/CustomCursor.jsx';
 
 // Lazy-load des composants globaux pour réduire le JS initial
 const Navbar = React.lazy(() => import('./components/Navbar.jsx'));
@@ -112,6 +114,8 @@ function AppContent() {
         <ThemeIcons />
       </Suspense>
       <AppContainer>
+        <SiteAtmosphere />
+        <CustomCursor />
         <CookieConsent />
         <Suspense fallback={null}>
           <Navbar />

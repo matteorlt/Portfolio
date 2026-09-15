@@ -1,71 +1,64 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { FiMenu, FiX, FiArrowRight } from 'react-icons/fi';
+import { AnimatePresence, motion } from 'framer-motion';
+import { FiArrowUpRight } from 'react-icons/fi';
+import Magnetic from './Magnetic.jsx';
 
 const NavContainer = styled(motion.nav)`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 2100;
   padding-top: env(safe-area-inset-top, 0px);
-  background: rgba(10, 10, 10, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
+  border-bottom: 1px solid transparent;
 `;
 
 const NavContent = styled.div`
-  max-width: 1280px;
+  max-width: var(--max);
   margin: 0 auto;
-  padding: 0 max(1.25rem, env(safe-area-inset-left, 0px)) 0 max(1.25rem, env(safe-area-inset-right, 0px));
+  padding: 0 var(--page-pad-x) 0 var(--page-pad-r);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  min-height: 72px;
-  height: auto;
-
-  @media (min-width: 768px) {
-    padding: 0 2rem;
-  }
+  min-height: var(--nav-h);
 `;
 
 const Logo = styled(Link)`
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  min-width: 0;
-  font-family: var(--font-display);
-  font-size: clamp(0.95rem, 3.5vw, 1.15rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  gap: 0.65rem;
   color: var(--color-text);
   text-decoration: none;
-  transition: color 0.2s ease;
+  z-index: 2;
 
   &:hover {
-    color: var(--color-accent);
-  }
-
-  @media (max-width: 360px) {
-    gap: 0.4rem;
+    color: var(--color-text);
   }
 `;
 
 const LogoImage = styled.img`
-  height: 40px;
-  width: 40px;
-  border-radius: 10px;
+  height: 36px;
+  width: 36px;
+  border-radius: 9px;
+`;
+
+const LogoText = styled.span`
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
 `;
 
 const NavLinks = styled.div`
   display: flex;
-  gap: 0.25rem;
+  gap: 0.15rem;
   align-items: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: 860px) {
     display: none;
   }
 `;
@@ -74,15 +67,16 @@ const navItemStyles = `
   position: relative;
   color: var(--color-muted);
   text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  padding: 0.5rem 0.85rem;
-  border-radius: 8px;
-  transition: color 0.2s ease, background 0.2s ease;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.55rem 0.8rem;
+  transition: color 0.25s var(--ease-out);
 
   &:hover {
     color: var(--color-text);
-    background: rgba(255, 255, 255, 0.04);
   }
 `;
 
@@ -97,109 +91,114 @@ const NavLinkRouter = styled(Link)`
 const NavCta = styled(Link)`
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-left: 0.75rem;
-  padding: 0.55rem 1.1rem;
-  border-radius: 9px;
-  background: var(--color-accent);
-  color: #0a0a0a;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: filter 0.2s ease;
-
-  &:hover {
-    color: #0a0a0a;
-    filter: brightness(1.06);
-  }
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
-
-const MobileMenuButton = styled.button`
-  display: none;
-  background: none;
-  border: none;
-  color: var(--color-text);
-  font-size: 1.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 8px;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.06);
-  }
-
-  @media (max-width: 768px) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-`;
-
-const MobileMenu = styled(motion.div)`
-  position: fixed;
-  top: calc(72px + env(safe-area-inset-top, 0px));
-  left: 0;
-  right: 0;
-  background: rgba(10, 10, 10, 0.98);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-  padding: 1rem max(1.25rem, env(safe-area-inset-left)) max(1.25rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-right));
   gap: 0.35rem;
-  max-height: min(
-    calc(100dvh - 72px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)),
-    420px
-  );
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  margin-left: 0.7rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  transition: filter 0.2s ease, transform 0.2s ease;
 
-  @media (min-width: 769px) {
+  &:hover {
+    color: var(--color-accent-ink);
+    filter: brightness(1.05);
+  }
+
+  @media (max-width: 860px) {
     display: none;
   }
 `;
 
-const MobileNavLink = styled.a`
+const Burger = styled.button`
+  display: none;
+  position: relative;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  background: transparent;
   color: var(--color-text);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 1.05rem;
-  padding: 0.85rem 1rem;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  border-radius: 10px;
-  transition: background 0.2s ease;
-
-  &:hover,
-  &:active {
-    background: rgba(255, 255, 255, 0.06);
-  }
-`;
-
-const MobileCta = styled(Link)`
-  display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+
+  span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.35s var(--ease-out), opacity 0.25s ease;
+    transform-origin: center;
+  }
+
+  &[aria-expanded='true'] span:first-child {
+    transform: translateY(3.75px) rotate(45deg);
+  }
+
+  &[aria-expanded='true'] span:last-child {
+    transform: translateY(-3.75px) rotate(-45deg);
+  }
+
+  @media (max-width: 860px) {
+    display: flex;
+  }
+`;
+
+const Overlay = styled(motion.div)`
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: #070706;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + 1rem) var(--page-pad-x)
+    calc(2rem + env(safe-area-inset-bottom, 0px));
+
+  @media (min-width: 861px) {
+    display: none;
+  }
+`;
+
+const OverlayLink = styled(motion.a)`
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 10vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  color: var(--color-text);
+  padding: 0.35rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+
+  em {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: 0.7rem;
+    letter-spacing: 0.16em;
+    color: var(--color-accent);
+  }
+`;
+
+const OverlayCta = styled(Link)`
+  margin-top: 1.75rem;
+  display: inline-flex;
+  align-items: center;
   gap: 0.45rem;
-  margin-top: 0.5rem;
-  padding: 0.9rem 1rem;
-  min-height: 50px;
-  border-radius: 10px;
+  width: fit-content;
+  padding: 0.95rem 1.35rem;
+  border-radius: 999px;
   background: var(--color-accent);
-  color: #0a0a0a;
-  font-weight: 600;
+  color: var(--color-accent-ink);
+  font-weight: 700;
   font-size: 1rem;
-  text-align: center;
 
   &:hover {
-    color: #0a0a0a;
-    filter: brightness(1.05);
+    color: var(--color-accent-ink);
   }
 `;
 
@@ -207,24 +206,31 @@ function scrollToId(id) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+const LINKS = [
+  { id: 'services', label: 'Services', index: '01' },
+  { id: 'realisations', label: 'Travail', index: '02' },
+  { id: 'offres', label: 'Offres', index: '03' },
+  { id: 'contact', label: 'Contact', index: '04' }
+];
+
 const Navbar = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/';
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   useEffect(() => {
-    setIsMobileMenuOpen(false);
+    setOpen(false);
   }, [location.pathname, location.hash]);
 
   useEffect(() => {
-    if (!isMobileMenuOpen) {
+    if (!open) {
       document.body.style.overflow = '';
       return undefined;
     }
@@ -233,27 +239,26 @@ const Navbar = () => {
     return () => {
       document.body.style.overflow = prev;
     };
-  }, [isMobileMenuOpen]);
+  }, [open]);
 
   const handleAnchor = (e, id) => {
     if (isHome) {
       e.preventDefault();
       scrollToId(id);
     }
+    setOpen(false);
   };
-
-  const servicesHref = isHome ? '#services' : '/#services';
-  const realHref = isHome ? '#realisations' : '/#realisations';
-  const offresHref = isHome ? '#offres' : '/#offres';
-  const contactHref = isHome ? '#contact' : '/#contact';
 
   return (
     <NavContainer
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.45 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       style={{
-        background: scrolled ? 'rgba(10, 10, 10, 0.92)' : 'rgba(10, 10, 10, 0.85)'
+        background: scrolled || open ? 'rgba(7, 7, 6, 0.78)' : 'transparent',
+        backdropFilter: scrolled || open ? 'blur(18px)' : 'none',
+        WebkitBackdropFilter: scrolled || open ? 'blur(18px)' : 'none',
+        borderBottomColor: scrolled ? 'var(--color-line)' : 'transparent'
       }}
     >
       <NavContent>
@@ -261,69 +266,78 @@ const Navbar = () => {
           <LogoImage
             src="/logos/logo_black-80.webp"
             alt=""
-            width={40}
-            height={40}
+            width={36}
+            height={36}
             loading="eager"
             decoding="async"
           />
-          Mattéo RLT
+          <LogoText>Mattéo RLT</LogoText>
         </Logo>
 
         <NavLinks>
-          {isHome ? (
-            <>
-              <NavLinkNative href="#services" onClick={(e) => handleAnchor(e, 'services')}>
-                Services
+          {LINKS.map((l) =>
+            isHome ? (
+              <NavLinkNative key={l.id} href={`#${l.id}`} onClick={(e) => handleAnchor(e, l.id)}>
+                {l.label}
               </NavLinkNative>
-              <NavLinkNative href="#realisations" onClick={(e) => handleAnchor(e, 'realisations')}>
-                Réalisations
-              </NavLinkNative>
-              <NavLinkNative href="#offres" onClick={(e) => handleAnchor(e, 'offres')}>
-                Devis & offres
-              </NavLinkNative>
-              <NavLinkNative href="#contact" onClick={(e) => handleAnchor(e, 'contact')}>
-                Contact
-              </NavLinkNative>
-            </>
-          ) : (
-            <>
-              <NavLinkRouter to="/#services">Services</NavLinkRouter>
-              <NavLinkRouter to="/#realisations">Réalisations</NavLinkRouter>
-              <NavLinkRouter to="/#offres">Devis & offres</NavLinkRouter>
-              <NavLinkRouter to="/#contact">Contact</NavLinkRouter>
-            </>
+            ) : (
+              <NavLinkRouter key={l.id} to={`/#${l.id}`}>
+                {l.label}
+              </NavLinkRouter>
+            )
           )}
-          <NavCta to={isHome ? '#contact' : '/#contact'} onClick={(e) => isHome && handleAnchor(e, 'contact')}>
-            Discutons
-            <FiArrowRight aria-hidden size={16} />
-          </NavCta>
+          <Magnetic strength={0.22}>
+            <NavCta to={isHome ? '#contact' : '/#contact'} onClick={(e) => isHome && handleAnchor(e, 'contact')}>
+              Discutons
+              <FiArrowUpRight aria-hidden size={15} />
+            </NavCta>
+          </Magnetic>
         </NavLinks>
 
-        <MobileMenuButton type="button" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-expanded={isMobileMenuOpen} aria-label={isMobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}>
-          {isMobileMenuOpen ? <FiX /> : <FiMenu />}
-        </MobileMenuButton>
+        <Burger
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
+        >
+          <span />
+          <span />
+        </Burger>
       </NavContent>
 
-      {isMobileMenuOpen && (
-        <MobileMenu initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25 }}>
-          <MobileNavLink href={servicesHref} onClick={(e) => { handleAnchor(e, 'services'); setIsMobileMenuOpen(false); }}>
-            Services
-          </MobileNavLink>
-          <MobileNavLink href={realHref} onClick={(e) => { handleAnchor(e, 'realisations'); setIsMobileMenuOpen(false); }}>
-            Réalisations
-          </MobileNavLink>
-          <MobileNavLink href={offresHref} onClick={(e) => { handleAnchor(e, 'offres'); setIsMobileMenuOpen(false); }}>
-            Devis & offres
-          </MobileNavLink>
-          <MobileNavLink href={contactHref} onClick={(e) => { handleAnchor(e, 'contact'); setIsMobileMenuOpen(false); }}>
-            Contact
-          </MobileNavLink>
-          <MobileCta to={contactHref} onClick={(e) => { handleAnchor(e, 'contact'); setIsMobileMenuOpen(false); }}>
-            Me contacter
-            <FiArrowRight aria-hidden size={16} />
-          </MobileCta>
-        </MobileMenu>
-      )}
+      {typeof document !== 'undefined' &&
+        createPortal(
+          <AnimatePresence>
+            {open ? (
+              <Overlay
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.28 }}
+              >
+                {LINKS.map((l, i) => (
+                  <OverlayLink
+                    key={l.id}
+                    href={isHome ? `#${l.id}` : `/#${l.id}`}
+                    onClick={(e) => handleAnchor(e, l.id)}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 10 }}
+                    transition={{ delay: 0.05 * i, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    <em>{l.index}</em>
+                    {l.label}
+                  </OverlayLink>
+                ))}
+                <OverlayCta to={isHome ? '#contact' : '/#contact'} onClick={(e) => handleAnchor(e, 'contact')}>
+                  Me contacter
+                  <FiArrowUpRight aria-hidden size={18} />
+                </OverlayCta>
+              </Overlay>
+            ) : null}
+          </AnimatePresence>,
+          document.body
+        )}
     </NavContainer>
   );
 };

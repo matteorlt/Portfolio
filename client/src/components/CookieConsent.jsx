@@ -47,8 +47,8 @@ const IconWrap = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(96, 165, 250, 0.12);
-  border: 1px solid rgba(96, 165, 250, 0.22);
+  background: var(--color-accent-muted);
+  border: 1px solid rgba(200, 242, 74, 0.28);
   color: var(--color-accent);
   font-size: 1.15rem;
 `;
@@ -80,7 +80,7 @@ const PolicyLink = styled(Link)`
   text-underline-offset: 3px;
 
   &:hover {
-    color: #93c5fd;
+    color: var(--color-text);
   }
 `;
 
@@ -140,7 +140,7 @@ const BtnGhost = styled(Btn)`
 const BtnPrimary = styled(Btn)`
   border: none;
   background: var(--color-accent);
-  color: #0a0a0a;
+  color: var(--color-accent-ink);
 
   &:hover {
     filter: brightness(1.06);
