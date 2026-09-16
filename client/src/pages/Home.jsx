@@ -923,24 +923,37 @@ const Home = () => {
       external: true
     },
     {
-      id: 'task',
-      title: 'Task Manager',
-      kicker: '03 — Application',
+      id: 'aume',
+      title: 'Aume',
+      kicker: '03 — Marque',
       outcome:
-        'Application de gestion de tâches avec authentification : équipes qui voient clairement priorités et avancement.',
-      tech: ['TypeScript', 'Node.js', 'Docker'],
-      preview: '/preview/task-manager-preview.webp',
-      previewMobile: '/preview/task-manager-preview-sm.webp',
-      previewWidth: 713,
-      previewMobileWidth: 594,
-      host: 'task-manager.fr',
-      link: '/demo/task-manager',
-      external: false
+        'Vitrine pour une marque fictive de mobilier et décoration durables : univers éditorial, collection et démarche mis en scène pour habiter plus lentement.',
+      tech: ['React', 'Vite'],
+      preview: '/preview/aume-preview.webp',
+      previewMobile: '/preview/aume-preview-sm.webp',
+      previewWidth: 1014,
+      previewMobileWidth: 800,
+      link: 'https://aumewebsite.vercel.app/',
+      external: true
+    },
+    {
+      id: 'noya',
+      title: 'Noya',
+      kicker: '04 — Mode',
+      outcome:
+        'Boutique en ligne pour une marque fictive de streetwear épuré : collection, lookbook et parcours d’achat mis en scène autour d’une silhouette oversize.',
+      tech: ['React', 'Vite'],
+      preview: '/preview/noya-preview.webp',
+      previewMobile: '/preview/noya-preview-sm.webp',
+      previewWidth: 1014,
+      previewMobileWidth: 800,
+      link: 'https://noya-website-eight.vercel.app/',
+      external: true
     },
     {
       id: 'gym',
       title: 'Gym Phys',
-      kicker: '04 — Association',
+      kicker: '05 — Association',
       outcome:
         'Site vitrine pour une association sportive : informations, actualités et prise de contact accessibles sur mobile.',
       tech: ['WordPress', 'PHP'],

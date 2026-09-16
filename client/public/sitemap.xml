@@ -7,12 +7,6 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://matteo-rlt.fr/demo/task-manager</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
     <loc>https://matteo-rlt.fr/demo/auth</loc>
     <lastmod>2026-05-06</lastmod>
     <changefreq>monthly</changefreq>
