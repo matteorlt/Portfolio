@@ -2,10 +2,21 @@
   "buildCommand": "cd client && npm run build:prod",
   "outputDirectory": "client/dist",
   "installCommand": "cd client && npm ci",
+  "cleanUrls": true,
+  "redirects": [
+    { "source": "/about", "destination": "/", "permanent": true },
+    { "source": "/skills", "destination": "/", "permanent": true },
+    { "source": "/projects", "destination": "/#realisations", "permanent": true },
+    { "source": "/offres", "destination": "/#offres", "permanent": true },
+    { "source": "/contact", "destination": "/#contact", "permanent": true }
+  ],
   "rewrites": [
+    { "source": "/demo/:path*", "destination": "/spa.html" }
+  ],
+  "headers": [
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/assets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     }
   ]
 }

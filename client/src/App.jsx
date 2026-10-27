@@ -1,5 +1,5 @@
 import React, { useEffect, Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import GlobalStyle from './styles/GlobalStyle.jsx';
@@ -9,13 +9,12 @@ import CookieConsent from './components/CookieConsent.jsx';
 import SiteAtmosphere from './components/SiteAtmosphere.jsx';
 import CustomCursor from './components/CustomCursor.jsx';
 
-// Lazy-load des composants globaux pour réduire le JS initial
-const Navbar = React.lazy(() => import('./components/Navbar.jsx'));
-const Footer = React.lazy(() => import('./components/Footer.jsx'));
-const ThemeIcons = React.lazy(() => import('./components/ThemeIcons.jsx'));
+import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
+import Home from './pages/Home.jsx';
 
-// Lazy loading pour améliorer les performances
-const Home = lazy(() => import('./pages/Home.jsx'));
+// Navbar, Footer et Home sont sur le chemin critique (et pré-rendus) : import direct.
+// Les pages secondaires restent chargées à la demande.
 const ProjectDemo = lazy(() => import('./pages/ProjectDemo.jsx'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy.jsx'));
 const LegalNotices = lazy(() => import('./pages/LegalNotices.jsx'));
@@ -75,7 +74,7 @@ function AnimatedRoutes() {
   }, [location.pathname]);
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <PageWrapper
         key={location.pathname}
         initial="initial"
@@ -110,31 +109,23 @@ function AppContent() {
   return (
     <>
       <GlobalStyle />
-      <Suspense fallback={null}>
-        <ThemeIcons />
-      </Suspense>
       <AppContainer>
         <SiteAtmosphere />
         <CustomCursor />
         <CookieConsent />
-        <Suspense fallback={null}>
-          <Navbar />
-        </Suspense>
+        <Navbar />
         <AnimatedRoutes />
-        <Suspense fallback={null}>
-          <Footer />
-        </Suspense>
+        <Footer />
       </AppContainer>
     </>
   );
 }
 
+/** Le Router est fourni par l’entrée : BrowserRouter côté client, StaticRouter au pré-rendu. */
 function App() {
   return (
     <ErrorBoundary>
-      <Router>
-        <AppContent />
-      </Router>
+      <AppContent />
     </ErrorBoundary>
   );
 }

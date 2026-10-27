@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import SEO from '../components/SEO.jsx';
+import { ROUTE_META, SITE_URL } from '../seo/routes.js';
 
 const LegalContainer = styled.div`
   min-height: 100dvh;
@@ -79,18 +81,19 @@ const LastUpdate = styled(motion.p)`
 const LegalNotices = () => {
   return (
     <LegalContainer>
+      <SEO {...ROUTE_META['/legal-notices']} url={`${SITE_URL}/legal-notices`} />
       <Title
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.5 }}
       >
-        Mentions Légales
+        Mentions légales
       </Title>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ duration: 0.5 }}
       >
         1. Éditeur du site
       </Subtitle>
@@ -98,7 +101,7 @@ const LegalNotices = () => {
       <CompanyInfo
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
+        transition={{ duration: 0.5 }}
       >
         <InfoTitle>Informations sur l'entreprise :</InfoTitle>
         <InfoText><strong>Raison sociale :</strong> RANNOU--LE TEXIER Mattéo</InfoText>
@@ -113,7 +116,7 @@ const LegalNotices = () => {
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
+        transition={{ duration: 0.5 }}
       >
         2. Coordonnées
       </Subtitle>
@@ -121,7 +124,7 @@ const LegalNotices = () => {
       <CompanyInfo
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
+        transition={{ duration: 0.5 }}
       >
         <InfoTitle>Adresse du siège :</InfoTitle>
         <InfoText>15 RUE Jules Ferry</InfoText>
@@ -134,7 +137,7 @@ const LegalNotices = () => {
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
+        transition={{ duration: 0.5 }}
       >
         3. Activité
       </Subtitle>
@@ -142,23 +145,16 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.7 }}
+        transition={{ duration: 0.5 }}
       >
-        <strong>Activité principale :</strong> Développeur web, Création de site internet, Design/Programmation/Maintenance des sites
+        <strong>Activité principale :</strong> développement web — création, design, programmation et maintenance de sites internet
       </Paragraph>
 
-      <Paragraph
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-      >
-        <strong>Autres activités :</strong> Influenceur, Publicités, Sponsors, Abonnement, Placement de Produits, Affiliation
-      </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
+        transition={{ duration: 0.5 }}
       >
         4. Hébergement
       </Subtitle>
@@ -166,15 +162,15 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.0 }}
+        transition={{ duration: 0.5 }}
       >
-        Ce site est hébergé par un prestataire de services d'hébergement web professionnel. Les données sont stockées de manière sécurisée conformément aux standards de l'industrie.
+        Ce site est hébergé par Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis — vercel.com.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.1 }}
+        transition={{ duration: 0.5 }}
       >
         5. Propriété intellectuelle
       </Subtitle>
@@ -182,15 +178,15 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
+        transition={{ duration: 0.5 }}
       >
-        L'ensemble du contenu de ce site (textes, images, vidéos, logos, graphismes, etc.) est la propriété exclusive de Mattéo RANNOU-LE TEXIER ou de ses partenaires. Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces éléments est strictement interdite sans l'accord exprès par écrit de Mattéo RANNOU-LE TEXIER.
+        L'ensemble du contenu de ce site (textes, images, vidéos, logos, graphismes, etc.) est la propriété exclusive de Mattéo Rannou Le Texier ou de ses partenaires. Toute reproduction, distribution, modification, adaptation, retransmission ou publication de ces éléments est strictement interdite sans l'accord exprès par écrit de Mattéo Rannou Le Texier.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.3 }}
+        transition={{ duration: 0.5 }}
       >
         6. Responsabilité
       </Subtitle>
@@ -198,23 +194,23 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.4 }}
+        transition={{ duration: 0.5 }}
       >
-        Les informations contenues sur ce site sont aussi précises que possible et le site remis à jour à différentes périodes de l'année, mais peut toutefois contenir des inexactitudes ou des omissions.
+        Les informations contenues sur ce site sont aussi précises que possible et le site est mis à jour régulièrement, mais il peut toutefois contenir des inexactitudes ou des omissions.
       </Paragraph>
 
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.5 }}
+        transition={{ duration: 0.5 }}
       >
-        Si vous constatez une lacune, erreur ou ce qui parait être un dysfonctionnement, merci de bien vouloir le signaler par email, à l'adresse contact@matteo-rlt.fr, en décrivant le problème de la manière la plus précise possible.
+        Si vous constatez une lacune, une erreur ou ce qui paraît être un dysfonctionnement, merci de bien vouloir le signaler par email, à l'adresse contact@matteo-rlt.fr, en décrivant le problème de la manière la plus précise possible.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.6 }}
+        transition={{ duration: 0.5 }}
       >
         7. Liens hypertextes
       </Subtitle>
@@ -222,15 +218,15 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.7 }}
+        transition={{ duration: 0.5 }}
       >
-        Ce site peut contenir des liens vers d'autres sites web. Nous ne sommes pas responsables du contenu de ces sites externes et ne pouvons garantir leur exactitude ou leur sécurité.
+        Ce site peut contenir des liens vers d'autres sites web. Je ne suis pas responsable du contenu de ces sites externes et ne peux garantir leur exactitude ou leur sécurité.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.8 }}
+        transition={{ duration: 0.5 }}
       >
         8. Cookies
       </Subtitle>
@@ -238,15 +234,15 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.9 }}
+        transition={{ duration: 0.5 }}
       >
-        Ce site utilise des cookies pour améliorer l'expérience utilisateur et analyser le trafic. En continuant à utiliser ce site, vous acceptez l'utilisation de cookies conformément à notre politique de confidentialité.
+        Les cookies de mesure d'audience et de publicité ne sont déposés qu'après votre accord via le bandeau cookies. Vous pouvez modifier votre choix à tout moment grâce au lien « Gérer les cookies » en bas de page. Plus de détails dans la politique de confidentialité.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.0 }}
+        transition={{ duration: 0.5 }}
       >
         9. Droit applicable
       </Subtitle>
@@ -254,7 +250,7 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.1 }}
+        transition={{ duration: 0.5 }}
       >
         Le présent site et les modalités et conditions de son utilisation sont régis par le droit français. En cas de litige, les tribunaux français seront seuls compétents.
       </Paragraph>
@@ -262,7 +258,7 @@ const LegalNotices = () => {
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.2 }}
+        transition={{ duration: 0.5 }}
       >
         10. Contact
       </Subtitle>
@@ -270,17 +266,17 @@ const LegalNotices = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.3 }}
+        transition={{ duration: 0.5 }}
       >
-        Pour toute question concernant ces mentions légales, vous pouvez nous contacter à l'adresse email : contact@matteo-rlt.fr
+        Pour toute question concernant ces mentions légales, vous pouvez me contacter à l'adresse e-mail : contact@matteo-rlt.fr
       </Paragraph>
 
       <LastUpdate
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.4 }}
+        transition={{ duration: 0.5 }}
       >
-        Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}
+        Dernière mise à jour : 27 octobre 2026
       </LastUpdate>
     </LegalContainer>
   );

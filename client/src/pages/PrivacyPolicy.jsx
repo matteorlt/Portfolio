@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
+import SEO from '../components/SEO.jsx';
+import { ROUTE_META, SITE_URL } from '../seo/routes.js';
 
 const PrivacyContainer = styled.div`
   min-height: 100dvh;
@@ -79,26 +81,27 @@ const LastUpdate = styled(motion.p)`
 const PrivacyPolicy = () => {
   return (
     <PrivacyContainer>
+      <SEO {...ROUTE_META['/privacy-policy']} url={`${SITE_URL}/privacy-policy`} />
       <Title
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.5 }}
       >
-        Politique de Confidentialité
+        Politique de confidentialité
       </Title>
 
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.2 }}
+        transition={{ duration: 0.5 }}
       >
-        Cette politique de confidentialité décrit comment Mattéo RANNOU-LE TEXIER collecte, utilise et protège vos informations personnelles lorsque vous utilisez ce site web.
+        Cette politique de confidentialité décrit comment Mattéo Rannou Le Texier collecte, utilise et protège vos informations personnelles lorsque vous utilisez ce site web.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
+        transition={{ duration: 0.5 }}
       >
         1. Collecte d'informations
       </Subtitle>
@@ -106,25 +109,24 @@ const PrivacyPolicy = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
+        transition={{ duration: 0.5 }}
       >
-        Nous collectons les informations suivantes :
+        Les informations suivantes peuvent être collectées :
       </Paragraph>
 
       <List
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.5 }}
+        transition={{ duration: 0.5 }}
       >
-        <ListItem>Informations que vous nous fournissez directement (nom, prénom, email, téléphone, entreprise)</ListItem>
-        <ListItem>Informations collectées automatiquement (adresse IP, type de navigateur, pages visitées)</ListItem>
-        <ListItem>Cookies et technologies similaires pour améliorer votre expérience</ListItem>
-      </List>
+        <ListItem>Informations que vous saisissez dans les formulaires de contact et de devis (nom, prénom, e-mail, téléphone, entreprise, site, description du projet)</ListItem>
+        <ListItem>Données de navigation (pages visitées, type d’appareil et de navigateur, adresse IP anonymisée) — uniquement si vous acceptez les cookies</ListItem>
+              </List>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
+        transition={{ duration: 0.5 }}
       >
         2. Utilisation des informations
       </Subtitle>
@@ -132,26 +134,26 @@ const PrivacyPolicy = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.7 }}
+        transition={{ duration: 0.5 }}
       >
-        Nous utilisons vos informations pour :
+        Ces informations servent à :
       </Paragraph>
 
       <List
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
+        transition={{ duration: 0.5 }}
       >
-        <ListItem>Répondre à vos demandes de devis et de contact</ListItem>
-        <ListItem>Améliorer notre site web et nos services</ListItem>
-        <ListItem>Vous envoyer des informations sur nos services (avec votre consentement)</ListItem>
-        <ListItem>Respecter nos obligations légales</ListItem>
+        <ListItem>Répondre à vos demandes de devis et de contact (base légale : mesures précontractuelles à votre demande)</ListItem>
+        <ListItem>Mesurer l’audience et améliorer le site (base légale : votre consentement)</ListItem>
+        <ListItem>Mesurer l’efficacité des campagnes publicitaires Google Ads (base légale : votre consentement)</ListItem>
+        <ListItem>Respecter mes obligations légales (facturation, comptabilité)</ListItem>
       </List>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
+        transition={{ duration: 0.5 }}
       >
         3. Partage des informations
       </Subtitle>
@@ -159,26 +161,27 @@ const PrivacyPolicy = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.0 }}
+        transition={{ duration: 0.5 }}
       >
-        Nous ne vendons, ne louons ni ne partageons vos informations personnelles avec des tiers, sauf dans les cas suivants :
+        Vos informations ne sont jamais vendues ni louées. Elles sont transmises uniquement aux prestataires nécessaires au fonctionnement du site :
       </Paragraph>
 
       <List
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.1 }}
+        transition={{ duration: 0.5 }}
       >
-        <ListItem>Avec votre consentement explicite</ListItem>
-        <ListItem>Pour respecter une obligation légale</ListItem>
-        <ListItem>Pour protéger nos droits et notre sécurité</ListItem>
-        <ListItem>Avec nos prestataires de services (hébergement, email) sous contrat de confidentialité</ListItem>
+        <ListItem>Vercel Inc. (hébergement du site, États-Unis)</ListItem>
+        <ListItem>EmailJS (acheminement des messages envoyés via les formulaires)</ListItem>
+        <ListItem>Google LLC — Google Analytics et Google Ads (si vous acceptez les cookies)</ListItem>
+        <ListItem>Microsoft — Clarity (analyse de parcours, si vous acceptez les cookies)</ListItem>
+        <ListItem>Les autorités compétentes, en cas d’obligation légale</ListItem>
       </List>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.2 }}
+        transition={{ duration: 0.5 }}
       >
         4. Sécurité des données
       </Subtitle>
@@ -186,31 +189,31 @@ const PrivacyPolicy = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.3 }}
+        transition={{ duration: 0.5 }}
       >
-        Nous mettons en place des mesures de sécurité appropriées pour protéger vos informations contre l'accès non autorisé, la modification, la divulgation ou la destruction. Cependant, aucune méthode de transmission sur Internet n'est 100% sécurisée.
+        Des mesures de sécurité appropriées sont mises en place pour protéger vos informations contre l'accès non autorisé, la modification, la divulgation ou la destruction. Cependant, aucune méthode de transmission sur Internet n'est 100% sécurisée.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.4 }}
+        transition={{ duration: 0.5 }}
       >
-        5. Cookies
+        5. Cookies et durée de conservation
       </Subtitle>
 
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.5 }}
+        transition={{ duration: 0.5 }}
       >
-        Notre site utilise des cookies pour améliorer votre expérience de navigation. Vous pouvez désactiver les cookies dans les paramètres de votre navigateur, mais cela peut affecter certaines fonctionnalités du site.
+        Aucun cookie de mesure d’audience ou de publicité n’est déposé sans votre accord. Le bandeau affiché à votre première visite vous permet d’accepter ou de refuser ; vous pouvez changer d’avis à tout moment via le lien « Gérer les cookies » en bas de page. Votre choix est conservé dans votre navigateur. Les messages envoyés via les formulaires sont conservés au maximum 3 ans après notre dernier échange, sauf si une relation commerciale s’ensuit.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.6 }}
+        transition={{ duration: 0.5 }}
       >
         6. Vos droits
       </Subtitle>
@@ -218,7 +221,7 @@ const PrivacyPolicy = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.7 }}
+        transition={{ duration: 0.5 }}
       >
         Conformément au RGPD, vous avez le droit de :
       </Paragraph>
@@ -226,20 +229,21 @@ const PrivacyPolicy = () => {
       <List
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.8 }}
+        transition={{ duration: 0.5 }}
       >
         <ListItem>Accéder à vos données personnelles</ListItem>
         <ListItem>Rectifier vos données inexactes</ListItem>
         <ListItem>Demander l'effacement de vos données</ListItem>
         <ListItem>Limiter le traitement de vos données</ListItem>
         <ListItem>Vous opposer au traitement de vos données</ListItem>
-        <ListItem>Portabilité de vos données</ListItem>
+        <ListItem>Demander la portabilité de vos données</ListItem>
+        <ListItem>Introduire une réclamation auprès de la CNIL (cnil.fr)</ListItem>
       </List>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 1.9 }}
+        transition={{ duration: 0.5 }}
       >
         7. Contact
       </Subtitle>
@@ -247,28 +251,28 @@ const PrivacyPolicy = () => {
       <ContactInfo
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.0 }}
+        transition={{ duration: 0.5 }}
       >
         <ContactTitle>Responsable du traitement :</ContactTitle>
-        <ContactText><strong>Mattéo RANNOU-LE TEXIER</strong></ContactText>
+        <ContactText><strong>Mattéo Rannou Le Texier</strong></ContactText>
         <ContactText>Entrepreneur individuel - SIREN : 932 455 504</ContactText>
         <ContactText>Adresse : 15 RUE Jules Ferry, 56460 Val d'Oust, FRANCE</ContactText>
-        <ContactText>Email : contact@matteo-rlt.fr</ContactText>
+        <ContactText>E-mail : contact@matteo-rlt.fr</ContactText>
         <ContactText>Site web : matteo-rlt.fr</ContactText>
       </ContactInfo>
 
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.1 }}
+        transition={{ duration: 0.5 }}
       >
-        Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits, vous pouvez nous contacter à l'adresse email mentionnée ci-dessus.
+        Pour toute question concernant cette politique de confidentialité ou pour exercer vos droits, écrivez-moi à l'adresse e-mail mentionnée ci-dessus. Je réponds sous un mois maximum.
       </Paragraph>
 
       <Subtitle
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.2 }}
+        transition={{ duration: 0.5 }}
       >
         8. Modifications
       </Subtitle>
@@ -276,17 +280,17 @@ const PrivacyPolicy = () => {
       <Paragraph
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.3 }}
+        transition={{ duration: 0.5 }}
       >
-        Cette politique de confidentialité peut être mise à jour périodiquement. Nous vous informerons de tout changement significatif en publiant la nouvelle politique sur cette page.
+        Cette politique de confidentialité peut être mise à jour périodiquement. Tout changement significatif sera publié sur cette page.
       </Paragraph>
 
       <LastUpdate
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 2.4 }}
+        transition={{ duration: 0.5 }}
       >
-        Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}
+        Dernière mise à jour : 27 octobre 2026
       </LastUpdate>
     </PrivacyContainer>
   );

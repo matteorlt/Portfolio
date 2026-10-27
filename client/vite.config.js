@@ -2,11 +2,15 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [react()],
   publicDir: 'public',
   optimizeDeps: {
     include: ['react', 'react-dom', 'styled-components'],
+  },
+  ssr: {
+    // Bundlé pour le pré-rendu : l’export CommonJS de styled-components casse l’interop ESM de Node.
+    noExternal: ['styled-components'],
   },
   resolve: {
     alias: {
@@ -15,6 +19,8 @@ export default defineConfig({
   },
   build: {
     outDir: 'dist',
+    // Le build SSR ne sert qu’au pré-rendu : inutile d’y copier public/.
+    copyPublicDir: !isSsrBuild,
     sourcemap: false,
     minify: 'terser',
     terserOptions: {
@@ -45,4 +51,4 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-}) 
+}))

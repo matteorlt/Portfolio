@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiArrowUpRight } from 'react-icons/fi';
 
@@ -18,7 +18,7 @@ const Inner = styled.div`
   padding: 0 var(--page-pad-x) 0 var(--page-pad-r);
 `;
 
-const Giant = styled(motion.a)`
+const Giant = styled(motion.create(Link))`
   display: block;
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 8vw, 5.5rem);
@@ -90,6 +90,19 @@ const FooterAnchor = styled.a`
   font-size: 0.92rem;
 `;
 
+const CookieButton = styled.button`
+  background: none;
+  padding: 0;
+  text-align: left;
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  transition: color 0.25s var(--ease-out);
+
+  &:hover {
+    color: var(--color-accent);
+  }
+`;
+
 const Text = styled.p`
   color: var(--color-muted);
   font-size: 0.92rem;
@@ -102,7 +115,7 @@ const Bottom = styled.div`
   justify-content: space-between;
   gap: 0.75rem;
   padding-top: 1.35rem;
-  color: #6e6b64;
+  color: #8a867e;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.06em;
@@ -132,10 +145,22 @@ const fade = {
 };
 
 const Footer = () => {
+  const { pathname } = useLocation();
+
+  /* Sur l’accueil, on défile directement (le hash peut déjà être dans l’URL). */
+  const onAnchor = (id) => (e) => {
+    if (pathname !== '/') return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    e.preventDefault();
+    window.history.replaceState(null, '', `#${id}`);
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
     <FooterContainer>
       <Inner>
-        <Giant href="/#contact" {...fade}>
+        <Giant to="/#contact" onClick={onAnchor('contact')} {...fade}>
           Un projet <span>en tête ?</span>
         </Giant>
         <Mail href="mailto:contact@matteo-rlt.fr" {...fade}>
@@ -152,15 +177,19 @@ const Footer = () => {
           </Col>
           <Col {...fade} transition={{ ...fade.transition, delay: 0.06 }}>
             <Label>Navigation</Label>
-            <FooterAnchor href="/#services">Services</FooterAnchor>
-            <FooterAnchor href="/#realisations">Réalisations</FooterAnchor>
-            <FooterAnchor href="/#offres">Devis & offres</FooterAnchor>
-            <FooterAnchor href="/#contact">Contact</FooterAnchor>
+            <FooterLink to="/#realisations" onClick={onAnchor('realisations')}>Réalisations</FooterLink>
+            <FooterLink to="/#services" onClick={onAnchor('services')}>Services</FooterLink>
+            <FooterLink to="/#methode" onClick={onAnchor('methode')}>Méthode</FooterLink>
+            <FooterLink to="/#faq" onClick={onAnchor('faq')}>Questions fréquentes</FooterLink>
+            <FooterLink to="/#contact" onClick={onAnchor('contact')}>Contact</FooterLink>
           </Col>
           <Col {...fade} transition={{ ...fade.transition, delay: 0.1 }}>
             <Label>Légal</Label>
             <FooterLink to="/privacy-policy">Confidentialité</FooterLink>
             <FooterLink to="/legal-notices">Mentions légales</FooterLink>
+            <CookieButton type="button" onClick={() => window.dispatchEvent(new Event('open-cookie-consent'))}>
+              Gérer les cookies
+            </CookieButton>
           </Col>
           <Col {...fade} transition={{ ...fade.transition, delay: 0.14 }}>
             <Label>Contact</Label>
@@ -174,7 +203,7 @@ const Footer = () => {
 
         <Bottom>
           <span>© {new Date().getFullYear()} Mattéo Rannou Le Texier</span>
-          <span>Tous droits réservés</span>
+          <span>Conçu et développé par mes soins — React, Vite, pré-rendu statique</span>
         </Bottom>
       </Inner>
       <Watermark aria-hidden>MATTÉO</Watermark>

@@ -6,6 +6,7 @@ import { trackFormEvent, trackConversion } from '../utils/analytics';
 import { sendViaEmailJs } from '../utils/emailjsSend.js';
 import {
   FiCheckCircle,
+  FiCheck,
   FiUser,
   FiMail,
   FiBriefcase,
@@ -16,23 +17,14 @@ import {
   FiUsers,
   FiAward,
   FiLayout,
-  FiSearch,
-  FiSmartphone,
-  FiBookOpen,
   FiLayers,
-  FiShield,
   FiShoppingCart,
-  FiCreditCard,
-  FiTrendingUp,
   FiRefreshCw,
-  FiEdit3,
-  FiDatabase,
   FiTool,
-  FiActivity,
-  FiPackage,
   FiX,
   FiZap,
   FiChevronDown,
+  FiArrowUpRight,
 } from 'react-icons/fi';
 
 const OffersRoot = styled.section`
@@ -74,116 +66,129 @@ const Subtitle = styled(motion.p)`
   max-width: 38rem;
 `;
 
-const FreeBanner = styled(motion.div)`
-  text-align: center;
-  padding: 1rem 1.25rem;
-  margin-bottom: 2.25rem;
-  border-radius: 16px;
-  background: var(--color-accent-muted);
-  border: 1px solid rgba(200, 242, 74, 0.28);
-  max-width: none;
+const Anchor = styled.span`
+  display: block;
+  scroll-margin-top: var(--scroll-margin);
 `;
 
-const FreeBannerLead = styled.p`
-  margin: 0 0 0.35rem;
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--color-text);
-`;
-
-const FreeBannerText = styled.p`
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--color-muted);
-`;
-
-const OffersSingleBlock = styled(motion.div)`
-  margin-bottom: 2.75rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
-  border-radius: 20px;
-  padding: clamp(1.35rem, 3.5vw, 2rem);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.22);
-`;
-
-const OfferItemsGrid = styled.ul`
-  display: grid;
-  gap: 0.25rem 1.5rem;
-  grid-template-columns: 1fr;
+const CardsGrid = styled.ul`
   list-style: none;
-  padding: 0;
-  margin: 0;
+  display: grid;
+  gap: 1rem;
 
-  @media (min-width: 720px) {
+  @media (min-width: 700px) {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1100px) {
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
 
-const OfferItem = styled(motion.li)`
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr);
-  column-gap: 0.85rem;
-  align-items: center;
-  padding: 0.55rem 0;
-  min-width: 0;
-`;
-
-const OfferIconWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  background: var(--color-accent-muted);
-  color: var(--color-accent);
-`;
-
-const OfferItemText = styled.p`
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.45;
-  color: var(--color-muted);
-`;
-
-const OffersBlockFooter = styled.div`
-  margin-top: 1.35rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  text-align: center;
-`;
-
-const TarifNote = styled.span`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-muted);
-  padding: 0.5rem 0.85rem;
-  border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-`;
-
-const DevisCtaBlock = styled.div`
+const Card = styled(motion.li)`
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.65rem;
-  margin-bottom: 0;
-  text-align: center;
+  padding: 1.6rem 1.5rem 1.4rem;
+  border-radius: 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  transition: border-color 0.3s ease, transform 0.35s var(--ease-out);
+
+  &:hover {
+    border-color: rgba(200, 242, 74, 0.35);
+    transform: translateY(-4px);
+  }
 `;
 
-const DevisCtaHint = styled.p`
-  margin: 0;
-  font-size: 0.88rem;
+const CardIcon = styled.div`
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-muted);
+  color: var(--color-accent);
+  margin-bottom: 1.1rem;
+`;
+
+const CardTitle = styled.h3`
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+`;
+
+const CardAudience = styled.p`
+  font-size: 0.9rem;
+  line-height: 1.55;
   color: var(--color-muted);
-  max-width: 420px;
-  line-height: 1.45;
+  margin-bottom: 1rem;
+`;
+
+const CardPoints = styled.ul`
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+
+  li {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    gap: 0.55rem;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    color: var(--color-text);
+  }
+
+  svg {
+    margin-top: 0.15rem;
+    color: var(--color-accent);
+  }
+`;
+
+const CardCta = styled.button`
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  padding: 0.4rem 0;
+  background: none;
+  color: var(--color-accent);
+  font-size: 0.92rem;
+  font-weight: 600;
+
+  svg {
+    transition: transform 0.25s var(--ease-out);
+  }
+
+  &:hover svg {
+    transform: translate(2px, -2px);
+  }
+`;
+
+const HelpCard = styled(Card)`
+  justify-content: center;
+  align-items: flex-start;
+  background: var(--color-accent-muted);
+  border-color: rgba(200, 242, 74, 0.28);
+
+  ${CardTitle} {
+    font-size: 1.35rem;
+  }
+
+  ${CardAudience} {
+    margin-bottom: 1.35rem;
+  }
+`;
+
+const SrOnly = styled.span`
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 `;
 
 const DevisOpenButton = styled(motion.button)`
@@ -363,19 +368,19 @@ const NeedTypeTrigger = styled.button`
   font-family: inherit;
   color: var(--color-text);
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(200, 242, 74), 0.35);
+  border: 1px solid rgba(200, 242, 74, 0.35);
   border-radius: 10px;
   cursor: pointer;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 
   &:hover {
-    border-color: rgba(200, 242, 74), 0.55);
+    border-color: rgba(200, 242, 74, 0.55);
     background: rgba(255, 255, 255, 0.08);
   }
 
   &[aria-expanded='true'] {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(200, 242, 74), 0.28);
+    box-shadow: 0 0 0 2px rgba(200, 242, 74, 0.28);
   }
 
   &:focus-visible {
@@ -426,7 +431,7 @@ const NeedTypeOptionBtn = styled.button`
   font-family: inherit;
 
   &:hover {
-    background: rgba(200, 242, 74), 0.2);
+    background: rgba(200, 242, 74, 0.2);
     color: var(--color-text);
   }
 
@@ -436,7 +441,7 @@ const NeedTypeOptionBtn = styled.button`
   }
 
   &[data-selected='true'] {
-    background: rgba(200, 242, 74), 0.28);
+    background: rgba(200, 242, 74, 0.28);
     color: #f0f4ff;
     font-weight: 600;
   }
@@ -446,7 +451,7 @@ const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(200, 242, 74), 0.25);
+  border: 1px solid rgba(200, 242, 74, 0.25);
   border-radius: 8px;
   color: var(--color-text);
   font-size: 1rem;
@@ -454,11 +459,11 @@ const Input = styled.input`
   &:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(200, 242, 74), 0.2);
+    box-shadow: 0 0 0 2px rgba(200, 242, 74, 0.2);
   }
 
   &::placeholder {
-    color: #666666;
+    color: #8a867e;
   }
 `;
 
@@ -466,7 +471,7 @@ const TextArea = styled.textarea`
   width: 100%;
   padding: 0.75rem;
   background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(200, 242, 74), 0.25);
+  border: 1px solid rgba(200, 242, 74, 0.25);
   border-radius: 8px;
   color: var(--color-text);
   font-size: 1rem;
@@ -476,11 +481,11 @@ const TextArea = styled.textarea`
   &:focus {
     outline: none;
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(200, 242, 74), 0.2);
+    box-shadow: 0 0 0 2px rgba(200, 242, 74, 0.2);
   }
 
   &::placeholder {
-    color: #666666;
+    color: #8a867e;
   }
 `;
 
@@ -526,18 +531,18 @@ const OptionalToggle = styled(motion.button)`
   border-radius: 8px;
   background: var(--color-accent-muted);
   color: var(--color-accent);
-  border: 1px solid rgba(200, 242, 74), 0.35);
+  border: 1px solid rgba(200, 242, 74, 0.35);
   cursor: pointer;
   font-weight: 600;
   margin: 0.5rem 0 1rem;
   &:hover {
-    background: rgba(200, 242, 74), 0.22);
+    background: rgba(200, 242, 74, 0.22);
   }
 `;
 
 const OptionalSection = styled(motion.div)`
   overflow: hidden;
-  border: 1px dashed rgba(200, 242, 74), 0.25);
+  border: 1px dashed rgba(200, 242, 74, 0.25);
   border-radius: 12px;
   padding: 0 1rem;
   margin-bottom: 1rem;
@@ -557,71 +562,67 @@ const ResponseTimeMark = styled.span`
 const OFFER_CATEGORIES = [
   {
     id: 'vitrine',
+    Icon: FiLayout,
     title: 'Sites vitrine & WordPress',
+    audience: 'Artisans, indépendants, associations et PME qui veulent être trouvés et contactés.',
     points: [
-      'Sites clairs, rapides et agréables à faire évoluer',
-      'Référencement et structure pensés dès le départ',
-      'Affichage optimal sur mobile, tablette et bureau',
-      'Formation pour que vous restiez autonome sur le contenu',
+      'Site clair, rapide et adapté au mobile',
+      'Référencement Google pensé dès le départ',
+      'Formation pour gérer vos contenus en autonomie',
     ],
   },
   {
     id: 'sur-mesure',
-    title: 'Applications web & produits sur-mesure',
+    Icon: FiLayers,
+    title: 'Applications web sur-mesure',
+    audience: 'Outils métier, plateformes avec comptes utilisateurs, SaaS.',
     points: [
-      'Parcours utilisateur, comptes, règles métier — adapté à votre activité',
+      'Parcours, comptes et règles métier adaptés à votre activité',
       'Stack moderne, code lisible et maintenable',
-      'Performance, sécurité et évolutivité prises en compte',
+      'Performance, sécurité et évolutivité',
     ],
   },
   {
     id: 'ecommerce',
+    Icon: FiShoppingCart,
     title: 'E-commerce',
+    audience: 'Commerçants et marques qui veulent vendre en ligne.',
     points: [
-      'Boutique en ligne avec tunnel d’achat adapté à votre catalogue',
+      'Boutique et tunnel d’achat adaptés à votre catalogue',
       'Paiements sécurisés et gestion des commandes',
-      'Accompagnement sur l’ergonomie et la conversion',
+      'Conseils ergonomie et conversion',
     ],
   },
   {
     id: 'refonte',
+    Icon: FiRefreshCw,
     title: 'Refonte & migration',
+    audience: 'Sites vieillissants, lents ou difficiles à mettre à jour.',
     points: [
-      'Analyse de l’existant et plan de transition',
-      'Design et technique modernisés sans tout repartir de zéro quand c’est possible',
-      'Préservation du référencement et des données sensibles',
+      'Audit de l’existant et plan de transition',
+      'Design et technique modernisés',
+      'Référencement et données préservés',
     ],
   },
   {
     id: 'maintenance',
-    title: 'Accompagnement / maintenance',
+    Icon: FiTool,
+    title: 'Maintenance & évolutions',
+    audience: 'Sites existants à sécuriser et à faire grandir.',
     points: [
       'Mises à jour, sauvegardes et corrections',
-      'Veille perf & sécurité',
-      'Évolutions ponctuelles selon vos priorités',
+      'Veille performance et sécurité',
+      'Évolutions selon vos priorités',
     ],
   },
 ];
 
-/** Une ligne = une prestation, avec icône dédiée (affichage en un seul bloc). */
-const OFFER_ITEMS = [
-  { Icon: FiLayout, text: 'Sites vitrine : clairs, rapides et agréables à faire évoluer' },
-  { Icon: FiSearch, text: 'Référencement et structure de contenu pensés dès le départ' },
-  { Icon: FiSmartphone, text: 'Affichage soigné sur mobile, tablette et bureau' },
-  { Icon: FiBookOpen, text: 'Formation pour que vous restiez autonome sur vos contenus' },
-  { Icon: FiUsers, text: 'Applications web & produits sur-mesure : parcours, comptes, règles métier' },
-  { Icon: FiLayers, text: 'Stack moderne, code lisible et maintenable dans la durée' },
-  { Icon: FiShield, text: 'Performance, sécurité et évolutivité prises en compte' },
-  { Icon: FiShoppingCart, text: 'E-commerce : boutique et tunnel d’achat adaptés à votre catalogue' },
-  { Icon: FiCreditCard, text: 'Paiements sécurisés et gestion des commandes' },
-  { Icon: FiTrendingUp, text: 'Accompagnement sur l’ergonomie et la conversion' },
-  { Icon: FiRefreshCw, text: 'Refonte : analyse de l’existant et plan de transition' },
-  { Icon: FiEdit3, text: 'Design et technique modernisés sans tout repartir de zéro quand c’est pertinent' },
-  { Icon: FiDatabase, text: 'Référencement et données : migration en limitant la casse' },
-  { Icon: FiTool, text: 'Maintenance : mises à jour, sauvegardes et corrections' },
-  { Icon: FiActivity, text: 'Veille performances et sécurité' },
-  { Icon: FiPackage, text: 'Évolutions ponctuelles selon vos priorités' },
-];
+const reveal = {
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+};
 
 const NEED_OPTIONS = [
   { value: '', label: 'Indifférent / à définir ensemble' },
@@ -632,6 +633,7 @@ const NEED_OPTIONS = [
 const OffersSection = () => {
   const needTypeWrapRef = useRef(null);
   const needTypeListRef = useRef(null);
+  const devisOpenerRef = useRef(null);
   const [needTypeOpen, setNeedTypeOpen] = useState(false);
   const [needListRect, setNeedListRect] = useState(null);
   const [formError, setFormError] = useState('');
@@ -655,6 +657,12 @@ const OffersSection = () => {
   const [showOptional, setShowOptional] = useState(false);
   const [isDevisOpen, setIsDevisOpen] = useState(false);
 
+  const openDevis = (opener, needType) => {
+    devisOpenerRef.current = opener;
+    setFormData((prev) => ({ ...prev, needType }));
+    setIsDevisOpen(true);
+  };
+
   const closeDevisModal = () => {
     setNeedTypeOpen(false);
     setFormError('');
@@ -673,6 +681,22 @@ const OffersSection = () => {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const onKey = (e) => {
+      if (e.key === 'Tab') {
+        /* Garde le focus clavier dans la modale. */
+        const panel = document.getElementById('offres-form');
+        const focusables = panel?.querySelectorAll('button:not([disabled]), input, textarea, a[href]');
+        if (!focusables?.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+        return;
+      }
       if (e.key !== 'Escape') return;
       if (needTypeOpen) {
         e.stopPropagation();
@@ -687,6 +711,12 @@ const OffersSection = () => {
       window.removeEventListener('keydown', onKey);
     };
   }, [isDevisOpen, needTypeOpen]);
+
+  /* Rend le focus au bouton d’ouverture quand la modale se ferme. */
+  useEffect(() => {
+    if (!isDevisOpen) return undefined;
+    return () => devisOpenerRef.current?.focus({ preventScroll: true });
+  }, [isDevisOpen]);
 
   useLayoutEffect(() => {
     if (!needTypeOpen) {
@@ -866,11 +896,10 @@ const OffersSection = () => {
       setFormError('');
     } catch (error) {
       console.error('Erreur détaillée:', error);
-      const msg =
-        error?.message ||
-        error?.text ||
-        'Envoi impossible. Vérifiez la configuration e-mail (EmailJS) ou réessayez plus tard.';
-      setFormError(`Envoi impossible : ${msg}`);
+      const msg = error?.message || error?.text || 'Erreur inconnue';
+      setFormError(
+        'L’envoi n’a pas abouti. Réessayez dans un instant ou écrivez-moi directement à contact@matteo-rlt.fr.'
+      );
       trackFormEvent('Offer Form', 'error', {
         error_message: typeof msg === 'string' ? msg : String(msg),
       });
@@ -880,9 +909,10 @@ const OffersSection = () => {
   };
 
   return (
-    <OffersRoot id="offres" aria-labelledby="offres-title">
+    <OffersRoot id="services" aria-labelledby="offres-title">
       {showNotification && (
         <motion.div
+          role="status"
           initial={{ opacity: 0, x: 300, scale: 0.8 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           exit={{ opacity: 0, x: 300, scale: 0.8 }}
@@ -921,6 +951,7 @@ const OffersSection = () => {
           <button
             type="button"
             onClick={() => setShowNotification(false)}
+            aria-label="Fermer la notification"
             style={{
               background: 'none',
               border: 'none',
@@ -936,68 +967,55 @@ const OffersSection = () => {
         </motion.div>
       )}
 
-      <Index>05 — Offres</Index>
-      <Title
-        id="offres-title"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55 }}
-      >
-        Ce que je propose
+      <Anchor id="offres" aria-hidden />
+      <Index>02 — Services</Index>
+      <Title id="offres-title" {...reveal}>
+        Ce que je peux faire pour vous
       </Title>
 
-      <Subtitle
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.06 }}
-      >
-        Chaque projet est différent : pas de grille tarifaire figée ici — on cadrera le périmètre ensemble, et je vous
-        transmettrai une proposition claire après échange.
+      <Subtitle {...reveal} transition={{ ...reveal.transition, delay: 0.06 }}>
+        Pas de forfait figé : chaque projet est chiffré après échange, avec un devis gratuit et sans engagement.
       </Subtitle>
 
-      <FreeBanner initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 0.1 }}>
-        <FreeBannerLead>Devis gratuit, sans engagement</FreeBannerLead>
-        <FreeBannerText>
-          L’estimation et le devis sont toujours gratuits : ouvrez le formulaire, décrivez votre contexte — je reviens vers
-          vous avec des pistes concrètes et, si besoin, une fourchette ou un montant après analyse.
-        </FreeBannerText>
-      </FreeBanner>
-
-      <OffersSingleBlock
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.08 }}
-      >
-        <OfferItemsGrid>
-          {OFFER_ITEMS.map(({ Icon, text }, index) => (
-            <OfferItem key={text} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, delay: 0.02 * index }}>
-              <OfferIconWrap aria-hidden>
-                <Icon size={20} strokeWidth={2.25} />
-              </OfferIconWrap>
-              <OfferItemText>{text}</OfferItemText>
-            </OfferItem>
-          ))}
-        </OfferItemsGrid>
-        <OffersBlockFooter>
-          <TarifNote>Tarification sur devis — chaque mission est chiffrée après échange</TarifNote>
-        </OffersBlockFooter>
-      </OffersSingleBlock>
-
-      <DevisCtaBlock>
-        <DevisOpenButton
-          type="button"
-          onClick={() => setIsDevisOpen(true)}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.12 }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <FiZap size={20} strokeWidth={2.25} aria-hidden />
-          Demander un devis en 30 secondes
-        </DevisOpenButton>
-        <DevisCtaHint>Devis gratuit, sans engagement — vos infos servent uniquement à vous recontacter.</DevisCtaHint>
-      </DevisCtaBlock>
+      <CardsGrid>
+        {OFFER_CATEGORIES.map(({ id, Icon, title, audience, points }, i) => (
+          <Card key={id} {...reveal} transition={{ ...reveal.transition, delay: 0.05 * i }}>
+            <CardIcon aria-hidden>
+              <Icon size={21} strokeWidth={2.1} />
+            </CardIcon>
+            <CardTitle>{title}</CardTitle>
+            <CardAudience>{audience}</CardAudience>
+            <CardPoints>
+              {points.map((pt) => (
+                <li key={pt}>
+                  <FiCheck aria-hidden size={15} strokeWidth={2.5} />
+                  {pt}
+                </li>
+              ))}
+            </CardPoints>
+            <CardCta type="button" onClick={(e) => openDevis(e.currentTarget, id)}>
+              Demander un devis
+              <SrOnly> — {title}</SrOnly>
+              <FiArrowUpRight aria-hidden size={16} />
+            </CardCta>
+          </Card>
+        ))}
+        <HelpCard {...reveal} transition={{ ...reveal.transition, delay: 0.25 }}>
+          <CardTitle>Pas sûr de ce qu’il vous faut ?</CardTitle>
+          <CardAudience>
+            Décrivez votre projet en quelques lignes, je vous oriente vers la solution la plus adaptée à votre budget.
+          </CardAudience>
+          <DevisOpenButton
+            type="button"
+            onClick={(e) => openDevis(e.currentTarget, '')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <FiZap size={18} strokeWidth={2.25} aria-hidden />
+            Devis gratuit en 30 secondes
+          </DevisOpenButton>
+        </HelpCard>
+      </CardsGrid>
 
       <AnimatePresence>
         {isDevisOpen && (
@@ -1322,11 +1340,10 @@ const OffersSection = () => {
           ) : null}
 
           <SubmitButton
-            type="button"
+            type="submit"
             disabled={isSubmitting}
             whileHover={{ scale: 1.01 }}
             whileTap={{ scale: 0.99 }}
-            onClick={() => void handleSubmit({ preventDefault: () => {} })}
           >
             {isSubmitting ? 'Envoi…' : 'Envoyer ma demande de devis gratuit'}
           </SubmitButton>
