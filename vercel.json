@@ -11,7 +11,7 @@
     { "source": "/contact", "destination": "/#contact", "permanent": true }
   ],
   "rewrites": [
-    { "source": "/demo/:path*", "destination": "/spa.html" }
+    { "source": "/demo/:path*", "destination": "/spa" }
   ],
   "headers": [
     {
