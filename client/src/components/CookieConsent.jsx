@@ -227,6 +227,13 @@ function enableConsentAndLoadTags() {
 const CookieConsent = () => {
   const [visible, setVisible] = React.useState(false);
 
+  /* Le footer permet de rouvrir le bandeau pour modifier son choix (exigence CNIL). */
+  React.useEffect(() => {
+    const reopen = () => setVisible(true);
+    window.addEventListener('open-cookie-consent', reopen);
+    return () => window.removeEventListener('open-cookie-consent', reopen);
+  }, []);
+
   React.useEffect(() => {
     const stored = localStorage.getItem('cookie_consent_v1');
     if (stored === 'granted') {
@@ -252,8 +259,8 @@ const CookieConsent = () => {
           <Copy>
             <Title id="cookie-banner-title">Cookies &amp; confidentialité</Title>
             <Text id="cookie-banner-desc">
-              Nous utilisons des cookies pour la mesure d’audience (Google Analytics), à la publicité (Google Ads) et
-              pour l’analyse de parcours (Microsoft Clarity). Les scripts associés ne sont chargés qu’avec votre accord.{' '}
+              J’utilise des cookies pour la mesure d’audience (Google Analytics), la publicité (Google Ads) et
+              l’analyse de parcours (Microsoft Clarity). Les scripts associés ne sont chargés qu’avec votre accord.{' '}
               <PolicyLink to="/privacy-policy">Politique de confidentialité</PolicyLink>
             </Text>
           </Copy>
@@ -262,9 +269,12 @@ const CookieConsent = () => {
           <BtnGhost
             type="button"
             onClick={() => {
+              const wasGranted = window.__consentGranted === true;
               localStorage.setItem('cookie_consent_v1', 'denied');
               window.__consentGranted = false;
               setVisible(false);
+              // Les scripts déjà chargés ne se déchargent pas : on recharge pour retirer le suivi.
+              if (wasGranted) window.location.reload();
             }}
           >
             Refuser

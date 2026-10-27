@@ -1,5 +1,3 @@
-import { Helmet } from 'react-helmet';
-
 const StructuredData = () => {
   const structuredData = {
     '@context': 'https://schema.org',
@@ -11,17 +9,20 @@ const StructuredData = () => {
     url: 'https://matteo-rlt.fr',
     sameAs: ['https://github.com/matteorlt', 'https://linkedin.com/in/matteo-rlt'],
     knowsAbout: ['Développement web', 'TypeScript', 'JavaScript', 'E-commerce', 'Applications web'],
-    worksFor: {
-      '@type': 'Organization',
-      name: 'Freelance'
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Vannes',
+      addressRegion: 'Bretagne',
+      addressCountry: 'FR'
     },
     email: 'contact@matteo-rlt.fr'
   };
 
   return (
-    <Helmet>
-      <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
-    </Helmet>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
   );
 };
 

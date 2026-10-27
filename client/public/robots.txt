@@ -1,12 +1,4 @@
 User-agent: *
-
-Sitemap: https://matteo-rlt.fr/sitemap.xml
-
-User-agent: *
 Allow: /
 
-# Sitemap
 Sitemap: https://matteo-rlt.fr/sitemap.xml
- 
-# Crawl-delay pour éviter de surcharger le serveur
-Crawl-delay: 1 

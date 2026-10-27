@@ -5,17 +5,17 @@ import { useLocation, Link } from 'react-router-dom';
 import {
   FiArrowUpRight,
   FiArrowDown,
-  FiLayout,
-  FiLayers,
-  FiShoppingCart,
   FiExternalLink,
   FiLinkedin,
   FiMail,
   FiClock,
   FiCheckCircle,
-  FiUser
+  FiUser,
+  FiCheck,
+  FiPlus
 } from 'react-icons/fi';
 import SEO from '../components/SEO.jsx';
+import { ROUTE_META, SITE_URL } from '../seo/routes.js';
 import StructuredData from '../components/StructuredData.jsx';
 import ContactForm from '../components/ContactForm.jsx';
 import OffersSection from '../components/OffersSection.jsx';
@@ -47,6 +47,7 @@ const Hero = styled.section`
 
 const HeroGrid = styled.div`
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(2rem, 6vw, 4rem);
   align-items: end;
   width: 100%;
@@ -146,6 +147,12 @@ const CtaRow = styled(motion.div)`
   @media (max-width: 520px) {
     flex-direction: column;
     align-items: stretch;
+
+    /* Le wrapper Magnetic doit aussi prendre toute la largeur. */
+    & > div,
+    & > div > div {
+      width: 100%;
+    }
   }
 `;
 
@@ -196,6 +203,27 @@ const BtnGhost = styled.a`
 
   @media (max-width: 520px) {
     width: 100%;
+  }
+`;
+
+const TrustList = styled(motion.ul)`
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 1.5rem;
+  font-size: 0.88rem;
+  color: var(--color-muted);
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  svg {
+    color: var(--color-accent);
+    flex-shrink: 0;
   }
 `;
 
@@ -445,60 +473,6 @@ const fadeUp = {
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
 };
 
-const ServicesList = styled.div`
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid var(--color-line);
-`;
-
-const ServiceRow = styled(motion.article)`
-  display: grid;
-  gap: 0.85rem 2rem;
-  padding: 1.6rem 0;
-  border-bottom: 1px solid var(--color-line);
-  cursor: default;
-  transition: background 0.35s var(--ease-out);
-
-  @media (min-width: 760px) {
-    grid-template-columns: 4.5rem minmax(0, 0.9fr) minmax(0, 1.2fr) auto;
-    align-items: center;
-    padding: 1.85rem 0.4rem;
-  }
-
-  &:hover {
-    background: linear-gradient(90deg, rgba(200, 242, 74, 0.05), transparent 70%);
-  }
-`;
-
-const ServiceNum = styled.span`
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--color-accent);
-  letter-spacing: 0.08em;
-`;
-
-const ServiceTitle = styled.h3`
-  font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2.4vw, 1.7rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-`;
-
-const ServiceIcon = styled.span`
-  display: inline-flex;
-  color: var(--color-accent);
-  font-size: 1.15rem;
-`;
-
-const ServiceText = styled.p`
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: var(--color-muted);
-`;
-
 const ProjectsList = styled.div`
   display: flex;
   flex-direction: column;
@@ -624,6 +598,21 @@ const ProjectName = styled.h3`
   letter-spacing: -0.03em;
 `;
 
+const ProjectStatus = styled.span`
+  display: inline-block;
+  margin-left: 0.6rem;
+  vertical-align: middle;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  color: ${({ $concept }) => ($concept ? 'var(--color-muted)' : 'var(--color-accent-ink)')};
+  background: ${({ $concept }) => ($concept ? 'rgba(255, 255, 255, 0.06)' : 'var(--color-accent)')};
+`;
+
 const ProjectOutcome = styled.p`
   font-size: 0.9rem;
   line-height: 1.55;
@@ -683,8 +672,12 @@ const MethodGrid = styled.div`
   display: grid;
   gap: 1rem;
 
-  @media (min-width: 800px) {
-    grid-template-columns: repeat(3, 1fr);
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1040px) {
+    grid-template-columns: repeat(4, 1fr);
     gap: 0;
   }
 `;
@@ -695,7 +688,7 @@ const MethodCard = styled(motion.article)`
   background: rgba(255, 255, 255, 0.02);
   position: relative;
 
-  @media (min-width: 800px) {
+  @media (min-width: 1040px) {
     padding: 2.25rem 1.75rem;
     border-right: none;
 
@@ -786,6 +779,55 @@ const WhyText = styled.p`
   color: var(--color-muted);
 `;
 
+const FaqList = styled.div`
+  border-top: 1px solid var(--color-line);
+  max-width: 56rem;
+`;
+
+const FaqItem = styled.details`
+  border-bottom: 1px solid var(--color-line);
+
+  summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.35rem 0.25rem;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transition: color 0.25s var(--ease-out);
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    &:hover {
+      color: var(--color-accent);
+    }
+
+    svg {
+      flex-shrink: 0;
+      color: var(--color-accent);
+      transition: transform 0.3s var(--ease-out);
+    }
+  }
+
+  &[open] summary svg {
+    transform: rotate(45deg);
+  }
+
+  p {
+    padding: 0 0.25rem 1.5rem;
+    max-width: 44rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+  }
+`;
+
 const ContactSection = styled(Section)`
   padding-bottom: max(4rem, calc(3rem + var(--page-pad-b)));
 `;
@@ -837,6 +879,8 @@ const ContactLinkRow = styled.a`
   }
 `;
 
+const TRUST = ['Devis gratuit sous 48 h ouvrées', 'Un seul interlocuteur', 'Partout en France, à distance'];
+
 const TECH = [
   'Next.js',
   'React',
@@ -849,6 +893,43 @@ const TECH = [
   'Vite',
   'Framer Motion'
 ];
+
+const FAQ = [
+  {
+    q: 'Combien coûte un site internet ?',
+    a: 'Chaque projet est chiffré sur mesure, selon le nombre de pages, les fonctionnalités et les contenus à produire. Le devis est gratuit et sans engagement : décrivez votre besoin, je vous réponds sous 48 h ouvrées avec une estimation claire.'
+  },
+  {
+    q: 'Combien de temps faut-il pour créer mon site ?',
+    a: 'Cela dépend du périmètre et du rythme des échanges (contenus, validations). Le planning est fixé ensemble dès le devis, avec des étapes claires jusqu’à la mise en ligne.'
+  },
+  {
+    q: 'Pourrai-je modifier mon site moi-même ?',
+    a: 'Oui. Selon le projet, je mets en place un outil d’édition adapté (WordPress par exemple) et je vous forme pour que vous restiez autonome sur vos textes, images et actualités.'
+  },
+  {
+    q: 'Mon site sera-t-il bien référencé sur Google ?',
+    a: 'Le référencement est pris en compte dès le départ : structure des pages, vitesse, balises, affichage mobile. Personne ne peut honnêtement promettre la première place, mais votre site partira sur des bases solides.'
+  },
+  {
+    q: 'Travaillez-vous uniquement en Bretagne ?',
+    a: 'Je suis basé près de Vannes, mais je travaille à distance avec des clients partout en France : visio, e-mail et téléphone suffisent pour mener un projet de bout en bout.'
+  },
+  {
+    q: 'Que se passe-t-il après la mise en ligne ?',
+    a: 'Vous n’êtes pas laissé seul : je propose un accompagnement pour les mises à jour, sauvegardes, corrections et évolutions, selon vos besoins.'
+  }
+];
+
+const FAQ_JSONLD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: { '@type': 'Answer', text: a }
+  }))
+};
 
 function projectHost(project) {
   if (project.host) return project.host;
@@ -872,38 +953,19 @@ const Home = () => {
     return () => clearTimeout(t);
   }, [location.pathname, location.hash]);
 
-  const services = [
-    {
-      icon: <FiLayout aria-hidden />,
-      title: 'Sites vitrine & landing pages',
-      text:
-        'Pages rapides, SEO-friendly et pensées pour guider le visiteur vers l’action : contact, inscription ou achat.'
-    },
-    {
-      icon: <FiLayers aria-hidden />,
-      title: 'Applications web & SaaS',
-      text:
-        'Produits sur-mesure : tableaux de bord, comptes utilisateurs, automatisations — stack moderne et évolutive.'
-    },
-    {
-      icon: <FiShoppingCart aria-hidden />,
-      title: 'E-commerce',
-      text:
-        'Boutiques claires, tunnel d’achat fluide et intégrations paiement pour vendre en ligne sans friction.'
-    }
-  ];
-
   const projects = [
     {
       id: 'driva',
       title: 'Driva',
       kicker: '01 — Produit métier',
+      status: 'Mon produit',
       outcome:
         'Outil métier pour auto-écoles : planning, réservations et suivi des élèves centralisés pour gagner du temps au quotidien.',
       tech: ['Next.js', 'TypeScript', 'PostgreSQL'],
       preview: '/preview/driva-preview-2026.webp',
       previewMobile: '/preview/driva-preview-2026-sm.webp',
       previewWidth: 1007,
+      previewHeight: 708,
       previewMobileWidth: 800,
       link: 'https://driva-auto.fr/',
       external: true
@@ -912,8 +974,9 @@ const Home = () => {
       id: 'birdie-golf-club',
       title: 'Le Birdie Golf Club',
       kicker: '02 — Vitrine',
+      status: 'Concept',
       outcome:
-        'Vitrine pour un golf fictif : ambiance club-house, lecture claire du site et des adhésions, navigation fluide sur mobile comme sur grand écran.',
+        'Vitrine pour un golf imaginaire : ambiance club-house, lecture claire du site et des adhésions, navigation fluide sur mobile comme sur grand écran.',
       tech: ['Vue 3', 'Vite', 'HTML', 'CSS'],
       preview: '/preview/birdie-golf-club-preview.webp',
       previewMobile: '/preview/birdie-golf-club-preview-sm.webp',
@@ -926,6 +989,7 @@ const Home = () => {
       id: 'aume',
       title: 'Aume',
       kicker: '03 — Marque',
+      status: 'Concept',
       outcome:
         'Vitrine pour une marque fictive de mobilier et décoration durables : univers éditorial, collection et démarche mis en scène pour habiter plus lentement.',
       tech: ['React', 'Vite'],
@@ -940,6 +1004,7 @@ const Home = () => {
       id: 'noya',
       title: 'Noya',
       kicker: '04 — Mode',
+      status: 'Concept',
       outcome:
         'Boutique en ligne pour une marque fictive de streetwear épuré : collection, lookbook et parcours d’achat mis en scène autour d’une silhouette oversize.',
       tech: ['React', 'Vite'],
@@ -954,6 +1019,7 @@ const Home = () => {
       id: 'gym',
       title: 'Gym Phys',
       kicker: '05 — Association',
+      status: 'Client',
       outcome:
         'Site vitrine pour une association sportive : informations, actualités et prise de contact accessibles sur mobile.',
       tech: ['WordPress', 'PHP'],
@@ -967,9 +1033,26 @@ const Home = () => {
   ];
 
   const method = [
-    { n: '01', title: 'Attention', text: 'Un message accrocheur, une promesse claire. Le visiteur comprend en trois secondes pourquoi il est là.' },
-    { n: '02', title: 'Intention', text: 'Preuves, bénéfices, parcours. On construit la confiance avant de demander quoi que ce soit.' },
-    { n: '03', title: 'Action', text: 'Contact, devis ou achat — un CTA évident, un formulaire simple, zéro friction.' }
+    {
+      n: '01',
+      title: 'Échange',
+      text: 'On parle de votre activité, de vos objectifs et de votre budget. Vous recevez un devis gratuit et détaillé.'
+    },
+    {
+      n: '02',
+      title: 'Maquette',
+      text: 'Je propose une structure et un design que l’on ajuste ensemble, avant d’écrire la moindre ligne de code.'
+    },
+    {
+      n: '03',
+      title: 'Développement',
+      text: 'Un site rapide, adapté au mobile et optimisé pour Google, avec des points d’étape réguliers.'
+    },
+    {
+      n: '04',
+      title: 'Mise en ligne',
+      text: 'Déploiement, prise en main de vos contenus, puis suivi et maintenance si vous le souhaitez.'
+    }
   ];
 
   const why = [
@@ -998,12 +1081,7 @@ const Home = () => {
 
   return (
     <>
-      <SEO
-        title="Mattéo Rannou Le Texier — Développeur web freelance | Sites & applications"
-        description="Je construis des sites et applications web orientés conversion : vitrine, e-commerce, SaaS. Disponible pour vos projets — contactez-moi."
-        keywords="développeur web freelance, création site internet, site vitrine, e-commerce, SaaS, applications web, France"
-        url="https://matteo-rlt.fr"
-      />
+      <SEO {...ROUTE_META['/']} url={`${SITE_URL}/`} />
       <StructuredData />
       <Page>
         <Hero id="top">
@@ -1031,8 +1109,8 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.42, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               >
-                Développeur web freelance — vitrine, e-commerce et SaaS. Basé en Bretagne, j’interviens à distance
-                partout en France.
+                Développeur web freelance près de Vannes. Je conçois des sites vitrine, boutiques en ligne et
+                applications web rapides, bien référencés et pensés pour vous amener des clients.
               </Subhead>
               <CtaRow
                 initial={{ opacity: 0, y: 16 }}
@@ -1041,12 +1119,24 @@ const Home = () => {
               >
                 <Magnetic>
                   <BtnPrimary href="#contact">
-                    Me contacter
+                    Demander un devis gratuit
                     <FiArrowUpRight aria-hidden />
                   </BtnPrimary>
                 </Magnetic>
                 <BtnGhost href="#realisations">Voir mes réalisations</BtnGhost>
               </CtaRow>
+              <TrustList
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7, duration: 0.6 }}
+              >
+                {TRUST.map((t) => (
+                  <li key={t}>
+                    <FiCheck aria-hidden size={15} strokeWidth={2.5} />
+                    {t}
+                  </li>
+                ))}
+              </TrustList>
             </div>
 
             <HeroVisual
@@ -1087,7 +1177,7 @@ const Home = () => {
           </HeroGrid>
 
           <HeroMeta>
-            <ScrollHint href="#services">
+            <ScrollHint href="#realisations">
               Scroll
               <FiArrowDown aria-hidden size={14} />
             </ScrollHint>
@@ -1106,39 +1196,15 @@ const Home = () => {
           </MarqueeTrack>
         </MarqueeWrap>
 
-        <Section id="services">
-          <SectionHead>
-            <div>
-              <Index>01 — Expertise</Index>
-              <SectionTitle {...fadeUp}>Ce que je fais</SectionTitle>
-            </div>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              Des livrables orientés business : clarté du message, performance, et un parcours utilisateur qui mène à
-              l’action.
-            </SectionLead>
-          </SectionHead>
-          <ServicesList>
-            {services.map((s, i) => (
-              <ServiceRow key={s.title} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.06 * i }}>
-                <ServiceNum>0{i + 1}</ServiceNum>
-                <ServiceTitle>
-                  <ServiceIcon>{s.icon}</ServiceIcon>
-                  {s.title}
-                </ServiceTitle>
-                <ServiceText>{s.text}</ServiceText>
-              </ServiceRow>
-            ))}
-          </ServicesList>
-        </Section>
-
         <Section id="realisations">
           <SectionHead>
             <div>
-              <Index>02 — Sélection</Index>
-              <SectionTitle {...fadeUp}>Ce que j’ai livré</SectionTitle>
+              <Index>01 — Réalisations</Index>
+              <SectionTitle {...fadeUp}>Réalisations & concepts</SectionTitle>
             </div>
             <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              Quelques exemples concrets — résultat client avant tout.
+              Projets clients, produit maison et concepts de marque conçus de A à Z pour montrer ce que je peux
+              faire pour vous.
             </SectionLead>
           </SectionHead>
           <ProjectsList>
@@ -1167,7 +1233,7 @@ const Home = () => {
                         sizes="(max-width: 839px) min(100vw, 520px), min(42vw, 520px)"
                         alt={`Aperçu ${p.title}`}
                         width={p.previewWidth}
-                        height={Math.round(p.previewWidth * 0.62)}
+                        height={p.previewHeight || Math.round(p.previewWidth * 0.606)}
                         loading={i === 0 ? 'eager' : 'lazy'}
                         decoding="async"
                       />
@@ -1176,7 +1242,10 @@ const Home = () => {
                 </Browser>
                 <ProjectBody>
                   <ProjectKicker>{p.kicker}</ProjectKicker>
-                  <ProjectName>{p.title}</ProjectName>
+                  <ProjectName>
+                    {p.title}
+                    <ProjectStatus $concept={p.status === 'Concept'}>{p.status}</ProjectStatus>
+                  </ProjectName>
                   <Badges>
                     {p.tech.map((t) => (
                       <Badge key={t}>{t}</Badge>
@@ -1198,16 +1267,18 @@ const Home = () => {
           </ProjectsList>
         </Section>
 
+        <OffersSection />
+
         <Section id="methode">
           <SectionHead>
             <div>
               <Index>03 — Méthode</Index>
               <SectionTitle {...fadeUp}>
-                Trois jalons pour <Accent>convertir</Accent>
+                Quatre étapes, <Accent>zéro surprise</Accent>
               </SectionTitle>
             </div>
             <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              Transformer un visiteur en prospect ou client n’est pas un hasard — c’est un parcours dessiné.
+              Vous savez à chaque instant où en est votre projet, ce qui reste à faire et ce que ça coûte.
             </SectionLead>
           </SectionHead>
           <MethodGrid>
@@ -1242,13 +1313,35 @@ const Home = () => {
           </WhyGrid>
         </Section>
 
-        <OffersSection />
+        <Section id="faq">
+          <SectionHead>
+            <div>
+              <Index>05 — Questions</Index>
+              <SectionTitle {...fadeUp}>Questions fréquentes</SectionTitle>
+            </div>
+            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
+              Ce qu’on me demande le plus souvent avant de démarrer. Une autre question ? Écrivez-moi.
+            </SectionLead>
+          </SectionHead>
+          <FaqList>
+            {FAQ.map(({ q, a }) => (
+              <FaqItem key={q}>
+                <summary>
+                  {q}
+                  <FiPlus aria-hidden size={20} />
+                </summary>
+                <p>{a}</p>
+              </FaqItem>
+            ))}
+          </FaqList>
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSONLD) }} />
+        </Section>
 
         <ContactSection id="contact">
           <SectionHead>
             <div>
               <Index>06 — Contact</Index>
-              <SectionTitle {...fadeUp}>Un projet en tête ?</SectionTitle>
+              <SectionTitle {...fadeUp}>Parlons de votre projet</SectionTitle>
             </div>
             <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
               <LeadLine>Décrivez votre besoin en quelques lignes.</LeadLine>

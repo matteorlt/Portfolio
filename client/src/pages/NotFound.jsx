@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FiHome, FiArrowLeft } from 'react-icons/fi';
+import SEO from '../components/SEO.jsx';
+import { ROUTE_META } from '../seo/routes.js';
 
 const NotFoundContainer = styled.div`
   min-height: 100dvh;
@@ -92,14 +94,15 @@ const NotFound = () => {
 
   const quickLinks = [
     { path: '/', label: 'Accueil' },
-    { path: '/#services', label: 'Services' },
     { path: '/#realisations', label: 'Réalisations' },
-    { path: '/#offres', label: 'Offres' },
+    { path: '/#services', label: 'Services' },
+    { path: '/#faq', label: 'FAQ' },
     { path: '/#contact', label: 'Contact' }
   ];
 
   return (
     <NotFoundContainer>
+      <SEO {...ROUTE_META['/404']} />
       <NotFoundContent initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.55 }}>
         <Code>404</Code>
         <NotFoundTitle>Page introuvable</NotFoundTitle>

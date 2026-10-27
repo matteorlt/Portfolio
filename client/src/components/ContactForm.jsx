@@ -41,7 +41,7 @@ const Input = styled.input`
   }
 
   &::placeholder {
-    color: #737373;
+    color: #8a867e;
   }
 `;
 
@@ -94,7 +94,7 @@ const TextArea = styled.textarea`
   }
 
   &::placeholder {
-    color: #737373;
+    color: #8a867e;
   }
 `;
 
@@ -175,7 +175,18 @@ const ResponseTimeMark = styled.span`
   letter-spacing: -0.02em;
 `;
 
+const FormError = styled.p`
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.38);
+  color: #fecaca;
+  font-size: 0.9rem;
+  line-height: 1.45;
+`;
+
 const DEFAULT_SUBJECT = 'Message depuis matteo-rlt.fr';
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const PROJECT_TYPE_OPTIONS = [
   { value: '', label: 'Choisir une option' },
@@ -197,6 +208,7 @@ export default function ContactForm({ idPrefix = 'contact' }) {
   const [formData, setFormData] = useState({ name: '', email: '', projectType: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showNotification, setShowNotification] = useState(false);
+  const [formError, setFormError] = useState('');
 
   useEffect(() => {
     if (!showNotification) return undefined;
@@ -205,11 +217,25 @@ export default function ContactForm({ idPrefix = 'contact' }) {
   }, [showNotification]);
 
   const handleChange = (e) => {
+    setFormError('');
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError('');
+
+    const fail = (msg, field) => {
+      setFormError(msg);
+      document.getElementById(pid(field))?.focus();
+    };
+    if (!formData.name.trim()) return fail('Indiquez votre nom.', 'name');
+    if (!EMAIL_RE.test(formData.email.trim())) {
+      return fail('Indiquez une adresse e-mail valide (ex. : vous@domaine.fr).', 'email');
+    }
+    if (!formData.projectType) return fail('Choisissez un type de projet.', 'projectType');
+    if (!formData.message.trim()) return fail('Décrivez votre projet en quelques mots.', 'message');
+
     setIsSubmitting(true);
     trackFormEvent('Contact Form', 'submit');
 
@@ -240,7 +266,9 @@ export default function ContactForm({ idPrefix = 'contact' }) {
     } catch (error) {
       console.error('Contact:', error);
       trackFormEvent('Contact Form', 'error', { error_message: error.message });
-      alert(`Erreur lors de l'envoi : ${error.message}`);
+      setFormError(
+        'L’envoi n’a pas abouti. Réessayez dans un instant ou écrivez-moi directement à contact@matteo-rlt.fr.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -282,7 +310,7 @@ export default function ContactForm({ idPrefix = 'contact' }) {
 
       <Form onSubmit={handleSubmit} noValidate>
         <FormGroup>
-          <Label htmlFor={pid('name')}>Nom</Label>
+          <Label htmlFor={pid('name')}>Nom *</Label>
           <Input
             type="text"
             id={pid('name')}
@@ -295,7 +323,7 @@ export default function ContactForm({ idPrefix = 'contact' }) {
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor={pid('email')}>Email</Label>
+          <Label htmlFor={pid('email')}>Email *</Label>
           <Input
             type="email"
             id={pid('email')}
@@ -308,7 +336,7 @@ export default function ContactForm({ idPrefix = 'contact' }) {
           />
         </FormGroup>
         <FormGroup>
-          <Label htmlFor={pid('projectType')}>Type de projet</Label>
+          <Label htmlFor={pid('projectType')}>Type de projet *</Label>
           <Select
             id={pid('projectType')}
             name="projectType"
@@ -325,7 +353,7 @@ export default function ContactForm({ idPrefix = 'contact' }) {
           </Select>
         </FormGroup>
         <FormGroup>
-          <Label htmlFor={pid('message')}>Message</Label>
+          <Label htmlFor={pid('message')}>Message *</Label>
           <TextArea
             id={pid('message')}
             name="message"
@@ -335,6 +363,7 @@ export default function ContactForm({ idPrefix = 'contact' }) {
             required
           />
         </FormGroup>
+        {formError ? <FormError role="alert">{formError}</FormError> : null}
         <SubmitButton type="submit" disabled={isSubmitting} whileTap={{ scale: 0.98 }}>
           <FiSend aria-hidden />
           {isSubmitting ? 'Envoi…' : 'Envoyer'}

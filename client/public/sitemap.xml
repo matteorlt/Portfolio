@@ -2,32 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://matteo-rlt.fr/</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-10-27</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://matteo-rlt.fr/demo/auth</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
-    <loc>https://matteo-rlt.fr/demo/ticket-support-app</loc>
-    <lastmod>2026-05-06</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.65</priority>
-  </url>
-  <url>
     <loc>https://matteo-rlt.fr/privacy-policy</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.35</priority>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://matteo-rlt.fr/legal-notices</loc>
-    <lastmod>2026-05-06</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.35</priority>
+    <priority>0.3</priority>
   </url>
 </urlset>

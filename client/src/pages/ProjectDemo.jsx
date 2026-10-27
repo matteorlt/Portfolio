@@ -4,7 +4,7 @@ import SEO from '../components/SEO.jsx';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiArrowLeft, FiPlay, FiPause, FiVolume2, FiMaximize } from 'react-icons/fi';
+import { FiArrowLeft, FiPlay, FiPause, FiVolume2, FiMaximize, FiGithub } from 'react-icons/fi';
 
 const DemoContainer = styled.div`
   min-height: 100dvh;
@@ -299,8 +299,8 @@ const projectsData = {
   },
   'gym-phys': {
     title: 'Gym Phys',
-    description: 'Site vitrine pour une association sportif de gym, développé en Wordpress.',
-    tech: ['Wordpress', 'PHP'],
+    description: 'Site vitrine pour une association sportive de gym, développé sous WordPress.',
+    tech: ['WordPress', 'PHP'],
     videoUrl: null,
     codeUrl: 'https://github.com/matteorlt',
     demoUrl: 'https://www.gym-phys-ploermel.fr/'
@@ -517,7 +517,7 @@ const ProjectDemo = () => {
             </PlayIcon>
             <PlaceholderText>Vidéo de démonstration</PlaceholderText>
             <PlaceholderSubtext>
-              Ajoutez votre vidéo de démonstration ici
+              Vidéo bientôt disponible
             </PlaceholderSubtext>
           </VideoPlaceholder>
         )}
@@ -530,6 +530,7 @@ const ProjectDemo = () => {
         url={`https://matteo-rlt.fr/demo/${projectId}`}
         image={project.posterUrl || '/logos/og-image.jpg'}
         type="video.other"
+        noindex
       />
 
       <ProjectInfo
@@ -568,7 +569,7 @@ const ProjectDemo = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <FiArrowLeft />
+              <FiGithub aria-hidden />
               Voir le code
             </ActionButton>
           )}

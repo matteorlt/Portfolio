@@ -58,7 +58,7 @@ const NavLinks = styled.div`
   gap: 0.15rem;
   align-items: center;
 
-  @media (max-width: 860px) {
+  @media (max-width: 980px) {
     display: none;
   }
 `;
@@ -108,7 +108,7 @@ const NavCta = styled(Link)`
     filter: brightness(1.05);
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 980px) {
     display: none;
   }
 `;
@@ -143,7 +143,7 @@ const Burger = styled.button`
     transform: translateY(-3.75px) rotate(-45deg);
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 980px) {
     display: flex;
   }
 `;
@@ -159,7 +159,7 @@ const Overlay = styled(motion.div)`
   padding: calc(var(--nav-h) + env(safe-area-inset-top, 0px) + 1rem) var(--page-pad-x)
     calc(2rem + env(safe-area-inset-bottom, 0px));
 
-  @media (min-width: 861px) {
+  @media (min-width: 981px) {
     display: none;
   }
 `;
@@ -207,10 +207,11 @@ function scrollToId(id) {
 }
 
 const LINKS = [
-  { id: 'services', label: 'Services', index: '01' },
-  { id: 'realisations', label: 'Travail', index: '02' },
-  { id: 'offres', label: 'Offres', index: '03' },
-  { id: 'contact', label: 'Contact', index: '04' }
+  { id: 'realisations', label: 'Réalisations', index: '01' },
+  { id: 'services', label: 'Services', index: '02' },
+  { id: 'methode', label: 'Méthode', index: '03' },
+  { id: 'faq', label: 'FAQ', index: '04' },
+  { id: 'contact', label: 'Contact', index: '05' }
 ];
 
 const Navbar = () => {
@@ -236,8 +237,13 @@ const Navbar = () => {
     }
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    const onKey = (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
     return () => {
       document.body.style.overflow = prev;
+      window.removeEventListener('keydown', onKey);
     };
   }, [open]);
 
@@ -288,7 +294,7 @@ const Navbar = () => {
           )}
           <Magnetic strength={0.22}>
             <NavCta to={isHome ? '#contact' : '/#contact'} onClick={(e) => isHome && handleAnchor(e, 'contact')}>
-              Discutons
+              Devis gratuit
               <FiArrowUpRight aria-hidden size={15} />
             </NavCta>
           </Magnetic>
@@ -298,6 +304,7 @@ const Navbar = () => {
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
+          aria-controls="mobile-menu"
           aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
         >
           <span />
@@ -310,6 +317,10 @@ const Navbar = () => {
           <AnimatePresence>
             {open ? (
               <Overlay
+                id="mobile-menu"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Menu de navigation"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -325,12 +336,12 @@ const Navbar = () => {
                     exit={{ opacity: 0, y: 10 }}
                     transition={{ delay: 0.05 * i, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    <em>{l.index}</em>
+                    <em aria-hidden>{l.index}</em>
                     {l.label}
                   </OverlayLink>
                 ))}
                 <OverlayCta to={isHome ? '#contact' : '/#contact'} onClick={(e) => handleAnchor(e, 'contact')}>
-                  Me contacter
+                  Demander un devis gratuit
                   <FiArrowUpRight aria-hidden size={18} />
                 </OverlayCta>
               </Overlay>
