@@ -53,7 +53,7 @@ const HeroGrid = styled.div`
   padding-bottom: 1.25rem;
 
   @media (min-width: 880px) {
-    grid-template-columns: minmax(0, 1fr) minmax(340px, 1fr);
+    grid-template-columns: minmax(0, 0.9fr) minmax(340px, 1.1fr);
     align-items: center;
     min-height: calc(100dvh - var(--nav-h) - 5.5rem);
     padding-bottom: 0;
@@ -263,90 +263,12 @@ const TrustList = styled(motion.ul)`
   }
 `;
 
-const floatA = keyframes`
-  0%, 100% { transform: rotate(-7deg) translateY(0); }
-  50% { transform: rotate(-7deg) translateY(-8px); }
-`;
-
-const floatB = keyframes`
-  0%, 100% { transform: rotate(5deg) translateY(0); }
-  50% { transform: rotate(5deg) translateY(7px); }
-`;
-
-const HeroVisual = styled(motion.div)`
-  position: relative;
+const HeroVideo = styled.div`
   width: 100%;
-  max-width: 460px;
-  margin: 1.25rem auto 0;
-  min-height: 280px;
-  aspect-ratio: 5 / 4;
+  margin-top: 1.25rem;
 
   @media (min-width: 880px) {
-    max-width: 540px;
-    min-height: 380px;
-    margin: 0 0 0 auto;
-    aspect-ratio: 4 / 3.2;
-  }
-`;
-
-const Shot = styled(motion.div)`
-  position: absolute;
-  overflow: hidden;
-  border-radius: 14px;
-  border: 1px solid var(--color-line);
-  background: #141414;
-  box-shadow:
-    0 22px 50px rgba(0, 0, 0, 0.45),
-    0 0 0 1px rgba(255, 255, 255, 0.04);
-
-  img {
-    width: 100%;
-    height: auto;
-    display: block;
-    vertical-align: top;
-  }
-`;
-
-const HeroChrome = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 0.45rem 0.65rem;
-  background: #1c1c1c;
-  border-bottom: 1px solid var(--color-line);
-
-  i {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    display: block;
-    background: #3a3a3a;
-
-    &:first-child { background: #ff5f57; }
-    &:nth-child(2) { background: #febc2e; }
-    &:nth-child(3) { background: #28c840; }
-  }
-`;
-
-const ShotBack = styled(Shot)`
-  inset: 4% 18% 28% 0;
-  z-index: 1;
-  animation: ${floatA} 7s ease-in-out infinite;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    transform: rotate(-7deg);
-  }
-`;
-
-const ShotFront = styled(Shot)`
-  inset: 22% 0 0 14%;
-  z-index: 2;
-  animation: ${floatB} 8s ease-in-out infinite;
-
-  @media (prefers-reduced-motion: reduce) {
-    animation: none;
-    transform: rotate(5deg);
+    margin-top: 0;
   }
 `;
 
@@ -436,13 +358,6 @@ const MarqueeItem = styled.span`
     color: var(--color-accent);
     font-size: 0.7em;
   }
-`;
-
-const ShowreelSection = styled.section`
-  padding: clamp(3rem, 8vw, 5.5rem) var(--page-pad-x) 0;
-  padding-right: var(--page-pad-r);
-  max-width: var(--max);
-  margin: 0 auto;
 `;
 
 const Section = styled.section`
@@ -1113,41 +1028,9 @@ const Home = () => {
               </TrustList>
             </div>
 
-            <HeroVisual
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              aria-hidden
-            >
-              <ShotBack>
-                <HeroChrome>
-                  <i />
-                  <i />
-                  <i />
-                </HeroChrome>
-                <img
-                  src="/preview/birdie-golf-club-preview.webp"
-                  srcSet="/preview/birdie-golf-club-preview-sm.webp 800w, /preview/birdie-golf-club-preview.webp 1007w"
-                  sizes="(min-width: 880px) 36vw, 70vw"
-                  alt=""
-                  decoding="async"
-                />
-              </ShotBack>
-              <ShotFront>
-                <HeroChrome>
-                  <i />
-                  <i />
-                  <i />
-                </HeroChrome>
-                <img
-                  src="/preview/driva-preview-2026.webp"
-                  srcSet="/preview/driva-preview-2026-sm.webp 800w, /preview/driva-preview-2026.webp 1007w"
-                  sizes="(min-width: 880px) 40vw, 75vw"
-                  alt=""
-                  decoding="async"
-                />
-              </ShotFront>
-            </HeroVisual>
+            <HeroVideo>
+              <Showreel />
+            </HeroVideo>
           </HeroGrid>
 
           <HeroMeta>
@@ -1167,10 +1050,6 @@ const Home = () => {
             ))}
           </MarqueeTrack>
         </MarqueeWrap>
-
-        <ShowreelSection aria-label="Présentation vidéo">
-          <Showreel />
-        </ShowreelSection>
 
         <Section id="realisations">
           <SectionHead>

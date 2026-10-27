@@ -60,6 +60,19 @@ const pageVariants = {
   }
 };
 
+/**
+ * Suspense par page chargée à la demande. L’accueil n’est dans aucun Suspense : au pré-rendu,
+ * React 19 « externalise » les gros Suspense dans un <div hidden> révélé par script, ce qui
+ * retarde l’hydratation et masque le contenu aux robots sans JavaScript.
+ */
+function Lazy({ page: Page }) {
+  return (
+    <Suspense fallback={null}>
+      <Page />
+    </Suspense>
+  );
+}
+
 // Composant pour les routes avec animations
 function AnimatedRoutes() {
   const location = useLocation();
@@ -82,20 +95,18 @@ function AnimatedRoutes() {
         exit="exit"
         variants={pageVariants}
       >
-        <Suspense fallback={null}>
-          <Routes location={location}>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<Navigate to="/" replace />} />
-            <Route path="/projects" element={<Navigate to="/#realisations" replace />} />
-            <Route path="/skills" element={<Navigate to="/" replace />} />
-            <Route path="/contact" element={<Navigate to="/#contact" replace />} />
-            <Route path="/demo/:projectId" element={<ProjectDemo />} />
-            <Route path="/offres" element={<Navigate to="/#offres" replace />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/legal-notices" element={<LegalNotices />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<Navigate to="/" replace />} />
+          <Route path="/projects" element={<Navigate to="/#realisations" replace />} />
+          <Route path="/skills" element={<Navigate to="/" replace />} />
+          <Route path="/contact" element={<Navigate to="/#contact" replace />} />
+          <Route path="/demo/:projectId" element={<Lazy page={ProjectDemo} />} />
+          <Route path="/offres" element={<Navigate to="/#offres" replace />} />
+          <Route path="/privacy-policy" element={<Lazy page={PrivacyPolicy} />} />
+          <Route path="/legal-notices" element={<Lazy page={LegalNotices} />} />
+          <Route path="*" element={<Lazy page={NotFound} />} />
+        </Routes>
       </PageWrapper>
     </AnimatePresence>
   );

@@ -82,18 +82,29 @@ export default function Showreel() {
     if (!video) return undefined;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
 
+    let inView = false;
+    const tryPlay = () => {
+      if (inView && !userPaused.current && video.paused) {
+        video.muted = true;
+        video.play().catch(() => {});
+      }
+    };
+
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !userPaused.current) {
-          video.play().catch(() => {});
-        } else if (!entry.isIntersecting) {
-          video.pause();
-        }
+        inView = entry.isIntersecting;
+        if (inView) tryPlay();
+        else video.pause();
       },
       { threshold: 0.4 }
     );
     observer.observe(video);
-    return () => observer.disconnect();
+    // Au chargement (vidéo dans le hero), le premier play() peut partir avant que le média soit prêt.
+    video.addEventListener('canplay', tryPlay);
+    return () => {
+      observer.disconnect();
+      video.removeEventListener('canplay', tryPlay);
+    };
   }, []);
 
   const togglePlay = () => {
