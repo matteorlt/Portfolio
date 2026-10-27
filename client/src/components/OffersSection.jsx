@@ -25,6 +25,7 @@ import {
   FiZap,
   FiChevronDown,
   FiArrowUpRight,
+  FiGift,
 } from 'react-icons/fi';
 
 const OffersRoot = styled.section`
@@ -182,6 +183,93 @@ const HelpCard = styled(Card)`
   }
 `;
 
+const Launch = styled(motion.article)`
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  gap: 1.75rem 3rem;
+  margin-bottom: 1rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 22px;
+  border: 1px solid rgba(200, 242, 74, 0.4);
+  background:
+    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(200, 242, 74, 0.14), transparent 60%),
+    var(--color-surface);
+  scroll-margin-top: var(--scroll-margin);
+
+  @media (min-width: 860px) {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+  }
+`;
+
+const LaunchBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+`;
+
+const LaunchTitle = styled.h3`
+  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin-bottom: 0.6rem;
+`;
+
+const LaunchLead = styled.p`
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+  max-width: 32rem;
+`;
+
+const Price = styled.p`
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.85rem;
+  margin-bottom: 0.4rem;
+
+  s {
+    font-size: 1.35rem;
+    color: var(--color-muted);
+    text-decoration-thickness: 2px;
+  }
+
+  strong {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 4.25rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--color-accent);
+  }
+
+  span {
+    font-size: 0.95rem;
+    color: var(--color-text);
+  }
+`;
+
+const FinePrint = styled.p`
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-muted);
+  margin-bottom: 1.35rem;
+  max-width: 30rem;
+`;
+
 const SrOnly = styled.span`
   position: absolute;
   width: 1px;
@@ -215,6 +303,10 @@ const DevisOpenButton = styled(motion.button)`
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
   }
+`;
+
+const LaunchCta = styled(DevisOpenButton)`
+  min-height: 52px;
 `;
 
 const ModalOverlay = styled(motion.div)`
@@ -624,8 +716,25 @@ const reveal = {
   transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
 };
 
+/** Offre de lancement : site vitrine offert aux 10 premiers clients. */
+const LAUNCH_OFFER = {
+  id: 'offre-lancement',
+  label: 'Offre de lancement — site vitrine offert',
+  regularPrice: '400 €',
+  price: '0 €',
+  yearly: '50 € / an',
+  includes: [
+    'Jusqu’à 5 pages : accueil, services, à propos, contact…',
+    'Design sur-mesure, adapté au mobile',
+    'Formulaire de contact et mentions légales',
+    'Référencement Google de base',
+    'Mise en ligne incluse',
+  ],
+};
+
 const NEED_OPTIONS = [
   { value: '', label: 'Indifférent / à définir ensemble' },
+  { value: LAUNCH_OFFER.id, label: LAUNCH_OFFER.label },
   ...OFFER_CATEGORIES.map((c) => ({ value: c.id, label: c.title })),
   { value: 'autre', label: 'Autre besoin (précisez dans le message)' },
 ];
@@ -855,8 +964,12 @@ const OffersSection = () => {
           message: formData.message.trim(),
           package_id: formData.needType || '',
           package_title: resolveNeedLabel(),
-          package_price: 'Sur devis personnalisé',
-          package_period: 'Selon périmètre (à préciser)',
+          package_price:
+            formData.needType === LAUNCH_OFFER.id
+              ? `${LAUNCH_OFFER.price} au lieu de ${LAUNCH_OFFER.regularPrice}, puis ${LAUNCH_OFFER.yearly}`
+              : 'Sur devis personnalisé',
+          package_period:
+            formData.needType === LAUNCH_OFFER.id ? 'Abonnement annuel sans engagement' : 'Selon périmètre (à préciser)',
           package_features: `Besoin indiqué : ${resolveNeedLabel()}. Estimation et planification après échange sur le périmètre fonctionnel et la stack.`,
           budget: 'Non communiqué sur le formulaire — devis sur mesure',
           timestamp: quoteTs,
@@ -976,6 +1089,48 @@ const OffersSection = () => {
       <Subtitle {...reveal} transition={{ ...reveal.transition, delay: 0.06 }}>
         Pas de forfait figé : chaque projet est chiffré après échange, avec un devis gratuit et sans engagement.
       </Subtitle>
+
+      <Launch id="offre" {...reveal} aria-labelledby="offre-title">
+        <div>
+          <LaunchBadge>
+            <FiGift aria-hidden size={14} />
+            Offre de lancement — 10 premiers clients
+          </LaunchBadge>
+          <LaunchTitle id="offre-title">Votre site vitrine offert</LaunchTitle>
+          <LaunchLead>
+            Je lance mon activité et je réserve cette offre à mes 10 premiers clients : un site vitrine complet,
+            conçu et mis en ligne sans frais de création.
+          </LaunchLead>
+          <CardPoints>
+            {LAUNCH_OFFER.includes.map((pt) => (
+              <li key={pt}>
+                <FiCheck aria-hidden size={15} strokeWidth={2.5} />
+                {pt}
+              </li>
+            ))}
+          </CardPoints>
+        </div>
+        <div>
+          <Price>
+            <s aria-label={`Prix habituel ${LAUNCH_OFFER.regularPrice}`}>{LAUNCH_OFFER.regularPrice}</s>
+            <strong>{LAUNCH_OFFER.price}</strong>
+            <span>de création</span>
+          </Price>
+          <FinePrint>
+            Puis {LAUNCH_OFFER.yearly} pour l’hébergement, le nom de domaine et la maintenance. Sans engagement :
+            sans renouvellement, le site est mis hors ligne.
+          </FinePrint>
+          <LaunchCta
+            type="button"
+            onClick={(e) => openDevis(e.currentTarget, LAUNCH_OFFER.id)}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <FiZap size={18} strokeWidth={2.25} aria-hidden />
+            Profiter de l’offre
+          </LaunchCta>
+        </div>
+      </Launch>
 
       <CardsGrid>
         {OFFER_CATEGORIES.map(({ id, Icon, title, audience, points }, i) => (

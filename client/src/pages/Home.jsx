@@ -12,7 +12,8 @@ import {
   FiCheckCircle,
   FiUser,
   FiCheck,
-  FiPlus
+  FiPlus,
+  FiArrowRight
 } from 'react-icons/fi';
 import SEO from '../components/SEO.jsx';
 import { ROUTE_META, SITE_URL } from '../seo/routes.js';
@@ -71,6 +72,43 @@ const Status = styled(motion.p)`
   text-transform: uppercase;
   color: var(--color-muted);
   margin-bottom: 1.5rem;
+`;
+
+const OfferPill = styled(motion.a)`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.6rem;
+  width: fit-content;
+  margin: -0.5rem 0 1.5rem;
+  padding: 0.45rem 0.9rem 0.45rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(200, 242, 74, 0.35);
+  background: var(--color-accent-muted);
+  font-size: 0.85rem;
+  color: var(--color-text);
+
+  strong {
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
+    font-size: 0.75rem;
+  }
+
+  svg {
+    color: var(--color-accent);
+    transition: transform 0.25s var(--ease-out);
+  }
+
+  &:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent);
+  }
+
+  &:hover svg {
+    transform: translateX(3px);
+  }
 `;
 
 const pulse = keyframes`
@@ -897,7 +935,7 @@ const TECH = [
 const FAQ = [
   {
     q: 'Combien coûte un site internet ?',
-    a: 'Chaque projet est chiffré sur mesure, selon le nombre de pages, les fonctionnalités et les contenus à produire. Le devis est gratuit et sans engagement : décrivez votre besoin, je vous réponds sous 48 h ouvrées avec une estimation claire.'
+    a: 'Pour un site vitrine classique (jusqu’à 5 pages), la création est offerte à mes 10 premiers clients au lieu de 400 € ; il reste 50 € par an pour l’hébergement, le nom de domaine et la maintenance, sans engagement. Les autres projets sont chiffrés sur mesure, avec un devis gratuit sous 48 h ouvrées.'
   },
   {
     q: 'Combien de temps faut-il pour créer mon site ?',
@@ -1091,6 +1129,16 @@ const Home = () => {
                 <Dot aria-hidden />
                 Disponible — Bretagne, missions France entière
               </Status>
+              <OfferPill
+                href="#offre"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.05 }}
+              >
+                <strong>Offre de lancement</strong>
+                Site vitrine offert aux 10 premiers clients
+                <FiArrowRight aria-hidden size={14} />
+              </OfferPill>
               <Headline>
                 <Clip>
                   <Line {...lineAnim(0.08)}>Je construis</Line>
