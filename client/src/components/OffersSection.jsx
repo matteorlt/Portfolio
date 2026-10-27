@@ -123,7 +123,7 @@ const CardAudience = styled.p`
   font-size: 0.9rem;
   line-height: 1.55;
   color: var(--color-muted);
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 `;
 
 const CardPoints = styled.ul`
@@ -225,13 +225,6 @@ const LaunchTitle = styled.h3`
   letter-spacing: -0.04em;
   line-height: 1.1;
   margin-bottom: 0.6rem;
-`;
-
-const LaunchLead = styled.p`
-  color: var(--color-muted);
-  line-height: 1.6;
-  margin-bottom: 1.25rem;
-  max-width: 32rem;
 `;
 
 const Price = styled.p`
@@ -657,55 +650,30 @@ const OFFER_CATEGORIES = [
     Icon: FiLayout,
     title: 'Sites vitrine & WordPress',
     audience: 'Artisans, indépendants, associations et PME qui veulent être trouvés et contactés.',
-    points: [
-      'Site clair, rapide et adapté au mobile',
-      'Référencement Google pensé dès le départ',
-      'Formation pour gérer vos contenus en autonomie',
-    ],
   },
   {
     id: 'sur-mesure',
     Icon: FiLayers,
     title: 'Applications web sur-mesure',
     audience: 'Outils métier, plateformes avec comptes utilisateurs, SaaS.',
-    points: [
-      'Parcours, comptes et règles métier adaptés à votre activité',
-      'Stack moderne, code lisible et maintenable',
-      'Performance, sécurité et évolutivité',
-    ],
   },
   {
     id: 'ecommerce',
     Icon: FiShoppingCart,
     title: 'E-commerce',
     audience: 'Commerçants et marques qui veulent vendre en ligne.',
-    points: [
-      'Boutique et tunnel d’achat adaptés à votre catalogue',
-      'Paiements sécurisés et gestion des commandes',
-      'Conseils ergonomie et conversion',
-    ],
   },
   {
     id: 'refonte',
     Icon: FiRefreshCw,
     title: 'Refonte & migration',
     audience: 'Sites vieillissants, lents ou difficiles à mettre à jour.',
-    points: [
-      'Audit de l’existant et plan de transition',
-      'Design et technique modernisés',
-      'Référencement et données préservés',
-    ],
   },
   {
     id: 'maintenance',
     Icon: FiTool,
     title: 'Maintenance & évolutions',
     audience: 'Sites existants à sécuriser et à faire grandir.',
-    points: [
-      'Mises à jour, sauvegardes et corrections',
-      'Veille performance et sécurité',
-      'Évolutions selon vos priorités',
-    ],
   },
 ];
 
@@ -1087,7 +1055,7 @@ const OffersSection = () => {
       </Title>
 
       <Subtitle {...reveal} transition={{ ...reveal.transition, delay: 0.06 }}>
-        Pas de forfait figé : chaque projet est chiffré après échange, avec un devis gratuit et sans engagement.
+        Devis gratuit et sans engagement.
       </Subtitle>
 
       <Launch id="offre" {...reveal} aria-labelledby="offre-title">
@@ -1097,10 +1065,6 @@ const OffersSection = () => {
             Offre de lancement — 10 premiers clients
           </LaunchBadge>
           <LaunchTitle id="offre-title">Votre site vitrine offert</LaunchTitle>
-          <LaunchLead>
-            Je lance mon activité et je réserve cette offre à mes 10 premiers clients : un site vitrine complet,
-            conçu et mis en ligne sans frais de création.
-          </LaunchLead>
           <CardPoints>
             {LAUNCH_OFFER.includes.map((pt) => (
               <li key={pt}>
@@ -1133,21 +1097,13 @@ const OffersSection = () => {
       </Launch>
 
       <CardsGrid>
-        {OFFER_CATEGORIES.map(({ id, Icon, title, audience, points }, i) => (
+        {OFFER_CATEGORIES.map(({ id, Icon, title, audience }, i) => (
           <Card key={id} {...reveal} transition={{ ...reveal.transition, delay: 0.05 * i }}>
             <CardIcon aria-hidden>
               <Icon size={21} strokeWidth={2.1} />
             </CardIcon>
             <CardTitle>{title}</CardTitle>
             <CardAudience>{audience}</CardAudience>
-            <CardPoints>
-              {points.map((pt) => (
-                <li key={pt}>
-                  <FiCheck aria-hidden size={15} strokeWidth={2.5} />
-                  {pt}
-                </li>
-              ))}
-            </CardPoints>
             <CardCta type="button" onClick={(e) => openDevis(e.currentTarget, id)}>
               Demander un devis
               <SrOnly> — {title}</SrOnly>
@@ -1158,7 +1114,7 @@ const OffersSection = () => {
         <HelpCard {...reveal} transition={{ ...reveal.transition, delay: 0.25 }}>
           <CardTitle>Pas sûr de ce qu’il vous faut ?</CardTitle>
           <CardAudience>
-            Décrivez votre projet en quelques lignes, je vous oriente vers la solution la plus adaptée à votre budget.
+            Décrivez votre projet, je vous oriente.
           </CardAudience>
           <DevisOpenButton
             type="button"

@@ -8,9 +8,6 @@ import {
   FiExternalLink,
   FiLinkedin,
   FiMail,
-  FiClock,
-  FiCheckCircle,
-  FiUser,
   FiCheck,
   FiPlus,
   FiArrowRight
@@ -21,6 +18,7 @@ import StructuredData from '../components/StructuredData.jsx';
 import ContactForm from '../components/ContactForm.jsx';
 import OffersSection from '../components/OffersSection.jsx';
 import Magnetic from '../components/Magnetic.jsx';
+import Showreel from '../components/Showreel.jsx';
 
 const Page = styled.div`
   position: relative;
@@ -440,6 +438,13 @@ const MarqueeItem = styled.span`
   }
 `;
 
+const ShowreelSection = styled.section`
+  padding: clamp(3rem, 8vw, 5.5rem) var(--page-pad-x) 0;
+  padding-right: var(--page-pad-r);
+  max-width: var(--max);
+  margin: 0 auto;
+`;
+
 const Section = styled.section`
   padding: clamp(4rem, 11vw, 7.5rem) var(--page-pad-x);
   padding-right: var(--page-pad-r);
@@ -481,14 +486,6 @@ const SectionLead = styled(motion.p)`
   color: var(--color-muted);
   line-height: 1.7;
   max-width: 38rem;
-`;
-
-const LeadLine = styled.span`
-  display: block;
-
-  & + & {
-    margin-top: 0.45rem;
-  }
 `;
 
 const ResponseTimeMark = styled.span`
@@ -772,51 +769,6 @@ const MethodText = styled.p`
   font-size: 0.95rem;
 `;
 
-const WhyGrid = styled.div`
-  display: grid;
-  gap: 1rem;
-
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-`;
-
-const WhyCard = styled(motion.article)`
-  padding: 1.75rem 1.5rem;
-  border-radius: 16px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
-  transition: border-color 0.3s ease, transform 0.35s var(--ease-out);
-
-  &:hover {
-    border-color: rgba(200, 242, 74, 0.35);
-    transform: translateY(-4px);
-  }
-`;
-
-const WhyIcon = styled.div`
-  width: 42px;
-  height: 42px;
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-accent-muted);
-  color: var(--color-accent);
-  margin-bottom: 1.1rem;
-`;
-
-const WhyTitle = styled.h3`
-  font-size: 1.12rem;
-  margin-bottom: 0.5rem;
-`;
-
-const WhyText = styled.p`
-  font-size: 0.92rem;
-  line-height: 1.6;
-  color: var(--color-muted);
-`;
-
 const FaqList = styled.div`
   border-top: 1px solid var(--color-line);
   max-width: 56rem;
@@ -917,7 +869,7 @@ const ContactLinkRow = styled.a`
   }
 `;
 
-const TRUST = ['Devis gratuit sous 48 h ouvrées', 'Un seul interlocuteur', 'Partout en France, à distance'];
+const TRUST = ['Devis sous 48 h', 'Un seul interlocuteur', 'Partout en France'];
 
 const TECH = [
   'Next.js',
@@ -935,27 +887,19 @@ const TECH = [
 const FAQ = [
   {
     q: 'Combien coûte un site internet ?',
-    a: 'Pour un site vitrine classique (jusqu’à 5 pages), la création est offerte à mes 10 premiers clients au lieu de 400 € ; il reste 50 € par an pour l’hébergement, le nom de domaine et la maintenance, sans engagement. Les autres projets sont chiffrés sur mesure, avec un devis gratuit sous 48 h ouvrées.'
-  },
-  {
-    q: 'Combien de temps faut-il pour créer mon site ?',
-    a: 'Cela dépend du périmètre et du rythme des échanges (contenus, validations). Le planning est fixé ensemble dès le devis, avec des étapes claires jusqu’à la mise en ligne.'
+    a: 'Un site vitrine (jusqu’à 5 pages) est offert à mes 10 premiers clients, puis 50 € par an pour l’hébergement, le nom de domaine et la maintenance. Les autres projets sont sur devis gratuit.'
   },
   {
     q: 'Pourrai-je modifier mon site moi-même ?',
-    a: 'Oui. Selon le projet, je mets en place un outil d’édition adapté (WordPress par exemple) et je vous forme pour que vous restiez autonome sur vos textes, images et actualités.'
+    a: 'Oui : je vous forme pour que vous restiez autonome sur vos textes, images et actualités.'
   },
   {
     q: 'Mon site sera-t-il bien référencé sur Google ?',
-    a: 'Le référencement est pris en compte dès le départ : structure des pages, vitesse, balises, affichage mobile. Personne ne peut honnêtement promettre la première place, mais votre site partira sur des bases solides.'
-  },
-  {
-    q: 'Travaillez-vous uniquement en Bretagne ?',
-    a: 'Je suis basé près de Vannes, mais je travaille à distance avec des clients partout en France : visio, e-mail et téléphone suffisent pour mener un projet de bout en bout.'
+    a: 'Structure, vitesse et affichage mobile sont optimisés dès le départ. Personne ne peut promettre la première place, mais votre site part sur de bonnes bases.'
   },
   {
     q: 'Que se passe-t-il après la mise en ligne ?',
-    a: 'Vous n’êtes pas laissé seul : je propose un accompagnement pour les mises à jour, sauvegardes, corrections et évolutions, selon vos besoins.'
+    a: 'Je m’occupe des mises à jour, sauvegardes et corrections, et je fais évoluer le site selon vos besoins.'
   }
 ];
 
@@ -998,7 +942,7 @@ const Home = () => {
       kicker: '01 — Produit métier',
       status: 'Mon produit',
       outcome:
-        'Outil métier pour auto-écoles : planning, réservations et suivi des élèves centralisés pour gagner du temps au quotidien.',
+        'Logiciel pour auto-écoles : planning, réservations et suivi des élèves au même endroit.',
       tech: ['Next.js', 'TypeScript', 'PostgreSQL'],
       preview: '/preview/driva-preview-2026.webp',
       previewMobile: '/preview/driva-preview-2026-sm.webp',
@@ -1014,7 +958,7 @@ const Home = () => {
       kicker: '02 — Vitrine',
       status: 'Concept',
       outcome:
-        'Vitrine pour un golf imaginaire : ambiance club-house, lecture claire du site et des adhésions, navigation fluide sur mobile comme sur grand écran.',
+        'Site vitrine pour un golf : ambiance club-house et adhésions en quelques clics.',
       tech: ['Vue 3', 'Vite', 'HTML', 'CSS'],
       preview: '/preview/birdie-golf-club-preview.webp',
       previewMobile: '/preview/birdie-golf-club-preview-sm.webp',
@@ -1029,7 +973,7 @@ const Home = () => {
       kicker: '03 — Marque',
       status: 'Concept',
       outcome:
-        'Vitrine pour une marque fictive de mobilier et décoration durables : univers éditorial, collection et démarche mis en scène pour habiter plus lentement.',
+        'Site éditorial pour une marque de mobilier durable.',
       tech: ['React', 'Vite'],
       preview: '/preview/aume-preview.webp',
       previewMobile: '/preview/aume-preview-sm.webp',
@@ -1044,7 +988,7 @@ const Home = () => {
       kicker: '04 — Mode',
       status: 'Concept',
       outcome:
-        'Boutique en ligne pour une marque fictive de streetwear épuré : collection, lookbook et parcours d’achat mis en scène autour d’une silhouette oversize.',
+        'Boutique en ligne pour une marque de streetwear : collection, lookbook et achat.',
       tech: ['React', 'Vite'],
       preview: '/preview/noya-preview.webp',
       previewMobile: '/preview/noya-preview-sm.webp',
@@ -1059,7 +1003,7 @@ const Home = () => {
       kicker: '05 — Association',
       status: 'Client',
       outcome:
-        'Site vitrine pour une association sportive : informations, actualités et prise de contact accessibles sur mobile.',
+        'Site vitrine d’une association sportive : infos, actualités et contact.',
       tech: ['WordPress', 'PHP'],
       preview: '/preview/gym-phys-preview.webp',
       previewMobile: '/preview/gym-phys-preview-sm.webp',
@@ -1074,40 +1018,22 @@ const Home = () => {
     {
       n: '01',
       title: 'Échange',
-      text: 'On parle de votre activité, de vos objectifs et de votre budget. Vous recevez un devis gratuit et détaillé.'
+      text: 'Vos objectifs, votre budget, un devis gratuit.'
     },
     {
       n: '02',
       title: 'Maquette',
-      text: 'Je propose une structure et un design que l’on ajuste ensemble, avant d’écrire la moindre ligne de code.'
+      text: 'Le design validé ensemble avant de coder.'
     },
     {
       n: '03',
       title: 'Développement',
-      text: 'Un site rapide, adapté au mobile et optimisé pour Google, avec des points d’étape réguliers.'
+      text: 'Rapide, mobile, optimisé pour Google.'
     },
     {
       n: '04',
       title: 'Mise en ligne',
-      text: 'Déploiement, prise en main de vos contenus, puis suivi et maintenance si vous le souhaitez.'
-    }
-  ];
-
-  const why = [
-    {
-      icon: <FiCheckCircle aria-hidden size={20} strokeWidth={2} />,
-      title: 'Code propre et maintenable',
-      text: 'Architecture lisible, bonnes pratiques et documentation pour que votre produit reste évolutif.'
-    },
-    {
-      icon: <FiClock aria-hidden size={20} strokeWidth={2} />,
-      title: 'Livraison dans les délais',
-      text: 'Roadmap claire, points réguliers et priorités alignées sur votre calendrier business.'
-    },
-    {
-      icon: <FiUser aria-hidden size={20} strokeWidth={2} />,
-      title: 'Un seul interlocuteur',
-      text: 'Du brief au déploiement : même personne pour le cadrage, le développement et la mise en ligne.'
+      text: 'Prise en main, puis suivi et maintenance.'
     }
   ];
 
@@ -1127,7 +1053,7 @@ const Home = () => {
             <div>
               <Status initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
                 <Dot aria-hidden />
-                Disponible — Bretagne, missions France entière
+                Disponible pour de nouveaux projets
               </Status>
               <OfferPill
                 href="#offre"
@@ -1157,8 +1083,8 @@ const Home = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.42, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               >
-                Développeur web freelance près de Vannes. Je conçois des sites vitrine, boutiques en ligne et
-                applications web rapides, bien référencés et pensés pour vous amener des clients.
+                Développeur web freelance près de Vannes : sites vitrine, e-commerce et applications web qui vous
+                amènent des clients.
               </Subhead>
               <CtaRow
                 initial={{ opacity: 0, y: 16 }}
@@ -1229,8 +1155,6 @@ const Home = () => {
               Scroll
               <FiArrowDown aria-hidden size={14} />
             </ScrollHint>
-            <span>Vannes · France</span>
-            <span>Freelance · 2026</span>
           </HeroMeta>
         </Hero>
 
@@ -1244,16 +1168,16 @@ const Home = () => {
           </MarqueeTrack>
         </MarqueeWrap>
 
+        <ShowreelSection aria-label="Présentation vidéo">
+          <Showreel />
+        </ShowreelSection>
+
         <Section id="realisations">
           <SectionHead>
             <div>
               <Index>01 — Réalisations</Index>
-              <SectionTitle {...fadeUp}>Réalisations & concepts</SectionTitle>
+              <SectionTitle {...fadeUp}>Mes réalisations</SectionTitle>
             </div>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              Projets clients, produit maison et concepts de marque conçus de A à Z pour montrer ce que je peux
-              faire pour vous.
-            </SectionLead>
           </SectionHead>
           <ProjectsList>
             {projects.map((p, i) => (
@@ -1325,9 +1249,6 @@ const Home = () => {
                 Quatre étapes, <Accent>zéro surprise</Accent>
               </SectionTitle>
             </div>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              Vous savez à chaque instant où en est votre projet, ce qui reste à faire et ce que ça coûte.
-            </SectionLead>
           </SectionHead>
           <MethodGrid>
             {method.map((m, i) => (
@@ -1340,36 +1261,12 @@ const Home = () => {
           </MethodGrid>
         </Section>
 
-        <Section id="pourquoi-moi">
-          <SectionHead>
-            <div>
-              <Index>04 — Engagements</Index>
-              <SectionTitle {...fadeUp}>Pourquoi moi</SectionTitle>
-            </div>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              À distance depuis la Bretagne, partout en France — avec des jalons définis ensemble.
-            </SectionLead>
-          </SectionHead>
-          <WhyGrid>
-            {why.map((w, i) => (
-              <WhyCard key={w.title} {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.07 * i }}>
-                <WhyIcon aria-hidden>{w.icon}</WhyIcon>
-                <WhyTitle>{w.title}</WhyTitle>
-                <WhyText>{w.text}</WhyText>
-              </WhyCard>
-            ))}
-          </WhyGrid>
-        </Section>
-
         <Section id="faq">
           <SectionHead>
             <div>
-              <Index>05 — Questions</Index>
+              <Index>04 — Questions</Index>
               <SectionTitle {...fadeUp}>Questions fréquentes</SectionTitle>
             </div>
-            <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              Ce qu’on me demande le plus souvent avant de démarrer. Une autre question ? Écrivez-moi.
-            </SectionLead>
           </SectionHead>
           <FaqList>
             {FAQ.map(({ q, a }) => (
@@ -1388,22 +1285,15 @@ const Home = () => {
         <ContactSection id="contact">
           <SectionHead>
             <div>
-              <Index>06 — Contact</Index>
+              <Index>05 — Contact</Index>
               <SectionTitle {...fadeUp}>Parlons de votre projet</SectionTitle>
             </div>
             <SectionLead {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.08 }}>
-              <LeadLine>Décrivez votre besoin en quelques lignes.</LeadLine>
-              <LeadLine>
-                Je vous réponds sous <ResponseTimeMark>48 h ouvrées</ResponseTimeMark>
-              </LeadLine>
+              Réponse sous <ResponseTimeMark>48 h ouvrées</ResponseTimeMark>
             </SectionLead>
           </SectionHead>
           <ContactGrid>
             <ContactAside>
-              <p style={{ color: 'var(--color-muted)', lineHeight: 1.7, fontSize: '1.02rem' }}>
-                Idée de produit, refonte ou nouveau site : parlez-moi de votre contexte et de votre échéance. Pas de
-                jargon inutile — on valide l’essentiel puis on enchaîne.
-              </p>
               <ContactLinks>
                 <ContactLinkRow href="mailto:contact@matteo-rlt.fr">
                   <FiMail aria-hidden size={18} />
@@ -1411,7 +1301,7 @@ const Home = () => {
                 </ContactLinkRow>
                 <ContactLinkRow href="https://linkedin.com/in/matteo-rlt" target="_blank" rel="noopener noreferrer">
                   <FiLinkedin aria-hidden size={18} />
-                  LinkedIn — Mattéo Rannou Le Texier
+                  LinkedIn
                 </ContactLinkRow>
               </ContactLinks>
             </ContactAside>
