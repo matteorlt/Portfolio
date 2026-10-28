@@ -5,14 +5,16 @@
     
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#070706" />
+    <meta name="theme-color" content="#f3f1ec" />
     <meta name="google-site-verification" content="tyCw8EO5qH8BAHdfG7zkwlSAWbovDIqjl28rb_0k4Wk" />
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Développeur web freelance — sites vitrine, e-commerce et applications orientées conversion. Mattéo Rannou Le Texier, disponible pour vos projets." />
+    <meta name="description" content="Développeur web freelance à Vannes : sites vitrine, e-commerce et applications web rapides et bien référencés. Site vitrine offert aux 10 premiers clients." />
     <meta name="keywords" content="développeur web freelance, création site internet, site vitrine, e-commerce, SaaS, applications web, Mattéo Rannou Le Texier, Vannes" />
     <meta name="author" content="Mattéo Rannou Le Texier" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="geo.region" content="FR-56" />
+    <meta name="geo.placename" content="Vannes" />
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Mattéo Rannou Le Texier — Développeur web freelance" />
@@ -21,6 +23,9 @@
     <meta property="og:url" content="https://matteo-rlt.fr/" />
     <meta property="og:image" content="https://matteo-rlt.fr/logos/og-image.jpg" />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="Mattéo Rannou Le Texier — Développeur web" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -36,29 +41,17 @@
     <link rel="apple-touch-icon" href="/logos/logo_black-192.webp" />
     <link rel="manifest" href="/ico/bright/site.webmanifest" />
     
-    <!-- Fonts décalées hors chemin critique -->
-    <script>
-      (function () {
-        var href =
-          'https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap';
-        var loadFonts = function () {
-          if (document.querySelector('link[data-google-fonts="1"]')) return;
-          var link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = href;
-          link.setAttribute('data-google-fonts', '1');
-          document.head.appendChild(link);
-        };
-        if ('requestIdleCallback' in window) {
-          window.requestIdleCallback(loadFonts, { timeout: 2500 });
-        } else {
-          window.addEventListener('load', loadFonts, { once: true });
-          setTimeout(loadFonts, 2500);
-        }
-      })();
-    </script>
+    <!-- Polices : préconnexion + chargement non bloquant (media=print basculé au chargement) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
     </noscript>
 
     <!-- Google Ads également chargé après consentement -->

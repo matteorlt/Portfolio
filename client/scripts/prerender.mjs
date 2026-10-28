@@ -38,7 +38,7 @@ function applyMeta(html, meta, url) {
   let out = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(meta.title)}</title>`);
   out = setTag(out, 'meta', 'name', 'description', 'content', meta.description);
   if (meta.keywords) out = setTag(out, 'meta', 'name', 'keywords', 'content', meta.keywords);
-  out = setTag(out, 'meta', 'name', 'robots', 'content', meta.noindex ? 'noindex, follow' : 'index, follow');
+  out = setTag(out, 'meta', 'name', 'robots', 'content', meta.noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large');
   out = setTag(out, 'meta', 'property', 'og:title', 'content', meta.title);
   out = setTag(out, 'meta', 'property', 'og:description', 'content', meta.description);
   out = setTag(out, 'meta', 'property', 'og:url', 'content', url);

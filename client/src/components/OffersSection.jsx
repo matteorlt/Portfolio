@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Band, Container, Eyebrow, SectionHead, SectionTitle, SectionLead, Mark, darkTokens, reveal, revealDelay } from './ui.jsx';
 import { trackFormEvent, trackConversion } from '../utils/analytics';
 import { sendViaEmailJs } from '../utils/emailjsSend.js';
 import {
@@ -28,43 +29,8 @@ import {
   FiGift,
 } from 'react-icons/fi';
 
-const OffersRoot = styled.section`
+const OffersRoot = styled(Band)`
   scroll-margin-top: calc(var(--nav-h) + 0.75rem);
-  padding: clamp(4rem, 11vw, 7.5rem) var(--page-pad-x) clamp(2.5rem, 6vw, 4rem);
-  padding-right: var(--page-pad-r);
-  max-width: var(--max);
-  margin: 0 auto;
-  width: 100%;
-`;
-
-const Index = styled.span`
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  margin-bottom: 0.7rem;
-  text-align: left;
-`;
-
-const Title = styled(motion.h2)`
-  font-size: clamp(2rem, 4.6vw, 3.4rem);
-  font-weight: 800;
-  letter-spacing: -0.045em;
-  line-height: 1.02;
-  color: var(--color-text);
-  text-align: left;
-  margin-bottom: 0.75rem;
-`;
-
-const Subtitle = styled(motion.p)`
-  font-size: 1.05rem;
-  line-height: 1.7;
-  color: var(--color-muted);
-  text-align: left;
-  margin-bottom: 1.75rem;
-  max-width: 38rem;
 `;
 
 const Anchor = styled.span`
@@ -72,181 +38,129 @@ const Anchor = styled.span`
   scroll-margin-top: var(--scroll-margin);
 `;
 
-const CardsGrid = styled.ul`
-  list-style: none;
-  display: grid;
-  gap: 1rem;
-
-  @media (min-width: 700px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (min-width: 1100px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-`;
-
-const Card = styled(motion.li)`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  padding: 1.6rem 1.5rem 1.4rem;
-  border-radius: 18px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-line);
-  transition: border-color 0.3s ease, transform 0.35s var(--ease-out);
-
-  &:hover {
-    border-color: rgba(200, 242, 74, 0.35);
-    transform: translateY(-4px);
-  }
-`;
-
-const CardIcon = styled.div`
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--color-accent-muted);
-  color: var(--color-accent);
-  margin-bottom: 1.1rem;
-`;
-
-const CardTitle = styled.h3`
-  font-size: 1.2rem;
-  margin-bottom: 0.4rem;
-`;
-
-const CardAudience = styled.p`
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: var(--color-muted);
-  margin-bottom: 1.25rem;
-`;
-
-const CardPoints = styled.ul`
-  list-style: none;
-  display: grid;
-  gap: 0.5rem;
-  margin-bottom: 1.4rem;
-
-  li {
-    display: grid;
-    grid-template-columns: 16px 1fr;
-    gap: 0.55rem;
-    font-size: 0.9rem;
-    line-height: 1.45;
-    color: var(--color-text);
-  }
-
-  svg {
-    margin-top: 0.15rem;
-    color: var(--color-accent);
-  }
-`;
-
-const CardCta = styled.button`
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  width: fit-content;
-  padding: 0.4rem 0;
-  background: none;
-  color: var(--color-accent);
-  font-size: 0.92rem;
-  font-weight: 600;
-
-  svg {
-    transition: transform 0.25s var(--ease-out);
-  }
-
-  &:hover svg {
-    transform: translate(2px, -2px);
-  }
-`;
-
-const HelpCard = styled(Card)`
-  justify-content: center;
-  align-items: flex-start;
-  background: var(--color-accent-muted);
-  border-color: rgba(200, 242, 74, 0.28);
-
-  ${CardTitle} {
-    font-size: 1.35rem;
-  }
-
-  ${CardAudience} {
-    margin-bottom: 1.35rem;
-  }
-`;
-
 const Launch = styled(motion.article)`
+  ${darkTokens}
   position: relative;
   overflow: hidden;
   display: grid;
-  gap: 1.75rem 3rem;
-  margin-bottom: 1rem;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border-radius: 22px;
-  border: 1px solid rgba(200, 242, 74, 0.4);
-  background:
-    radial-gradient(ellipse 70% 90% at 100% 0%, rgba(200, 242, 74, 0.14), transparent 60%),
-    var(--color-surface);
+  gap: 2rem 3.5rem;
+  margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+  padding: clamp(1.6rem, 4.5vw, 3.25rem);
+  border-radius: calc(var(--radius) + 6px);
+  background: var(--color-bg);
+  color: var(--color-text);
   scroll-margin-top: var(--scroll-margin);
 
-  @media (min-width: 860px) {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-    align-items: center;
+  /* Halo citron discret dans l’angle. */
+  &::after {
+    content: '';
+    position: absolute;
+    right: -12%;
+    top: -40%;
+    width: 60%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212, 255, 63, 0.18), transparent 65%);
+    pointer-events: none;
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  @media (min-width: 900px) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: end;
   }
 `;
 
 const LaunchBadge = styled.span`
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.35rem 0.75rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 1.4rem;
   border-radius: 999px;
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
+  background: var(--lime);
+  color: var(--ink);
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 `;
 
 const LaunchTitle = styled.h3`
-  font-size: clamp(1.5rem, 3.2vw, 2.1rem);
+  font-size: clamp(2.2rem, 5.4vw, 4.2rem);
   font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  margin-bottom: 0.6rem;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+  margin-bottom: 1.75rem;
+`;
+
+const CardPoints = styled.ul`
+  list-style: none;
+  display: grid;
+  gap: 0.65rem 1.5rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 22px 1fr;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    color: var(--color-text);
+  }
+
+  svg {
+    margin-top: 0.05rem;
+    padding: 3px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-accent-muted);
+    color: var(--lime);
+  }
+`;
+
+const PriceBox = styled.div`
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-line);
+
+  @media (min-width: 900px) {
+    padding: 0 0 0 2.5rem;
+    border-top: none;
+    border-left: 1px solid var(--color-line);
+  }
 `;
 
 const Price = styled.p`
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 0.35rem 0.85rem;
-  margin-bottom: 0.4rem;
+  gap: 0.35rem 0.9rem;
+  margin-bottom: 0.75rem;
 
   s {
-    font-size: 1.35rem;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
     color: var(--color-muted);
     text-decoration-thickness: 2px;
   }
 
   strong {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 7vw, 4.25rem);
+    font-size: clamp(4.5rem, 11vw, 7.5rem);
     font-weight: 800;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    color: var(--color-accent);
+    letter-spacing: -0.07em;
+    line-height: 0.85;
+    color: var(--lime);
   }
 
   span {
@@ -256,50 +170,249 @@ const Price = styled.p`
 `;
 
 const FinePrint = styled.p`
-  font-size: 0.8rem;
-  line-height: 1.5;
+  font-size: 0.85rem;
+  line-height: 1.55;
   color: var(--color-muted);
-  margin-bottom: 1.35rem;
-  max-width: 30rem;
-`;
-
-const SrOnly = styled.span`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
+  margin-bottom: 1.5rem;
+  max-width: 26rem;
 `;
 
 const DevisOpenButton = styled(motion.button)`
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.95rem 1.5rem;
+  gap: 0.55rem;
+  min-height: 54px;
+  padding: 0 1.55rem;
   border-radius: 999px;
-  border: none;
-  cursor: pointer;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   font-family: var(--font-body);
   color: var(--color-accent-ink);
   background: var(--color-accent);
-  box-shadow: 0 12px 36px rgba(200, 242, 74, 0.18);
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.35s var(--ease-out);
 
-  &:hover {
-    filter: brightness(1.07);
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--lime);
+    transform: translateY(101%);
+    transition: transform 0.45s var(--ease-out);
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 3px;
+  &:hover {
+    color: var(--ink);
+  }
+
+  &:hover::before {
+    transform: translateY(0);
   }
 `;
 
 const LaunchCta = styled(DevisOpenButton)`
-  min-height: 52px;
+  width: 100%;
+
+  &::before {
+    background: var(--paper);
+  }
+`;
+
+const CardsGrid = styled.ul`
+  list-style: none;
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+
+  @media (min-width: 700px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1100px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+`;
+
+const Card = styled(motion.li)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+  padding: 1.6rem 1.6rem 1.4rem;
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  transition: background 0.45s var(--ease-out), color 0.45s var(--ease-out), border-color 0.45s var(--ease-out);
+
+  &:hover {
+    ${darkTokens}
+    background: var(--color-bg);
+    color: var(--color-text);
+    border-color: var(--color-bg);
+  }
+`;
+
+const CardTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: auto;
+  padding-bottom: 2.5rem;
+`;
+
+const CardNum = styled.span`
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--color-muted);
+`;
+
+const CardIcon = styled.div`
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-accent-muted);
+  color: var(--color-text);
+  transition: background 0.45s var(--ease-out), color 0.45s var(--ease-out), transform 0.5s var(--ease-out);
+
+  ${Card}:hover & {
+    background: var(--lime);
+    color: var(--ink);
+    transform: rotate(-8deg);
+  }
+`;
+
+const CardTitle = styled.h3`
+  font-size: clamp(1.45rem, 2.4vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.02;
+  margin-bottom: 0.55rem;
+`;
+
+const CardAudience = styled.p`
+  font-size: 0.93rem;
+  line-height: 1.55;
+  color: var(--color-muted);
+  margin-bottom: 1.4rem;
+`;
+
+const CardPrice = styled.p`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2rem 0.45rem;
+  margin: -0.4rem 0 1.25rem;
+
+  small {
+    flex-basis: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  strong {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 2.6vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--color-text);
+    transition: color 0.45s var(--ease-out);
+  }
+
+  span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  /* Rappel de l’offre de lancement. */
+  em {
+    align-self: center;
+    margin-left: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: var(--lime);
+    color: var(--ink);
+    font-style: normal;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  ${Card}:hover & strong {
+    color: var(--lime);
+  }
+`;
+
+const CardCta = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.4rem;
+  padding: 1rem 0 0.2rem;
+  border-top: 1px solid var(--color-line) !important;
+  background: none;
+  color: var(--color-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  /* Toute la carte est cliquable. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  svg {
+    transition: transform 0.35s var(--ease-out);
+  }
+
+  ${Card}:hover & svg {
+    transform: translate(3px, -3px);
+    color: var(--lime);
+  }
+`;
+
+const HelpCard = styled(motion.li)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 300px;
+  padding: 1.6rem;
+  border-radius: var(--radius);
+  background: var(--lime);
+  color: var(--ink);
+
+  ${CardTitle} {
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+  }
+
+  ${CardAudience} {
+    color: rgba(15, 15, 13, 0.72);
+    margin-bottom: 0;
+  }
+
+  ${DevisOpenButton} {
+    --color-accent: var(--ink);
+    --color-accent-ink: var(--paper);
+
+    &::before {
+      background: var(--paper);
+    }
+  }
 `;
 
 const ModalOverlay = styled(motion.div)`
@@ -311,23 +424,24 @@ const ModalOverlay = styled(motion.div)`
   justify-content: center;
   padding: max(1rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom))
     max(1rem, env(safe-area-inset-left));
-  background: rgba(0, 0, 0, 0.72);
-  backdrop-filter: blur(8px);
+  background: rgba(15, 15, 13, 0.6);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
 `;
 
 const ModalPanel = styled(motion.div)`
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 620px;
   max-height: min(90dvh, 880px);
   /* visible : sinon le menu natif du <select> peut être clippé par l’ancêtre */
   overflow: visible;
   display: flex;
   flex-direction: column;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: var(--color-surface-elevated);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 40px 120px -30px rgba(15, 15, 13, 0.7);
 `;
 
 const ModalBody = styled.div`
@@ -337,72 +451,59 @@ const ModalBody = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  padding: 0;
-  border-radius: 0 0 16px 16px;
+  border-radius: var(--radius);
 `;
 
 const ModalClose = styled.button`
   position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
+  top: 0.9rem;
+  right: 0.9rem;
   z-index: 2;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  color: var(--color-muted);
-  background: rgba(255, 255, 255, 0.06);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: var(--ink);
+  background: var(--paper);
+  transition: background 0.25s ease, transform 0.35s var(--ease-out);
 
   &:hover {
-    color: var(--color-text);
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+    background: var(--lime);
+    transform: rotate(90deg);
   }
 `;
 
 const QuoteForm = styled.div`
-  background: transparent;
-  padding: 2rem;
-  padding-top: 2.75rem;
-  position: relative;
+  padding: 2.25rem 2rem 2rem;
 
   @media (max-width: 520px) {
-    padding: 1.5rem;
-    padding-top: 2.5rem;
+    padding: 2rem 1.25rem 1.5rem;
   }
 `;
 
 const FormTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: var(--color-accent);
-  text-align: center;
+  font-size: clamp(1.7rem, 4vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
   margin-bottom: 0.5rem;
+  padding-right: 3rem;
 `;
 
 const FormLead = styled.p`
-  text-align: center;
-  font-size: 0.92rem;
-  color: var(--color-muted);
-  line-height: 1.5;
+  font-size: 0.93rem;
+  color: #5d5a53;
+  line-height: 1.55;
   margin-bottom: 1.75rem;
 `;
 
 const FormGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 0 1rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 560px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -413,9 +514,10 @@ const FormGroup = styled.div`
 
 const Label = styled.label`
   display: block;
-  color: var(--color-muted);
-  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
   font-weight: 500;
+  color: #5d5a53;
+  margin-bottom: 0.45rem;
 `;
 
 const LabelRow = styled.span`
@@ -425,8 +527,6 @@ const LabelRow = styled.span`
 
   svg {
     flex-shrink: 0;
-    color: var(--color-accent);
-    opacity: 0.95;
   }
 `;
 
@@ -440,37 +540,42 @@ const NeedTypeCustomWrap = styled.div`
   width: 100%;
 `;
 
-const NeedTypeTrigger = styled.button`
+const fieldBase = `
   width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--paper);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+
+  &:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 4px rgba(212, 255, 63, 0.6);
+  }
+
+  &::placeholder {
+    color: #8d897f;
+  }
+`;
+
+const NeedTypeTrigger = styled.button`
+  ${fieldBase}
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  min-height: 48px;
-  padding: 0.75rem 1rem;
+  min-height: 50px;
   text-align: left;
-  font-size: 1rem;
-  font-family: inherit;
-  color: var(--color-text);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(200, 242, 74, 0.35);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-
-  &:hover {
-    border-color: rgba(200, 242, 74, 0.55);
-    background: rgba(255, 255, 255, 0.08);
-  }
 
   &[aria-expanded='true'] {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(200, 242, 74, 0.28);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
+    background: #fff;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 4px rgba(212, 255, 63, 0.6);
   }
 `;
 
@@ -488,12 +593,10 @@ const NeedTypeList = styled(motion.ul)`
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
-  border-radius: 12px;
-  background: #141414;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow:
-    0 14px 40px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid rgba(15, 15, 13, 0.12);
+  box-shadow: 0 24px 60px -20px rgba(15, 15, 13, 0.45);
 `;
 
 const NeedTypeOption = styled.li`
@@ -508,181 +611,164 @@ const NeedTypeOptionBtn = styled.button`
   text-align: left;
   font-size: 0.94rem;
   line-height: 1.45;
-  color: #eaeaea;
+  color: var(--ink);
   background: transparent;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  border-radius: 9px;
   font-family: inherit;
 
   &:hover {
-    background: rgba(200, 242, 74, 0.2);
-    color: var(--color-text);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: -2px;
+    background: var(--paper);
   }
 
   &[data-selected='true'] {
-    background: rgba(200, 242, 74, 0.28);
-    color: #f0f4ff;
+    background: var(--lime);
     font-weight: 600;
   }
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(200, 242, 74, 0.25);
-  border-radius: 8px;
-  color: var(--color-text);
-  font-size: 1rem;
-
-  &:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(200, 242, 74, 0.2);
-  }
-
-  &::placeholder {
-    color: #8a867e;
-  }
+  ${fieldBase}
 `;
 
 const TextArea = styled.textarea`
-  width: 100%;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(200, 242, 74, 0.25);
-  border-radius: 8px;
-  color: var(--color-text);
-  font-size: 1rem;
-  min-height: 100px;
+  ${fieldBase}
+  min-height: 110px;
   resize: vertical;
-
-  &:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 2px rgba(200, 242, 74, 0.2);
-  }
-
-  &::placeholder {
-    color: #8a867e;
-  }
 `;
 
 const FormErrorBox = styled.div`
   margin-bottom: 1rem;
   padding: 0.85rem 1rem;
-  border-radius: 10px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.38);
-  color: #fecaca;
+  border-radius: 12px;
+  background: #fdecea;
+  border: 1px solid #f3b5ae;
+  color: #8a1c10;
   font-size: 0.9rem;
   line-height: 1.45;
 `;
 
 const SubmitButton = styled(motion.button)`
   width: 100%;
-  padding: 1rem;
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
-  border: none;
+  min-height: 56px;
+  background: var(--ink);
+  color: var(--paper);
   border-radius: 999px;
   font-size: 1rem;
   font-weight: 600;
-  cursor: pointer;
-  transition: filter 0.2s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 
-  &:hover {
-    filter: brightness(1.06);
+  &:hover:not(:disabled) {
+    background: var(--lime);
+    color: var(--ink);
   }
 
   &:disabled {
     opacity: 0.55;
     cursor: not-allowed;
-    transform: none;
   }
 `;
 
-const OptionalToggle = styled(motion.button)`
+const OptionalToggle = styled.button`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.9rem;
-  border-radius: 8px;
-  background: var(--color-accent-muted);
-  color: var(--color-accent);
-  border: 1px solid rgba(200, 242, 74, 0.35);
-  cursor: pointer;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px dashed rgba(15, 15, 13, 0.35) !important;
+  font-size: 0.88rem;
   font-weight: 600;
-  margin: 0.5rem 0 1rem;
+  margin: 0.25rem 0 1rem;
+
   &:hover {
-    background: rgba(200, 242, 74, 0.22);
+    background: var(--paper);
   }
 `;
 
 const OptionalSection = styled(motion.div)`
   overflow: hidden;
-  border: 1px dashed rgba(200, 242, 74, 0.25);
-  border-radius: 12px;
-  padding: 0 1rem;
-  margin-bottom: 1rem;
 `;
 
-const ResponseTimeMark = styled.span`
-  display: inline-block;
-  margin: 0 0.12em;
-  padding: 0.12em 0.45em;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.28);
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+const Toast = styled(motion.div)`
+  position: fixed;
+  top: calc(var(--nav-h) + 12px);
+  right: 1rem;
+  z-index: 2600;
+  max-width: min(400px, calc(100vw - 2rem));
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.15rem;
+  border-radius: 16px;
+  background: var(--ink);
+  color: var(--paper);
+  box-shadow: 0 24px 60px -20px rgba(15, 15, 13, 0.6);
+
+  > svg {
+    flex-shrink: 0;
+    color: var(--lime);
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #c9c5bb;
+  }
+
+  button {
+    margin-left: auto;
+    background: none;
+    color: inherit;
+    font-size: 1.3rem;
+    line-height: 1;
+    opacity: 0.7;
+  }
 `;
 
 const OFFER_CATEGORIES = [
   {
     id: 'vitrine',
     Icon: FiLayout,
-    title: 'Sites vitrine & WordPress',
+    title: 'Sites vitrine',
     audience: 'Artisans, indépendants, associations et PME qui veulent être trouvés et contactés.',
+    price: { prefix: 'À partir de', amount: '400 €', suffix: 'HT', tag: '0 € pour les 10 premiers clients' },
   },
   {
     id: 'sur-mesure',
     Icon: FiLayers,
     title: 'Applications web sur-mesure',
     audience: 'Outils métier, plateformes avec comptes utilisateurs, SaaS.',
+    price: { prefix: 'À partir de', amount: '1 000 €', suffix: 'HT' },
   },
   {
     id: 'ecommerce',
     Icon: FiShoppingCart,
     title: 'E-commerce',
     audience: 'Commerçants et marques qui veulent vendre en ligne.',
+    price: { prefix: 'À partir de', amount: '700 €', suffix: '/ mois' },
   },
   {
     id: 'refonte',
     Icon: FiRefreshCw,
     title: 'Refonte & migration',
     audience: 'Sites vieillissants, lents ou difficiles à mettre à jour.',
+    price: { prefix: 'Tarif', amount: 'Sur devis' },
   },
   {
     id: 'maintenance',
     Icon: FiTool,
     title: 'Maintenance & évolutions',
     audience: 'Sites existants à sécuriser et à faire grandir.',
+    price: { prefix: 'Entre', amount: '100 et 200 €', suffix: '/ an' },
   },
 ];
 
-const reveal = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-60px' },
-  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
-};
 
 /** Offre de lancement : site vitrine offert aux 10 premiers clients. */
 const LAUNCH_OFFER = {
@@ -699,6 +785,10 @@ const LAUNCH_OFFER = {
     'Mise en ligne incluse',
   ],
 };
+
+/** Tarif lisible d’une catégorie, pour l’e-mail de demande de devis. */
+const priceLabel = (price) =>
+  price ? [price.prefix, price.amount, price.suffix].filter(Boolean).join(' ') : 'Sur devis personnalisé';
 
 const NEED_OPTIONS = [
   { value: '', label: 'Indifférent / à définir ensemble' },
@@ -935,7 +1025,7 @@ const OffersSection = () => {
           package_price:
             formData.needType === LAUNCH_OFFER.id
               ? `${LAUNCH_OFFER.price} au lieu de ${LAUNCH_OFFER.regularPrice}, puis ${LAUNCH_OFFER.yearly}`
-              : 'Sur devis personnalisé',
+              : priceLabel(OFFER_CATEGORIES.find((c) => c.id === formData.needType)?.price),
           package_period:
             formData.needType === LAUNCH_OFFER.id ? 'Abonnement annuel sans engagement' : 'Selon périmètre (à préciser)',
           package_features: `Besoin indiqué : ${resolveNeedLabel()}. Estimation et planification après échange sur le périmètre fonctionnel et la stack.`,
@@ -991,142 +1081,113 @@ const OffersSection = () => {
 
   return (
     <OffersRoot id="services" aria-labelledby="offres-title">
-      {showNotification && (
-        <motion.div
-          role="status"
-          initial={{ opacity: 0, x: 300, scale: 0.8 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
-          exit={{ opacity: 0, x: 300, scale: 0.8 }}
-          transition={{ duration: 0.5, type: 'spring', stiffness: 200 }}
-          style={{
-            position: 'fixed',
-            top: '20px',
-            right: '20px',
-            background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
-            color: 'white',
-            padding: '1rem 1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(40, 167, 69, 0.3)',
-            zIndex: 2600,
-            maxWidth: '400px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-          }}
-        >
-          <FiCheckCircle size={28} style={{ flexShrink: 0 }} aria-hidden strokeWidth={2.25} />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: '0.25rem' }}>Demande envoyée !</div>
-            <div
-              style={{
-                display: 'block',
-                marginTop: '0.3rem',
-                fontSize: '0.9rem',
-                opacity: 0.95,
-                lineHeight: 1.5,
-              }}
-            >
-              Je vous réponds sous <ResponseTimeMark>48 h ouvrées</ResponseTimeMark>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowNotification(false)}
-            aria-label="Fermer la notification"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'white',
-              fontSize: '1.2rem',
-              cursor: 'pointer',
-              padding: 0,
-              opacity: 0.7,
-            }}
+      <AnimatePresence>
+        {showNotification && (
+          <Toast
+            role="status"
+            initial={{ opacity: 0, y: -16, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.96 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            ×
-          </button>
-        </motion.div>
-      )}
+            <FiCheckCircle size={24} aria-hidden strokeWidth={2.25} />
+            <div>
+              <strong>Demande envoyée !</strong>
+              <p>Je vous réponds sous 24 h ouvrées.</p>
+            </div>
+            <button type="button" onClick={() => setShowNotification(false)} aria-label="Fermer la notification">
+              ×
+            </button>
+          </Toast>
+        )}
+      </AnimatePresence>
 
       <Anchor id="offres" aria-hidden />
-      <Index>02 — Services</Index>
-      <Title id="offres-title" {...reveal}>
-        Ce que je peux faire pour vous
-      </Title>
+      <Container>
+        <SectionHead>
+          <div>
+            <Eyebrow>02 — Services</Eyebrow>
+            <SectionTitle id="offres-title" {...reveal}>
+              Ce que je peux <Mark>faire pour vous.</Mark>
+            </SectionTitle>
+          </div>
+          <SectionLead {...revealDelay(0.08)}>
+            Du site vitrine à l’application sur-mesure, chaque projet commence par un devis gratuit et sans
+            engagement.
+          </SectionLead>
+        </SectionHead>
 
-      <Subtitle {...reveal} transition={{ ...reveal.transition, delay: 0.06 }}>
-        Devis gratuit et sans engagement.
-      </Subtitle>
+        <Launch id="offre" {...reveal} aria-labelledby="offre-title">
+          <div>
+            <LaunchBadge>
+              <FiGift aria-hidden size={14} />
+              Offre de lancement — 10 premiers clients
+            </LaunchBadge>
+            <LaunchTitle id="offre-title">Votre site vitrine, offert.</LaunchTitle>
+            <CardPoints>
+              {LAUNCH_OFFER.includes.map((pt) => (
+                <li key={pt}>
+                  <FiCheck aria-hidden strokeWidth={3} />
+                  {pt}
+                </li>
+              ))}
+            </CardPoints>
+          </div>
+          <PriceBox>
+            <Price>
+              <s aria-label={`Prix habituel ${LAUNCH_OFFER.regularPrice}`}>{LAUNCH_OFFER.regularPrice}</s>
+              <strong>{LAUNCH_OFFER.price}</strong>
+              <span>de création</span>
+            </Price>
+            <FinePrint>
+              Puis {LAUNCH_OFFER.yearly} pour l’hébergement, le nom de domaine et la maintenance. Sans engagement :
+              sans renouvellement, le site est mis hors ligne.
+            </FinePrint>
+            <LaunchCta type="button" onClick={(e) => openDevis(e.currentTarget, LAUNCH_OFFER.id)} whileTap={{ scale: 0.98 }}>
+              <FiZap size={18} strokeWidth={2.25} aria-hidden />
+              Profiter de l’offre
+            </LaunchCta>
+          </PriceBox>
+        </Launch>
 
-      <Launch id="offre" {...reveal} aria-labelledby="offre-title">
-        <div>
-          <LaunchBadge>
-            <FiGift aria-hidden size={14} />
-            Offre de lancement — 10 premiers clients
-          </LaunchBadge>
-          <LaunchTitle id="offre-title">Votre site vitrine offert</LaunchTitle>
-          <CardPoints>
-            {LAUNCH_OFFER.includes.map((pt) => (
-              <li key={pt}>
-                <FiCheck aria-hidden size={15} strokeWidth={2.5} />
-                {pt}
-              </li>
-            ))}
-          </CardPoints>
-        </div>
-        <div>
-          <Price>
-            <s aria-label={`Prix habituel ${LAUNCH_OFFER.regularPrice}`}>{LAUNCH_OFFER.regularPrice}</s>
-            <strong>{LAUNCH_OFFER.price}</strong>
-            <span>de création</span>
-          </Price>
-          <FinePrint>
-            Puis {LAUNCH_OFFER.yearly} pour l’hébergement, le nom de domaine et la maintenance. Sans engagement :
-            sans renouvellement, le site est mis hors ligne.
-          </FinePrint>
-          <LaunchCta
-            type="button"
-            onClick={(e) => openDevis(e.currentTarget, LAUNCH_OFFER.id)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <FiZap size={18} strokeWidth={2.25} aria-hidden />
-            Profiter de l’offre
-          </LaunchCta>
-        </div>
-      </Launch>
-
-      <CardsGrid>
-        {OFFER_CATEGORIES.map(({ id, Icon, title, audience }, i) => (
-          <Card key={id} {...reveal} transition={{ ...reveal.transition, delay: 0.05 * i }}>
-            <CardIcon aria-hidden>
-              <Icon size={21} strokeWidth={2.1} />
-            </CardIcon>
-            <CardTitle>{title}</CardTitle>
-            <CardAudience>{audience}</CardAudience>
-            <CardCta type="button" onClick={(e) => openDevis(e.currentTarget, id)}>
-              Demander un devis
-              <SrOnly> — {title}</SrOnly>
-              <FiArrowUpRight aria-hidden size={16} />
-            </CardCta>
-          </Card>
-        ))}
-        <HelpCard {...reveal} transition={{ ...reveal.transition, delay: 0.25 }}>
-          <CardTitle>Pas sûr de ce qu’il vous faut ?</CardTitle>
-          <CardAudience>
-            Décrivez votre projet, je vous oriente.
-          </CardAudience>
-          <DevisOpenButton
-            type="button"
-            onClick={(e) => openDevis(e.currentTarget, '')}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <FiZap size={18} strokeWidth={2.25} aria-hidden />
-            Devis gratuit en 30 secondes
-          </DevisOpenButton>
-        </HelpCard>
-      </CardsGrid>
+        <CardsGrid>
+          {OFFER_CATEGORIES.map(({ id, Icon, title, audience, price }, i) => (
+            <Card key={id} {...revealDelay(0.05 * (i % 3))}>
+              <CardTop>
+                <CardIcon aria-hidden>
+                  <Icon size={22} strokeWidth={2} />
+                </CardIcon>
+                <CardNum aria-hidden>{String(i + 1).padStart(2, '0')}</CardNum>
+              </CardTop>
+              <CardTitle>{title}</CardTitle>
+              <CardAudience>{audience}</CardAudience>
+              <CardPrice>
+                {price.prefix ? <small>{price.prefix}</small> : null}
+                <strong>{price.amount}</strong>
+                {price.suffix ? <span>{price.suffix}</span> : null}
+                {price.tag ? <em>{price.tag}</em> : null}
+              </CardPrice>
+              <CardCta type="button" onClick={(e) => openDevis(e.currentTarget, id)}>
+                <span>
+                  Demander un devis
+                  <span className="sr-only"> — {title}</span>
+                </span>
+                <FiArrowUpRight aria-hidden size={18} />
+              </CardCta>
+            </Card>
+          ))}
+          <HelpCard {...revealDelay(0.1)}>
+            <div>
+              <CardTitle>Pas sûr de ce qu’il vous faut ?</CardTitle>
+              <CardAudience>Décrivez votre projet en une phrase, je vous oriente vers la bonne solution.</CardAudience>
+            </div>
+            <DevisOpenButton type="button" onClick={(e) => openDevis(e.currentTarget, '')} whileTap={{ scale: 0.98 }}>
+              <FiZap size={18} strokeWidth={2.25} aria-hidden />
+              Devis gratuit en 30 secondes
+            </DevisOpenButton>
+          </HelpCard>
+        </CardsGrid>
+      </Container>
 
       <AnimatePresence>
         {isDevisOpen && (
@@ -1328,10 +1389,8 @@ const OffersSection = () => {
             type="button"
             onClick={() => setShowOptional(!showOptional)}
             aria-expanded={showOptional}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
           >
-            {showOptional ? '− Masquer les options' : '+ Plus de détails (facultatif)'}
+            {showOptional ? '− Masquer les détails' : '+ Ajouter des détails (facultatif)'}
           </OptionalToggle>
 
           <OptionalSection
@@ -1450,12 +1509,7 @@ const OffersSection = () => {
             </FormErrorBox>
           ) : null}
 
-          <SubmitButton
-            type="submit"
-            disabled={isSubmitting}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-          >
+          <SubmitButton type="submit" disabled={isSubmitting} whileTap={{ scale: 0.99 }}>
             {isSubmitting ? 'Envoi…' : 'Envoyer ma demande de devis gratuit'}
           </SubmitButton>
         </form>

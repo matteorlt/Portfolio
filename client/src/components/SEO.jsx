@@ -29,7 +29,7 @@ const SEO = ({
     document.title = title;
     upsert('meta', 'name', 'description', { content: description });
     if (keywords) upsert('meta', 'name', 'keywords', { content: keywords });
-    upsert('meta', 'name', 'robots', { content: noindex ? 'noindex, follow' : 'index, follow' });
+    upsert('meta', 'name', 'robots', { content: noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large' });
 
     upsert('meta', 'property', 'og:title', { content: title });
     upsert('meta', 'property', 'og:description', { content: description });

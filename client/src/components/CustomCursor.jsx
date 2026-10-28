@@ -8,9 +8,9 @@ const Dot = styled.div`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: #fff;
   pointer-events: none;
-  z-index: 9800;
+  z-index: 2147483001;
   mix-blend-mode: difference;
   transform: translate(-50%, -50%);
   will-change: transform;
@@ -23,9 +23,10 @@ const Ring = styled.div`
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid rgba(200, 242, 74, 0.55);
+  border: 1px solid #fff;
   pointer-events: none;
-  z-index: 9799;
+  z-index: 2147483000;
+  mix-blend-mode: difference;
   transform: translate(-50%, -50%);
   will-change: transform, width, height, background;
   transition:
@@ -77,10 +78,10 @@ export default function CustomCursor() {
         dotRef.current.style.transform = `translate(${mouse.current.x}px, ${mouse.current.y}px) translate(-50%, -50%)`;
       }
       if (ringRef.current) {
-        const size = hover.current ? 56 : 36;
+        const size = hover.current ? 64 : 34;
         ringRef.current.style.width = `${size}px`;
         ringRef.current.style.height = `${size}px`;
-        ringRef.current.style.background = hover.current ? 'rgba(200, 242, 74, 0.12)' : 'transparent';
+        ringRef.current.style.background = hover.current ? '#fff' : 'transparent';
         ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px) translate(-50%, -50%)`;
       }
       raf = requestAnimationFrame(tick);

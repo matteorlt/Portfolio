@@ -26,7 +26,7 @@ const BackButton = styled(motion.button)`
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: rgba(200, 242, 74, 0.1);
+  background: var(--color-accent-muted);
   color: var(--color-accent);
   border: 1px solid var(--color-accent);
   border-radius: 8px;
@@ -39,15 +39,15 @@ const BackButton = styled(motion.button)`
 
   &:hover {
     background: var(--color-accent);
-    color: white;
+    color: var(--color-accent-ink);
     transform: translateY(-2px);
   }
 `;
 
 const Title = styled(motion.h1)`
   font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--color-accent);
+  font-weight: 800;
+  color: var(--color-text);
   margin-bottom: 1rem;
   text-align: center;
 
@@ -74,7 +74,7 @@ const DemoTypeBadge = styled.span`
 
 const Subtitle = styled(motion.p)`
   font-size: 1.2rem;
-  color: #cccccc;
+  color: var(--color-muted);
   text-align: center;
   margin-bottom: 3rem;
   max-width: 600px;
@@ -83,8 +83,8 @@ const Subtitle = styled(motion.p)`
 const VideoContainer = styled(motion.div)`
   width: 100%;
   max-width: 800px;
-  background: rgba(200, 242, 74, 0.05);
-  border: 1px solid rgba(200, 242, 74, 0.1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-accent-muted);
   border-radius: 16px;
   overflow: hidden;
   position: relative;
@@ -97,12 +97,12 @@ const VideoContainer = styled(motion.div)`
 const VideoPlaceholder = styled.div`
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, var(--color-accent) 0%, #9bc22e 100%);
+  background: var(--lime);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--ink);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -225,7 +225,7 @@ const ProjectInfo = styled(motion.div)`
 `;
 
 const ProjectDescription = styled.p`
-  color: #aaaaaa;
+  color: var(--color-muted);
   line-height: 1.6;
   margin-bottom: 1.5rem;
   font-size: 1rem;
@@ -240,7 +240,7 @@ const TechStack = styled.div`
 `;
 
 const TechTag = styled.span`
-  background: rgba(200, 242, 74, 0.1);
+  background: var(--color-accent-muted);
   color: var(--color-accent);
   padding: 0.5rem 1rem;
   border-radius: 20px;
@@ -267,10 +267,11 @@ const ActionButton = styled(motion.a)`
 
   &.primary {
     background: var(--color-accent);
-    color: white;
+    color: var(--color-accent-ink);
 
     &:hover {
-      background: #9bc22e;
+      background: var(--lime);
+      color: var(--ink);
       transform: translateY(-2px);
     }
   }
@@ -281,7 +282,7 @@ const ActionButton = styled(motion.a)`
     border: 1px solid var(--color-accent);
 
     &:hover {
-      background: rgba(200, 242, 74, 0.1);
+      background: var(--color-accent-muted);
       transform: translateY(-2px);
     }
   }

@@ -29,35 +29,37 @@ const AppContainer = styled.div`
   overflow-x: hidden;
 `;
 
-const PageWrapper = styled(motion.div)`
+const PageWrapper = styled(motion.main)`
   width: 100%;
   min-height: calc(100dvh - var(--nav-h));
+
+  &:focus {
+    outline: none;
+  }
+`;
+
+const SkipLink = styled.a`
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 3000;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--ink);
+  font-weight: 600;
+  transform: translateY(-200%);
+  transition: transform 0.25s var(--ease-out);
+
+  &:focus {
+    transform: translateY(0);
+  }
 `;
 
 const pageVariants = {
-  initial: {
-    opacity: 0,
-    y: 30,
-    scale: 0.98
-  },
-  animate: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  },
-  exit: {
-    opacity: 0,
-    y: -30,
-    scale: 0.98,
-    transition: {
-      duration: 0.4,
-      ease: [0.22, 1, 0.36, 1]
-    }
-  }
+  initial: { opacity: 0, y: 16 },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  exit: { opacity: 0, transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] } }
 };
 
 /**
@@ -89,6 +91,8 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait" initial={false}>
       <PageWrapper
+        id="contenu"
+        tabIndex={-1}
         key={location.pathname}
         initial="initial"
         animate="animate"
@@ -121,6 +125,7 @@ function AppContent() {
     <>
       <GlobalStyle />
       <AppContainer>
+        <SkipLink href="#contenu">Aller au contenu</SkipLink>
         <SiteAtmosphere />
         <CustomCursor />
         <CookieConsent />

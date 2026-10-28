@@ -1,126 +1,99 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiSend, FiCheck } from 'react-icons/fi';
+import { FiArrowUpRight, FiCheck } from 'react-icons/fi';
 import { trackFormEvent } from '../utils/analytics';
 import { sendViaEmailJs } from '../utils/emailjsSend.js';
+import Dropdown from './Dropdown.jsx';
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.1rem;
+  color: var(--ink);
 `;
 
 const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.45rem;
+`;
+
+const Row = styled.div`
+  display: grid;
+  gap: 1.1rem;
+
+  @media (min-width: 560px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 const Label = styled.label`
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  color: var(--color-muted);
+  color: #5d5a53;
+`;
+
+const field = css`
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+
+  &:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--ink);
+    box-shadow: 0 0 0 4px rgba(212, 255, 63, 0.65);
+  }
+
+  &::placeholder {
+    color: #8d897f;
+  }
 `;
 
 const Input = styled.input`
-  width: 100%;
-  padding: 0.85rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--color-text);
-  font-size: 1rem;
-  font-family: inherit;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: rgba(200, 242, 74, 0.55);
-    box-shadow: 0 0 0 3px rgba(200, 242, 74, 0.16);
-  }
-
-  &::placeholder {
-    color: #8a867e;
-  }
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 0.85rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--color-text);
-  font-size: 1rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a3a3a3' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.85rem center;
-  padding-right: 2.5rem;
-
-  &:focus {
-    outline: none;
-    border-color: rgba(200, 242, 74, 0.55);
-    box-shadow: 0 0 0 3px rgba(200, 242, 74, 0.16);
-  }
-
-  option {
-    background: #141414;
-    color: var(--color-text);
-  }
+  ${field}
 `;
 
 const TextArea = styled.textarea`
-  width: 100%;
-  padding: 0.85rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  color: var(--color-text);
-  font-size: 1rem;
-  font-family: inherit;
+  ${field}
   min-height: 140px;
   resize: vertical;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: rgba(200, 242, 74, 0.55);
-    box-shadow: 0 0 0 3px rgba(200, 242, 74, 0.16);
-  }
-
-  &::placeholder {
-    color: #8a867e;
-  }
 `;
 
 const SubmitButton = styled(motion.button)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.95rem 1.75rem;
-  min-height: 48px;
+  gap: 0.6rem;
+  min-height: 56px;
   width: 100%;
-
-  @media (min-width: 480px) {
-    width: auto;
-  }
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
+  margin-top: 0.35rem;
+  background: var(--ink);
+  color: var(--paper);
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   font-family: inherit;
   border-radius: 999px;
-  cursor: pointer;
-  transition: filter 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+  transition: background 0.3s ease, color 0.3s ease, opacity 0.2s ease;
+
+  svg {
+    transition: transform 0.35s var(--ease-out);
+  }
 
   &:hover:not(:disabled) {
-    filter: brightness(1.06);
+    background: var(--lime);
+    color: var(--ink);
+  }
+
+  &:hover:not(:disabled) svg {
+    transform: translate(3px, -3px);
   }
 
   &:disabled {
@@ -129,58 +102,61 @@ const SubmitButton = styled(motion.button)`
   }
 `;
 
+const Reassure = styled.p`
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #6b675f;
+  text-align: center;
+`;
+
 const Toast = styled(motion.div)`
   position: fixed;
-  top: 88px;
+  top: calc(var(--nav-h) + 12px);
   right: 1rem;
-  z-index: 2000;
+  z-index: 2600;
   max-width: min(400px, calc(100vw - 2rem));
-  padding: 1rem 1.25rem;
-  border-radius: 12px;
-  background: rgba(34, 197, 94, 0.15);
-  border: 1px solid rgba(34, 197, 94, 0.35);
-  color: #86efac;
+  padding: 1rem 1.15rem;
+  border-radius: 16px;
+  background: var(--ink);
+  color: var(--paper);
   font-size: 0.95rem;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 24px 60px -20px rgba(15, 15, 13, 0.6);
+
+  > svg {
+    flex-shrink: 0;
+    color: var(--lime);
+  }
+
+  p {
+    margin-top: 0.2rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #c9c5bb;
+  }
 `;
 
 const ToastClose = styled.button`
   margin-left: auto;
   background: none;
-  border: none;
   color: inherit;
-  cursor: pointer;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   line-height: 1;
-  opacity: 0.75;
-  padding: 0;
+  opacity: 0.7;
 
   &:hover {
     opacity: 1;
   }
 `;
 
-const ResponseTimeMark = styled.span`
-  display: inline-block;
-  margin: 0 0.12em;
-  padding: 0.12em 0.45em;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.22);
-  color: #fff;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
-`;
-
 const FormError = styled.p`
   padding: 0.85rem 1rem;
-  border-radius: 10px;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.38);
-  color: #fecaca;
+  border-radius: 12px;
+  background: #fdecea;
+  border: 1px solid #f3b5ae;
+  color: #8a1c10;
   font-size: 0.9rem;
   line-height: 1.45;
 `;
@@ -289,17 +265,7 @@ export default function ContactForm({ idPrefix = 'contact' }) {
             <FiCheck aria-hidden size={22} strokeWidth={2.5} />
             <div>
               <strong>Message envoyé</strong>
-              <div
-                style={{
-                  display: 'block',
-                  opacity: 0.95,
-                  marginTop: '0.3rem',
-                  fontSize: '0.9rem',
-                  lineHeight: 1.5,
-                }}
-              >
-                Je vous réponds sous <ResponseTimeMark>48 h ouvrées</ResponseTimeMark>
-              </div>
+              <p>Je vous réponds sous 24 h ouvrées.</p>
             </div>
             <ToastClose type="button" onClick={() => setShowNotification(false)} aria-label="Fermer">
               ×
@@ -309,48 +275,49 @@ export default function ContactForm({ idPrefix = 'contact' }) {
       </AnimatePresence>
 
       <Form onSubmit={handleSubmit} noValidate>
+        <Row>
+          <FormGroup>
+            <Label htmlFor={pid('name')}>Nom *</Label>
+            <Input
+              type="text"
+              id={pid('name')}
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              placeholder="Votre nom ou société"
+              autoComplete="name"
+              required
+            />
+          </FormGroup>
+          <FormGroup>
+            <Label htmlFor={pid('email')}>Email *</Label>
+            <Input
+              type="email"
+              id={pid('email')}
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="vous@exemple.fr"
+              autoComplete="email"
+              required
+            />
+          </FormGroup>
+        </Row>
         <FormGroup>
-          <Label htmlFor={pid('name')}>Nom *</Label>
-          <Input
-            type="text"
-            id={pid('name')}
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Votre nom ou société"
-            autoComplete="name"
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor={pid('email')}>Email *</Label>
-          <Input
-            type="email"
-            id={pid('email')}
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="vous@exemple.fr"
-            autoComplete="email"
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor={pid('projectType')}>Type de projet *</Label>
-          <Select
+          <Label id={pid('projectType-label')} htmlFor={pid('projectType')}>
+            Type de projet *
+          </Label>
+          <Dropdown
             id={pid('projectType')}
-            name="projectType"
+            labelId={pid('projectType-label')}
             value={formData.projectType}
-            onChange={handleChange}
-            required
-            aria-required
-          >
-            {PROJECT_TYPE_OPTIONS.map((opt) => (
-              <option key={opt.value || 'empty'} value={opt.value} disabled={opt.value === ''}>
-                {opt.label}
-              </option>
-            ))}
-          </Select>
+            onChange={(projectType) => {
+              setFormError('');
+              setFormData((prev) => ({ ...prev, projectType }));
+            }}
+            options={PROJECT_TYPE_OPTIONS.filter((o) => o.value)}
+            placeholder={PROJECT_TYPE_OPTIONS[0].label}
+          />
         </FormGroup>
         <FormGroup>
           <Label htmlFor={pid('message')}>Message *</Label>
@@ -365,9 +332,10 @@ export default function ContactForm({ idPrefix = 'contact' }) {
         </FormGroup>
         {formError ? <FormError role="alert">{formError}</FormError> : null}
         <SubmitButton type="submit" disabled={isSubmitting} whileTap={{ scale: 0.98 }}>
-          <FiSend aria-hidden />
-          {isSubmitting ? 'Envoi…' : 'Envoyer'}
+          {isSubmitting ? 'Envoi…' : 'Envoyer ma demande'}
+          <FiArrowUpRight aria-hidden size={18} />
         </SubmitButton>
+        <Reassure>Gratuit et sans engagement — vos données servent uniquement à vous répondre.</Reassure>
       </Form>
     </>
   );

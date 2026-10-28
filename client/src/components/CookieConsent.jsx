@@ -2,24 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { FiShield } from 'react-icons/fi';
+import { darkTokens } from './ui.jsx';
 
 const Backdrop = styled.div`
+  ${darkTokens}
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  left: max(0.75rem, env(safe-area-inset-left));
+  right: max(0.75rem, env(safe-area-inset-right));
+  bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
   z-index: 9999;
-  padding: 1rem max(1.25rem, env(safe-area-inset-left)) calc(1rem + env(safe-area-inset-bottom, 0px)) max(1.25rem, env(safe-area-inset-right));
-  background: rgba(10, 10, 10, 0.94);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.45);
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.1rem 1.25rem;
+  border-radius: 20px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 30px 80px -24px rgba(15, 15, 13, 0.6);
 `;
 
 const Inner = styled.div`
-  max-width: 1280px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 1.15rem;
@@ -48,7 +50,6 @@ const IconWrap = styled.div`
   align-items: center;
   justify-content: center;
   background: var(--color-accent-muted);
-  border: 1px solid rgba(200, 242, 74, 0.28);
   color: var(--color-accent);
   font-size: 1.15rem;
 `;
@@ -105,7 +106,7 @@ const Btn = styled.button`
   min-width: 0;
   padding: 0.75rem 1.1rem;
   min-height: 48px;
-  border-radius: 10px;
+  border-radius: 999px;
   font-family: var(--font-body);
   font-size: 0.9rem;
   font-weight: 600;
@@ -127,13 +128,12 @@ const Btn = styled.button`
 `;
 
 const BtnGhost = styled(Btn)`
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--color-line-strong);
+  background: transparent;
   color: var(--color-text);
 
   &:hover {
-    border-color: rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.07);
+    border-color: var(--color-text);
   }
 `;
 

@@ -1,40 +1,58 @@
 import { createGlobalStyle } from 'styled-components';
 
+/**
+ * Thème « atelier » : papier clair + encre, vert citron réservé aux surlignages.
+ * Les sections sombres (<Band $dark>) redéfinissent les mêmes variables : les composants
+ * s’adaptent sans connaître le fond sur lequel ils sont posés.
+ *   --color-accent      couleur d’action sur le fond courant (encre sur papier, citron sur encre)
+ *   --color-accent-ink  texte posé sur --color-accent
+ *   --lime              citron de marque, toujours utilisé en aplat avec du texte encre
+ */
 const GlobalStyle = createGlobalStyle`
   :root {
-    --color-bg: #070706;
-    --color-bg-2: #0d0d0b;
-    --color-surface: #121210;
-    --color-surface-elevated: #181816;
-    --color-accent: #c8f24a;
-    --color-accent-ink: #10110c;
-    --color-accent-muted: rgba(200, 242, 74, 0.12);
-    --color-text: #f2eee6;
-    --color-muted: #9a958c;
-    --color-line: rgba(242, 238, 230, 0.1);
-    --font-display: 'Syne', system-ui, sans-serif;
-    --font-serif: 'Instrument Serif', Georgia, serif;
-    --font-body: 'Inter', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-    --font-hero: 'Syne', system-ui, sans-serif;
+    --paper: #f3f1ec;
+    --paper-2: #e9e6de;
+    --ink: #0f0f0d;
+    --ink-2: #181816;
+    --lime: #d4ff3f;
+
+    --color-bg: var(--paper);
+    --color-bg-2: var(--paper-2);
+    --color-surface: #ffffff;
+    --color-surface-elevated: #ffffff;
+    --color-text: var(--ink);
+    --color-muted: #5d5a53;
+    --color-line: rgba(15, 15, 13, 0.12);
+    --color-line-strong: rgba(15, 15, 13, 0.28);
+    --color-accent: var(--ink);
+    --color-accent-ink: var(--paper);
+    --color-accent-muted: rgba(15, 15, 13, 0.06);
+
+    --font-display: 'Bricolage Grotesque', 'Arial Narrow', system-ui, sans-serif;
+    --font-body: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --font-serif: var(--font-display);
+    --font-hero: var(--font-display);
+
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --radius: 22px;
     --page-pad-x: max(20px, env(safe-area-inset-left, 0px));
     --page-pad-r: max(20px, env(safe-area-inset-right, 0px));
     --page-pad-b: max(0.5rem, env(safe-area-inset-bottom, 0px));
-    --nav-h: 76px;
+    --nav-h: 72px;
     --scroll-margin: calc(var(--nav-h) + 20px + env(safe-area-inset-top, 0px));
-    --max: 1280px;
+    --max: 1320px;
   }
 
   @media (min-width: 768px) {
     :root {
-      --page-pad-x: max(32px, env(safe-area-inset-left, 0px));
-      --page-pad-r: max(32px, env(safe-area-inset-right, 0px));
+      --page-pad-x: max(40px, env(safe-area-inset-left, 0px));
+      --page-pad-r: max(40px, env(safe-area-inset-right, 0px));
       --scroll-margin: calc(var(--nav-h) + 28px + env(safe-area-inset-top, 0px));
     }
   }
 
-  * {
+  *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -44,10 +62,13 @@ const GlobalStyle = createGlobalStyle`
     scroll-behavior: smooth;
     background: var(--color-bg);
     min-height: 100%;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
     font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background: var(--color-bg);
@@ -55,10 +76,9 @@ const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     min-height: 100vh;
     min-height: 100dvh;
-    margin: 0;
-    padding: 0;
     -webkit-tap-highlight-color: transparent;
     text-rendering: optimizeLegibility;
+    font-feature-settings: 'ss01', 'cv11';
   }
 
   #root {
@@ -70,17 +90,24 @@ const GlobalStyle = createGlobalStyle`
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     font-weight: 700;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
-    background: var(--color-accent);
-    color: var(--color-accent-ink);
+    background: var(--lime);
+    color: var(--ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-text);
     outline-offset: 3px;
+    border-radius: 4px;
   }
 
   code {
@@ -88,30 +115,27 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #0b0b09;
+    background: var(--paper-2);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #2a2a26;
+    background: #b9b5ab;
     border-radius: 99px;
+    border: 2px solid var(--paper-2);
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #3c3c36;
+    background: #8f8b82;
   }
 
   a {
     text-decoration: none;
     color: inherit;
-    transition: color 0.25s var(--ease-out);
-  }
-
-  a:hover {
-    color: var(--color-accent);
+    transition: color 0.25s var(--ease-out), opacity 0.25s var(--ease-out);
   }
 
   button,
@@ -123,13 +147,23 @@ const GlobalStyle = createGlobalStyle`
     touch-action: manipulation;
   }
 
-  img {
+  img,
+  video {
     max-width: 100%;
     display: block;
   }
 
   section[id] {
     scroll-margin-top: var(--scroll-margin);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 
   html.has-cursor,

@@ -54,7 +54,7 @@ const ListItem = styled.li`
 
 const ContactInfo = styled(motion.div)`
   background: var(--color-accent-muted);
-  border: 1px solid rgba(200, 242, 74, 0.22);
+  border: 1px solid var(--color-line);
   border-radius: 8px;
   padding: 1.5rem;
   margin: 2rem 0;
@@ -72,7 +72,7 @@ const ContactText = styled.p`
 `;
 
 const LastUpdate = styled(motion.p)`
-  color: #aaaaaa;
+  color: var(--color-muted);
   font-style: italic;
   text-align: center;
   margin-top: 3rem;

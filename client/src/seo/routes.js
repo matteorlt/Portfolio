@@ -7,11 +7,11 @@ export const DEFAULT_IMAGE = `${SITE_URL}/logos/og-image.jpg`;
 
 export const ROUTE_META = {
   '/': {
-    title: 'Mattéo Rannou Le Texier — Développeur web freelance en Bretagne',
+    title: 'Création de site internet à Vannes — Mattéo RLT, développeur web',
     description:
-      'Développeur web freelance basé près de Vannes : sites vitrine, e-commerce et applications web rapides, pensés pour transformer vos visiteurs en clients. Devis gratuit sous 48 h.',
+      'Développeur web freelance à Vannes : sites vitrine, e-commerce et applications web rapides et bien référencés. Site vitrine offert aux 10 premiers clients, devis sous 24 h.',
     keywords:
-      'développeur web freelance, création site internet, site vitrine, e-commerce, application web, Vannes, Morbihan, Bretagne'
+      'création site internet Vannes, développeur web freelance, site vitrine, e-commerce, application web, référencement, Morbihan, Bretagne'
   },
   '/legal-notices': {
     title: 'Mentions légales — Mattéo Rannou Le Texier',

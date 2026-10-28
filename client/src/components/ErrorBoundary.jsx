@@ -24,7 +24,7 @@ const ErrorContent = styled(motion.div)`
 
 const ErrorIcon = styled.div`
   font-size: 4rem;
-  color: #ff6b6b;
+  color: #b42318;
   margin-bottom: 1.5rem;
   display: flex;
   justify-content: center;
@@ -33,13 +33,13 @@ const ErrorIcon = styled.div`
 const ErrorTitle = styled.h1`
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--color-text);
   margin-bottom: 1rem;
 `;
 
 const ErrorMessage = styled.p`
   font-size: 1.1rem;
-  color: #aaaaaa;
+  color: var(--color-muted);
   line-height: 1.6;
   margin-bottom: 2rem;
 `;
@@ -60,11 +60,11 @@ const ErrorDetails = styled.details`
   }
   
   pre {
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--color-accent-muted);
     padding: 1rem;
     border-radius: 8px;
     overflow-x: auto;
-    color: #ff6b6b;
+    color: #b42318;
     font-size: 0.9rem;
     line-height: 1.5;
   }
