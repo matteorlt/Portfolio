@@ -33,7 +33,8 @@
     "build:prod": "vite build --mode production && vite build --ssr src/entry-server.jsx --outDir dist-ssr --mode production && node scripts/prerender.mjs",
     "preview": "vite preview",
     "test:email": "node scripts/test-emailjs.mjs",
-    "test:email:quote": "node scripts/test-emailjs.mjs --quote"
+    "test:email:quote": "node scripts/test-emailjs.mjs --quote",
+    "maquette": "node scripts/add-maquette.mjs"
   },
   "eslintConfig": {
     "extends": [
