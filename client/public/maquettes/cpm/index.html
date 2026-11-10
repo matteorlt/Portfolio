@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<base href="/maquettes/cpm/">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>CPM – Construction Promotion Martin · Maçonnerie, rénovation et isolation à Plémy</title>
+<meta name="description" content="CPM, Construction Promotion Martin : maçonnerie, rénovation de maisons et isolation RGE à Plémy (22150), autour de Moncontour, Lamballe et Loudéac. Devis gratuit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ink:#1C2326; --granite:#2A3337; --muted:#59625F; --stone:#F3EFE7; --paper:#FFFFFF;
+  --line:#E2DBCD; --accent:#B4532A; --accent-dark:#8E3E1C; --accent-soft:#F6E4D9; --moss:#4F6B47; --moss-soft:#E4ECDF;
+  --radius:22px; --max:1200px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:var(--stone);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:var(--accent-dark)}
+h1,h2,h3{font-family:'Bricolage Grotesque','Inter',sans-serif;letter-spacing:-.02em;line-height:1.08;margin:0}
+h2{font-size:clamp(32px,4.2vw,46px);font-weight:800}
+h3{font-size:21px;font-weight:700;letter-spacing:-.01em}
+p{margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-dark)}
+.eyebrow::before{content:"";width:22px;height:3px;border-radius:2px;background:var(--accent)}
+.lead{font-size:19px;color:var(--muted);max-width:640px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;text-decoration:none;transition:transform .15s ease,background .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-dark);color:#fff}
+.btn-ghost{border:2px solid rgba(255,255,255,.7);color:#fff}
+.btn-ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:#000;color:#fff}
+.btn svg{width:18px;height:18px}
+
+/* Header */
+.top{position:sticky;top:0;z-index:50;background:rgba(243,239,231,.92);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:76px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink)}
+.logo-mark{width:46px;height:46px;flex:none}
+.logo-txt{display:flex;flex-direction:column;line-height:1.1}
+.logo-txt strong{font-family:'Bricolage Grotesque',sans-serif;font-size:24px;font-weight:800;letter-spacing:.02em}
+.logo-txt span{font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.nav{display:flex;gap:28px;font-weight:600;font-size:15px}
+.nav a{color:var(--ink);text-decoration:none;white-space:nowrap}
+.btn{white-space:nowrap}
+.nav a:hover{color:var(--accent-dark)}
+.top .btn{min-height:44px;padding:0 20px;font-size:15px}
+
+/* Hero */
+.hero{position:relative;color:#fff;overflow:hidden;background:var(--granite)}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,26,28,.88) 0%,rgba(20,26,28,.66) 45%,rgba(20,26,28,.12) 100%)}
+.hero .wrap{position:relative;z-index:1;padding-top:112px;padding-bottom:120px}
+.hero-inner{max-width:640px;display:flex;flex-direction:column;gap:26px}
+.pill{display:inline-flex;align-self:flex-start;align-items:center;gap:10px;padding:7px 14px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);font-size:14px;font-weight:600}
+.pill i{width:8px;height:8px;border-radius:50%;background:#E8875A}
+.hero h1{font-size:clamp(40px,6vw,66px);font-weight:800}
+.hero h1 em{font-style:normal;color:#F0A47E}
+.hero p{font-size:19px;color:rgba(255,255,255,.86)}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:14px}
+.hero-card{position:absolute;right:24px;bottom:-1px;z-index:2;display:flex;align-items:center;gap:14px;background:var(--paper);color:var(--ink);padding:18px 22px;border-radius:18px 18px 0 0;max-width:340px}
+.hero-card b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:18px}
+.hero-card small{color:var(--muted);font-size:14px;line-height:1.4;display:block}
+.rge{flex:none;width:52px;height:52px;border-radius:14px;background:var(--moss-soft);display:grid;place-items:center}
+
+/* Facts band */
+.facts{background:var(--paper);border-bottom:1px solid var(--line)}
+.facts .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.fact{padding:30px 24px;border-left:1px solid var(--line)}
+.fact:first-child{border-left:0;padding-left:0}
+.fact strong{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:30px;font-weight:800;letter-spacing:-.02em}
+.fact span{color:var(--muted);font-size:15px}
+
+/* Sections */
+section{scroll-margin-top:80px}
+.sec{padding:104px 0}
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:48px}
+.sec-head > div{display:flex;flex-direction:column;gap:16px;max-width:720px}
+
+/* Services */
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.card img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.card-body{padding:24px 24px 28px;display:flex;flex-direction:column;gap:10px;flex:1}
+.card-body p{color:var(--muted);font-size:16px}
+.tag{align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--moss-soft);color:var(--moss)}
+.card ul{margin:4px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.card li{display:flex;gap:8px}
+.card li::before{content:"";flex:none;width:6px;height:6px;margin-top:9px;border-radius:2px;background:var(--accent)}
+
+/* RGE */
+.rge-sec{background:var(--granite);color:#fff}
+.rge-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:64px;align-items:center}
+.rge-sec .eyebrow{color:#F0A47E}
+.rge-sec .eyebrow::before{background:#F0A47E}
+.rge-sec .lead{color:rgba(255,255,255,.78)}
+.rge-txt{display:flex;flex-direction:column;gap:22px}
+.aids{display:flex;flex-wrap:wrap;gap:10px}
+.aids span{padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);font-size:14px;font-weight:600}
+.quals{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.14);border-radius:var(--radius);padding:10px 28px}
+.qual{display:flex;gap:16px;padding:18px 0;border-top:1px solid rgba(255,255,255,.12)}
+.qual:first-child{border-top:0}
+.qual svg{flex:none;width:26px;height:26px;margin-top:2px;color:#9CC08F}
+.qual b{display:block;font-size:16px}
+.qual small{display:block;color:rgba(255,255,255,.64);font-size:14px}
+.rge-photo{position:relative;border-radius:var(--radius);overflow:hidden;margin-top:22px;height:200px}
+.rge-photo img{width:100%;height:100%;object-fit:cover}
+
+/* Method */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:s}
+.step{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;display:flex;flex-direction:column;gap:10px;position:relative}
+.step::before{counter-increment:s;content:"0" counter(s);font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px;color:var(--accent);background:var(--accent-soft);width:44px;height:44px;border-radius:12px;display:grid;place-items:center;margin-bottom:8px}
+.step p{color:var(--muted);font-size:16px}
+
+/* Gallery */
+.gallery{display:grid;grid-template-columns:repeat(12,1fr);grid-auto-rows:150px;gap:16px}
+.g{position:relative;border-radius:18px;overflow:hidden;background:#d8d2c6}
+.g img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.g:hover img{transform:scale(1.04)}
+.g figcaption{position:absolute;left:12px;bottom:12px;right:12px;display:flex}
+.g figcaption span{background:rgba(28,35,38,.82);color:#fff;font-size:14px;font-weight:600;padding:7px 12px;border-radius:10px;backdrop-filter:blur(4px)}
+.g1{grid-column:span 7;grid-row:span 3}
+.g2{grid-column:span 5;grid-row:span 2}
+.g3{grid-column:span 5;grid-row:span 1}
+.g4{grid-column:span 4;grid-row:span 2}
+.g5{grid-column:span 4;grid-row:span 2}
+.g6{grid-column:span 4;grid-row:span 2}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:64px;align-items:start}
+.faq-grid .sec-head{margin:0}
+details{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:0 24px;margin-bottom:12px}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 0;font-weight:700;font-size:17px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";flex:none;width:30px;height:30px;border-radius:50%;background:var(--stone);display:grid;place-items:center;font-size:20px;font-weight:500;transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 0 22px;color:var(--muted);font-size:16px}
+
+/* Zone */
+.zone{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:stretch}
+.zone-txt{display:flex;flex-direction:column;gap:22px}
+.towns{display:flex;flex-wrap:wrap;gap:8px}
+.towns span{padding:7px 13px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:14.5px;font-weight:600}
+.towns span.main{background:var(--ink);color:#fff;border-color:var(--ink)}
+.map{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:460px;background:#e6e1d6}
+.map{position:relative}
+#carte{position:absolute;inset:0;z-index:0}
+.map-cta{position:absolute;right:14px;bottom:14px;z-index:500;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 8px 20px -8px rgba(0,0,0,.4)}
+.map-cta svg{width:16px;height:16px}
+.leaflet-container{font-family:'Inter',system-ui,sans-serif;background:#ece7dd}
+.cpm-pin{width:46px;height:46px;border-radius:14px;background:#1C2326;display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.55);border:3px solid #fff}
+.cpm-pin svg{width:22px;height:22px}
+.leaflet-tooltip.town-lbl{background:none;border:0;box-shadow:none;padding:0;font-weight:700;font-size:12px;color:#1C2326;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff}
+.leaflet-tooltip.town-lbl::before{display:none}
+.cpm-tiles{filter:grayscale(.55) sepia(.18) brightness(1.03) contrast(.95)}
+.leaflet-popup-content{margin:12px 14px;font-size:14px;line-height:1.45}
+.leaflet-popup-content b{font-family:'Bricolage Grotesque',sans-serif;font-size:16px}
+
+/* Contact */
+.contact{background:var(--ink);color:#fff}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.contact .eyebrow{color:#F0A47E}
+.contact .eyebrow::before{background:#F0A47E}
+.contact .lead{color:rgba(255,255,255,.75)}
+.contact-info{display:flex;flex-direction:column;gap:28px}
+.lines{display:flex;flex-direction:column;gap:4px}
+.line{display:flex;gap:16px;align-items:center;padding:16px 0;border-top:1px solid rgba(255,255,255,.12);color:#fff;text-decoration:none}
+.line:last-child{border-bottom:1px solid rgba(255,255,255,.12)}
+.line .ic{flex:none;width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.08);display:grid;place-items:center}
+.line .ic svg{width:20px;height:20px;color:#F0A47E}
+.line small{display:block;color:rgba(255,255,255,.6);font-size:13px}
+.line b{font-size:17px}
+form{background:var(--paper);color:var(--ink);border-radius:var(--radius);padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+form h3{grid-column:1/-1;font-size:24px}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600}
+label.full{grid-column:1/-1}
+input,select,textarea{font:inherit;font-size:16px;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--stone);color:var(--ink);width:100%}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;background:#fff}
+textarea{min-height:120px;resize:vertical}
+form .btn{grid-column:1/-1;border:0;cursor:pointer;font-family:inherit}
+form .note{grid-column:1/-1;font-size:13px;color:var(--muted)}
+
+footer{background:#131819;color:rgba(255,255,255,.62);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 32px;padding-top:28px;padding-bottom:28px}
+footer a{color:rgba(255,255,255,.8)}
+
+/* Responsive */
+@media (max-width:1080px){
+  .nav{display:none}
+}
+@media (max-width:1000px){
+  .services{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .rge-grid,.faq-grid,.zone,.contact-grid{grid-template-columns:1fr;gap:40px}
+  .facts .wrap{grid-template-columns:1fr 1fr}
+  .fact:nth-child(3){border-left:0;padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--line)}
+}
+@media (max-width:680px){
+  body{font-size:16px}
+  .wrap{padding:0 16px}
+  .sec{padding:72px 0}
+  .top .wrap{min-height:66px}
+  .logo-txt span{display:none}
+  .logo-mark{width:40px;height:40px}
+  .top .btn span{display:none}
+  .top .btn{width:44px;padding:0}
+  .hero .wrap{padding-top:72px;padding-bottom:150px}
+  .hero::after{background:linear-gradient(180deg,rgba(20,26,28,.7) 0%,rgba(20,26,28,.85) 100%)}
+  .hero-card{left:16px;right:16px;max-width:none}
+  .services,.steps{grid-template-columns:1fr}
+  .facts .wrap{grid-template-columns:1fr 1fr}
+  .fact{padding:22px 14px}
+  .fact:nth-child(odd){padding-left:0;border-left:0}
+  .fact strong{font-size:20px}
+  .gallery{grid-template-columns:1fr 1fr;grid-auto-rows:140px}
+  .g1{grid-column:span 2;grid-row:span 2}
+  .g2,.g3,.g4,.g5,.g6{grid-column:span 1;grid-row:span 1}
+  .g figcaption span{font-size:12px;padding:5px 9px}
+  form{grid-template-columns:1fr;padding:24px}
+  .quals{padding:6px 18px}
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#accueil" aria-label="CPM, Construction Promotion Martin – accueil">
+      <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <rect width="48" height="48" rx="12" fill="#1C2326"/>
+        <path d="M10 22 24 11l14 11" fill="none" stroke="#E8875A" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <g fill="#F3EFE7">
+          <rect x="12" y="26" width="11" height="5" rx="1"/>
+          <rect x="25" y="26" width="11" height="5" rx="1"/>
+          <rect x="12" y="33" width="5" height="5" rx="1"/>
+          <rect x="19" y="33" width="11" height="5" rx="1"/>
+          <rect x="32" y="33" width="4" height="5" rx="1"/>
+        </g>
+      </svg>
+      <span class="logo-txt"><strong>CPM</strong><span>Construction Promotion Martin</span></span>
+    </a>
+    <nav class="nav" aria-label="Navigation principale">
+      <a href="#savoir-faire">Savoir-faire</a>
+      <a href="#rge">Isolation RGE</a>
+      <a href="#realisations">Réalisations</a>
+      <a href="#zone">Secteur</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="btn btn-dark" href="tel:+33296602845" aria-label="Appeler le 02 96 60 28 45">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+      <span>02 96 60 28 45</span>
+    </a>
+  </div>
+</header>
+
+<main>
+<!-- HERO -->
+<section id="accueil" class="hero">
+  <img class="hero-img" src="./assets/hero.jpg" alt="Maison bretonne en pierre au toit d'ardoise, entourée d'un jardin">
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="pill"><i></i>Maçon · rénovation · isolation — Plémy, Côtes-d'Armor</span>
+      <h1>Votre maison rénovée, <em>des fondations au toit.</em></h1>
+      <p>Depuis 2013, CPM (Construction Promotion Martin) accompagne les particuliers autour de Moncontour, Lamballe et Loudéac : maçonnerie, rénovation de bâti ancien, plâtrerie, isolation et menuiseries extérieures. Une seule équipe, un seul interlocuteur, du devis à la fin du chantier.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-primary" href="#contact">Demander un devis gratuit</a>
+        <a class="btn btn-ghost" href="#savoir-faire">Nos savoir-faire</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-card">
+    <span class="rge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#4F6B47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+    </span>
+    <span><b>Entreprise certifiée Qualibat RGE</b><small>Vos travaux d'isolation peuvent ouvrir droit aux aides de l'État.</small></span>
+  </div>
+</section>
+
+<!-- FACTS -->
+<section class="facts" aria-label="CPM en bref">
+  <div class="wrap">
+    <div class="fact"><strong>Depuis 2013</strong><span>Une entreprise installée à Plémy</span></div>
+    <div class="fact"><strong>Qualibat RGE</strong><span>6 domaines certifiés, jusqu'en 2030</span></div>
+    <div class="fact"><strong>Équipe locale</strong><span>3 à 5 compagnons, toujours les mêmes</span></div>
+    <div class="fact"><strong>Devis gratuit</strong><span>Visite sur place et conseils inclus</span></div>
+  </div>
+</section>
+
+<!-- SAVOIR-FAIRE -->
+<section id="savoir-faire" class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Savoir-faire</span>
+        <h2>Le gros œuvre et tout ce qui rend une maison confortable.</h2>
+      </div>
+      <p class="lead" style="max-width:420px">De la reprise d'un mur en pierre à l'isolation des combles, CPM coordonne vos travaux pour que tout s'enchaîne sans mauvaise surprise.</p>
+    </div>
+
+    <div class="services">
+      <article class="card">
+        <img src="./assets/maconnerie.jpg" alt="Montage d'un mur en parpaings à la truelle" loading="lazy">
+        <div class="card-body">
+          <h3>Maçonnerie &amp; gros œuvre</h3>
+          <p>Fondations, murs porteurs, dalles et chapes : des bases solides pour vos projets neufs comme pour vos rénovations.</p>
+          <ul><li>Murs en parpaing, brique ou pierre</li><li>Dalles, chapes et fondations</li><li>Création et agrandissement d'ouvertures</li></ul>
+        </div>
+      </article>
+      <article class="card">
+        <img src="./assets/ferme.jpg" alt="Ancienne ferme en pierre avant rénovation" loading="lazy">
+        <div class="card-body">
+          <h3>Rénovation de maisons anciennes</h3>
+          <p>Longères, corps de ferme, maisons de bourg : on redonne vie au bâti en pierre en respectant son caractère.</p>
+          <ul><li>Reprise et rejointoiement de murs en pierre</li><li>Enduits traditionnels à la chaux</li><li>Ouverture de murs, pose de linteaux</li></ul>
+        </div>
+      </article>
+      <article class="card">
+        <img src="./assets/isolation.jpg" alt="Pose de laine isolante entre les montants d'un mur" loading="lazy">
+        <div class="card-body">
+          <span class="tag">Certifié RGE</span>
+          <h3>Isolation thermique</h3>
+          <p>Moins de pertes, plus de confort et des factures allégées, avec des travaux éligibles aux aides.</p>
+          <ul><li>Combles perdus</li><li>Murs, rampants et plafonds par l'intérieur</li><li>Planchers bas</li></ul>
+        </div>
+      </article>
+      <article class="card">
+        <img src="./assets/porte.jpg" alt="Porte d'entrée en bois dans une façade en pierre" loading="lazy">
+        <div class="card-body">
+          <span class="tag">Certifié RGE</span>
+          <h3>Portes, fenêtres &amp; portails</h3>
+          <p>Remplacement et pose de menuiseries extérieures performantes, en neuf comme en rénovation.</p>
+          <ul><li>Fenêtres et portes-fenêtres</li><li>Portes d'entrée et volets</li><li>Portails et clôtures</li></ul>
+        </div>
+      </article>
+      <article class="card">
+        <img src="./assets/electricite.jpg" alt="Artisan raccordant un équipement électrique" loading="lazy">
+        <div class="card-body">
+          <span class="tag">Certifié RGE</span>
+          <h3>Ventilation &amp; chauffage électrique</h3>
+          <p>Une maison bien isolée doit aussi bien respirer : VMC et radiateurs performants complètent vos travaux.</p>
+          <ul><li>Ventilation mécanique (VMC)</li><li>Radiateurs électriques et régulation</li></ul>
+        </div>
+      </article>
+      <article class="card">
+        <img src="./assets/renovation.jpg" alt="Pièce en cours de rénovation avec étais et gravats" loading="lazy">
+        <div class="card-body">
+          <h3>Plâtrerie &amp; rénovation intérieure</h3>
+          <p>Vous rachetez une maison à rénover ? Du curage aux finitions en plaques de plâtre, on reprend l'intérieur pièce par pièce.</p>
+          <ul><li>Démolition et curage</li><li>Cloisons, doublages et plafonds en plaques de plâtre</li><li>Redistribution des pièces, un interlocuteur unique</li></ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- RGE -->
+<section id="rge" class="sec rge-sec">
+  <div class="wrap rge-grid">
+    <div class="rge-txt">
+      <span class="eyebrow">Isolation &amp; aides</span>
+      <h2>Certifiés RGE : vos travaux peuvent être financés en partie.</h2>
+      <p class="lead">Faire appel à une entreprise reconnue garante de l'environnement (RGE) est la condition pour bénéficier des principales aides à la rénovation énergétique. CPM vous aide à monter le projet et vous remet les documents nécessaires.</p>
+      <div class="aids"><span>MaPrimeRénov'</span><span>Certificats d'économies d'énergie</span><span>Éco-prêt à taux zéro</span><span>TVA à 5,5 %</span></div>
+      <div class="rge-photo"><img src="./assets/combles.jpg" alt="Combles aménagés et isolés sous la toiture" loading="lazy"></div>
+    </div>
+    <div class="quals">
+      <div class="qual">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
+        <div><b>Isolation des combles perdus</b><small>Qualibat RGE 7122 · isolation thermique par l'intérieur · valable jusqu'en février 2028</small></div>
+      </div>
+      <div class="qual">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
+        <div><b>Isolation des murs, rampants et plafonds</b><small>Qualibat RGE 7122 · isolation thermique par l'intérieur · valable jusqu'en février 2028</small></div>
+      </div>
+      <div class="qual">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
+        <div><b>Isolation des planchers bas</b><small>Qualibat RGE 7122 · isolation thermique par l'intérieur · valable jusqu'en février 2028</small></div>
+      </div>
+      <div class="qual">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
+        <div><b>Fenêtres, volets et portes donnant sur l'extérieur</b><small>Qualibat RGE · ECO Artisan® efficacité énergétique · valable jusqu'en février 2030</small></div>
+      </div>
+      <div class="qual">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
+        <div><b>Ventilation mécanique</b><small>Qualibat RGE · ECO Artisan® efficacité énergétique · valable jusqu'en février 2030</small></div>
+      </div>
+      <div class="qual">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg>
+        <div><b>Radiateurs électriques et régulation</b><small>Qualibat RGE · ECO Artisan® efficacité énergétique · valable jusqu'en février 2030</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODE -->
+<section class="sec" aria-labelledby="methode-titre">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Comment ça se passe</span>
+        <h2 id="methode-titre">Un chantier clair, du premier appel à la réception.</h2>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Visite sur place</h3><p>On se déplace chez vous pour voir le bâti, écouter votre projet et repérer les points délicats.</p></div>
+      <div class="step"><h3>Devis détaillé</h3><p>Un devis gratuit, poste par poste, avec les aides possibles quand les travaux y ouvrent droit.</p></div>
+      <div class="step"><h3>Chantier suivi</h3><p>Des délais annoncés et tenus, un chantier propre et un point régulier sur l'avancement.</p></div>
+      <div class="step"><h3>Réception</h3><p>On fait le tour des travaux ensemble et on vous remet les attestations et garanties.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- REALISATIONS -->
+<section id="realisations" class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Réalisations</span>
+        <h2>Des chantiers de toutes tailles, en Centre-Bretagne.</h2>
+      </div>
+      <a class="btn btn-dark" href="#contact">Parler de votre projet</a>
+    </div>
+    <div class="gallery">
+      <figure class="g g1" style="margin:0"><img src="./assets/cottage.jpg" alt="Maison en pierre rénovée avec toit en ardoise" loading="lazy"><figcaption><span>Rénovation d'une maison en pierre</span></figcaption></figure>
+      <figure class="g g2" style="margin:0"><img src="./assets/briques.jpg" alt="Maçon montant un mur de briques" loading="lazy" style="object-position:center 35%"><figcaption><span>Maçonnerie traditionnelle</span></figcaption></figure>
+      <figure class="g g3" style="margin:0"><img src="./assets/enduit.jpg" alt="Application d'un enduit à la lisseuse" loading="lazy"><figcaption><span>Enduits</span></figcaption></figure>
+      <figure class="g g4" style="margin:0"><img src="./assets/combles.jpg" alt="Combles isolés avec fenêtres de toit" loading="lazy"><figcaption><span>Isolation des combles</span></figcaption></figure>
+      <figure class="g g5" style="margin:0"><img src="./assets/fenetre.jpg" alt="Fenêtre en bois blanc ouverte sur le jardin" loading="lazy" style="object-position:center 30%"><figcaption><span>Remplacement de fenêtres</span></figcaption></figure>
+      <figure class="g g6" style="margin:0"><img src="./assets/porte.jpg" alt="Porte en bois dans un mur en pierre" loading="lazy" style="object-position:center 40%"><figcaption><span>Porte d'entrée</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" style="padding-top:0" aria-labelledby="faq-titre">
+  <div class="wrap faq-grid">
+    <div class="sec-head">
+      <div>
+        <span class="eyebrow">Questions fréquentes</span>
+        <h2 id="faq-titre">Avant de vous lancer.</h2>
+        <p class="lead">Une autre question ? Le plus simple reste de nous appeler au <a href="tel:+33296602845">02 96 60 28 45</a>.</p>
+      </div>
+    </div>
+    <div>
+      <details open><summary>Le devis est-il gratuit ?</summary><p>Oui. Nous venons voir votre maison, nous prenons les mesures et nous vous remettons un devis détaillé, sans engagement.</p></details>
+      <details><summary>Puis-je obtenir des aides pour mes travaux d'isolation ?</summary><p>CPM est certifiée Qualibat RGE : l'isolation des combles, des murs, des rampants et des planchers bas, ainsi que les menuiseries et la ventilation, peuvent ouvrir droit à MaPrimeRénov', aux primes CEE ou à l'éco-prêt à taux zéro, selon votre situation.</p></details>
+      <details><summary>Travaillez-vous sur les maisons en pierre ?</summary><p>C'est une grande partie de notre travail en Centre-Bretagne : reprise de murs, rejointoiement, ouvertures, enduits à la chaux et isolation adaptée au bâti ancien.</p></details>
+      <details><summary>Dans quel secteur intervenez-vous ?</summary><p>Nous sommes basés à Plémy et intervenons dans un rayon d'environ 30 km : Moncontour, Lamballe, Loudéac, Quintin, Plœuc-l'Hermitage, Saint-Brieuc et les communes alentour.</p></details>
+      <details><summary>Faites-vous aussi du neuf ?</summary><p>Oui : fondations, murs, dalles, extensions et garages. Nous pouvons également prendre en charge la maçonnerie de votre projet de construction.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE -->
+<section id="zone" class="sec" style="padding-top:0">
+  <div class="wrap zone">
+    <div class="zone-txt">
+      <span class="eyebrow">Secteur d'intervention</span>
+      <h2>Basés à Plémy, au cœur des Côtes-d'Armor.</h2>
+      <p class="lead">L'atelier est installé rue du Pré Veillon, à deux pas de Moncontour. Nous intervenons chez les particuliers dans un rayon d'environ 30 km.</p>
+      <div class="towns">
+        <span class="main">Plémy</span><span>Moncontour</span><span>Hénon</span><span>Trébry</span><span>Plœuc-l'Hermitage</span><span>Quintin</span><span>Lamballe-Armor</span><span>Loudéac</span><span>Saint-Brieuc</span><span>Plédran</span><span>Bréhand</span><span>Le Mené</span><span>Saint-Carreuc</span><span>Langast</span>
+      </div>
+    </div>
+    <div class="map">
+      <div id="carte" role="img" aria-label="Carte du secteur d'intervention de CPM autour de Plémy"></div>
+      <a class="map-cta" href="https://www.google.com/maps/dir/?api=1&amp;destination=10+rue+du+Pr%C3%A9+Veillon+22150+Pl%C3%A9my" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>Itinéraire
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="sec contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <span class="eyebrow">Contact</span>
+      <h2>Parlons de votre projet.</h2>
+      <p class="lead">Décrivez-nous vos travaux : on vous rappelle pour convenir d'une visite et établir votre devis gratuit.</p>
+      <div class="lines">
+        <a class="line" href="tel:+33296602845">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span>
+          <span><small>Téléphone</small><b>02 96 60 28 45</b></span>
+        </a>
+        <a class="line" href="mailto:cpm.jpm@gmail.com">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg></span>
+          <span><small>E-mail</small><b>cpm.jpm@gmail.com</b></span>
+        </a>
+        <a class="line" href="https://www.openstreetmap.org/?mlat=48.3335&amp;mlon=-2.6824#map=15/48.3335/-2.6824" target="_blank" rel="noopener">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+          <span><small>Adresse</small><b>10 rue du Pré Veillon, 22150 Plémy</b></span>
+        </a>
+      </div>
+    </div>
+    <form onsubmit="event.preventDefault();this.querySelector('.note').textContent='Merci ! (Maquette : le formulaire n\'envoie rien pour l\'instant.)';">
+      <h3>Demande de devis</h3>
+      <label>Nom<input name="nom" autocomplete="name" required></label>
+      <label>Téléphone<input name="tel" type="tel" autocomplete="tel" required></label>
+      <label class="full">Commune des travaux<input name="commune" placeholder="ex. Moncontour"></label>
+      <label class="full">Type de travaux
+        <select name="type"><option>Maçonnerie / gros œuvre</option><option>Rénovation d'une maison ancienne</option><option>Isolation</option><option>Plâtrerie / cloisons</option><option>Portes, fenêtres, portails</option><option>Ventilation / chauffage</option><option>Autre</option></select>
+      </label>
+      <label class="full">Votre projet<textarea name="message" placeholder="Quelques mots sur vos travaux, la surface, vos délais…"></textarea></label>
+      <button class="btn btn-primary" type="submit">Envoyer ma demande</button>
+      <p class="note">Réponse sous 48 h ouvrées. Vos coordonnées servent uniquement à vous recontacter.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 CPM – Construction Promotion Martin · SARL · SIRET 793 057 746 00018 · RCS Saint-Brieuc</span>
+    <span>Photos d'illustration : Unsplash · Carte © contributeurs OpenStreetMap</span>
+  </div>
+</footer>
+
+
+<div id="mrlt-badge" style="position:fixed;left:16px;bottom:16px;z-index:2147483647;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:999px;background:#0f0f0d;color:#f3f1ec;font:500 13px/1.2 system-ui,-apple-system,'Segoe UI',sans-serif;box-shadow:0 12px 30px -12px rgba(0,0,0,.5)">
+  <span style="width:8px;height:8px;border-radius:50%;background:#d4ff3f"></span>
+  <span>Maquette CPM – Construction Promotion Martin — <a href="https://matteo-rlt.fr/" target="_blank" rel="noopener" style="color:#d4ff3f;text-decoration:none">matteo-rlt.fr</a></span>
+  <button type="button" aria-label="Masquer" onclick="this.parentNode.remove()" style="all:unset;cursor:pointer;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(243,241,236,.12)">×</button>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  if(!window.L) return;
+  var hq=[48.3335,-2.6824];
+  var map=L.map('carte',{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView(hq,10);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18,className:'cpm-tiles',
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  var zone=L.circle(hq,{radius:30000,color:'#B4532A',weight:2,dashArray:'6 6',fillColor:'#B4532A',fillOpacity:.08}).addTo(map);
+  var towns=[['Moncontour',48.3592,-2.6339],['Hénon',48.3844,-2.6836],['Trébry',48.3500,-2.5550],['Plœuc-l’Hermitage',48.3439,-2.7561],['Quintin',48.4036,-2.9111],['Lamballe-Armor',48.4686,-2.5164],['Loudéac',48.1778,-2.7536],['Saint-Brieuc',48.5136,-2.7603],['Plédran',48.4456,-2.7464],['Bréhand',48.4031,-2.5767],['Le Mené',48.3000,-2.5194],['Saint-Carreuc',48.3992,-2.7303],['Langast',48.2817,-2.6650]];
+  towns.forEach(function(t){
+    var big=/Saint-Brieuc|Lamballe|Loudéac|Quintin|Moncontour/.test(t[0]);
+    L.circleMarker([t[1],t[2]],{radius:big?6:4,color:'#fff',weight:2,fillColor:'#B4532A',fillOpacity:1})
+      .bindTooltip(t[0],{permanent:big,direction:'right',offset:[6,0],className:'town-lbl'}).addTo(map);
+  });
+  var pin=L.divIcon({className:'',iconSize:[46,46],iconAnchor:[23,23],html:'<div class="cpm-pin"><svg viewBox="0 0 24 24" fill="none" stroke="#E8875A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg></div>'});
+  L.marker(hq,{icon:pin,zIndexOffset:1000}).addTo(map)
+    .bindPopup('<b>CPM</b><br>10 rue du Pré Veillon<br>22150 Plémy<br><a href="tel:+33296602845">02 96 60 28 45</a>');
+  map.fitBounds(zone.getBounds(),{padding:[4,4]});
+})();
+</script>
+</body>
+</html>
