@@ -149,8 +149,19 @@ details p{padding:0 0 22px;color:var(--muted);font-size:16px}
 .towns{display:flex;flex-wrap:wrap;gap:8px}
 .towns span{padding:7px 13px;border-radius:999px;background:var(--paper);border:1px solid var(--line);font-size:14.5px;font-weight:600}
 .towns span.main{background:var(--ink);color:#fff;border-color:var(--ink)}
-.map{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:400px;background:#e6e1d6}
-.map iframe{width:100%;height:100%;min-height:400px;border:0;display:block}
+.map{border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);min-height:460px;background:#e6e1d6}
+.map{position:relative}
+#carte{position:absolute;inset:0;z-index:0}
+.map-cta{position:absolute;right:14px;bottom:14px;z-index:500;display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--ink);color:#fff;font-weight:700;font-size:14px;text-decoration:none;box-shadow:0 8px 20px -8px rgba(0,0,0,.4)}
+.map-cta svg{width:16px;height:16px}
+.leaflet-container{font-family:'Inter',system-ui,sans-serif;background:#ece7dd}
+.cpm-pin{width:46px;height:46px;border-radius:14px;background:#1C2326;display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(0,0,0,.55);border:3px solid #fff}
+.cpm-pin svg{width:22px;height:22px}
+.leaflet-tooltip.town-lbl{background:none;border:0;box-shadow:none;padding:0;font-weight:700;font-size:12px;color:#1C2326;text-shadow:0 0 3px #fff,0 0 3px #fff,0 0 3px #fff}
+.leaflet-tooltip.town-lbl::before{display:none}
+.cpm-tiles{filter:grayscale(.55) sepia(.18) brightness(1.03) contrast(.95)}
+.leaflet-popup-content{margin:12px 14px;font-size:14px;line-height:1.45}
+.leaflet-popup-content b{font-family:'Bricolage Grotesque',sans-serif;font-size:16px}
 
 /* Contact */
 .contact{background:var(--ink);color:#fff}
@@ -217,6 +228,7 @@ footer a{color:rgba(255,255,255,.8)}
   .quals{padding:6px 18px}
 }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 </head>
 <body>
 
@@ -455,13 +467,16 @@ footer a{color:rgba(255,255,255,.8)}
     <div class="zone-txt">
       <span class="eyebrow">Secteur d'intervention</span>
       <h2>Basés à Plémy, au cœur des Côtes-d'Armor.</h2>
-      <p class="lead">L'atelier est installé rue du Pré Veillon, à deux pas de Moncontour. Nous intervenons chez les particuliers dans tout le secteur.</p>
+      <p class="lead">L'atelier est installé rue du Pré Veillon, à deux pas de Moncontour. Nous intervenons chez les particuliers dans un rayon d'environ 30 km.</p>
       <div class="towns">
         <span class="main">Plémy</span><span>Moncontour</span><span>Hénon</span><span>Trébry</span><span>Plœuc-l'Hermitage</span><span>Quintin</span><span>Lamballe-Armor</span><span>Loudéac</span><span>Saint-Brieuc</span><span>Plédran</span><span>Bréhand</span><span>Le Mené</span><span>Saint-Carreuc</span><span>Langast</span>
       </div>
     </div>
     <div class="map">
-      <iframe title="Carte : CPM, 10 rue du Pré Veillon à Plémy" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=-2.86%2C48.25%2C-2.50%2C48.42&amp;layer=mapnik&amp;marker=48.3335%2C-2.6824"></iframe>
+      <div id="carte" role="img" aria-label="Carte du secteur d'intervention de CPM autour de Plémy"></div>
+      <a class="map-cta" href="https://www.google.com/maps/dir/?api=1&amp;destination=10+rue+du+Pr%C3%A9+Veillon+22150+Pl%C3%A9my" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>Itinéraire
+      </a>
     </div>
   </div>
 </section>
@@ -517,5 +532,28 @@ footer a{color:rgba(255,255,255,.8)}
   <span>Maquette CPM – Construction Promotion Martin — <a href="https://matteo-rlt.fr/" target="_blank" rel="noopener" style="color:#d4ff3f;text-decoration:none">matteo-rlt.fr</a></span>
   <button type="button" aria-label="Masquer" onclick="this.parentNode.remove()" style="all:unset;cursor:pointer;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(243,241,236,.12)">×</button>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function(){
+  if(!window.L) return;
+  var hq=[48.3335,-2.6824];
+  var map=L.map('carte',{scrollWheelZoom:false,zoomControl:true,attributionControl:true}).setView(hq,10);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18,className:'cpm-tiles',
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  var zone=L.circle(hq,{radius:30000,color:'#B4532A',weight:2,dashArray:'6 6',fillColor:'#B4532A',fillOpacity:.08}).addTo(map);
+  var towns=[['Moncontour',48.3592,-2.6339],['Hénon',48.3844,-2.6836],['Trébry',48.3500,-2.5550],['Plœuc-l’Hermitage',48.3439,-2.7561],['Quintin',48.4036,-2.9111],['Lamballe-Armor',48.4686,-2.5164],['Loudéac',48.1778,-2.7536],['Saint-Brieuc',48.5136,-2.7603],['Plédran',48.4456,-2.7464],['Bréhand',48.4031,-2.5767],['Le Mené',48.3000,-2.5194],['Saint-Carreuc',48.3992,-2.7303],['Langast',48.2817,-2.6650]];
+  towns.forEach(function(t){
+    var big=/Saint-Brieuc|Lamballe|Loudéac|Quintin|Moncontour/.test(t[0]);
+    L.circleMarker([t[1],t[2]],{radius:big?6:4,color:'#fff',weight:2,fillColor:'#B4532A',fillOpacity:1})
+      .bindTooltip(t[0],{permanent:big,direction:'right',offset:[6,0],className:'town-lbl'}).addTo(map);
+  });
+  var pin=L.divIcon({className:'',iconSize:[46,46],iconAnchor:[23,23],html:'<div class="cpm-pin"><svg viewBox="0 0 24 24" fill="none" stroke="#E8875A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg></div>'});
+  L.marker(hq,{icon:pin,zIndexOffset:1000}).addTo(map)
+    .bindPopup('<b>CPM</b><br>10 rue du Pré Veillon<br>22150 Plémy<br><a href="tel:+33296602845">02 96 60 28 45</a>');
+  map.fitBounds(zone.getBounds(),{padding:[4,4]});
+})();
+</script>
 </body>
 </html>
